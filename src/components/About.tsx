@@ -57,7 +57,8 @@ const About = () => {
             <p className="text-muted-foreground leading-relaxed mb-8">
               Whether you need a complete business setup — from LLC formation and EIN numbers
               to brand registry and trademark filing — or expert help recovering a suspended
-              account, I've got you covered.
+              account, I've got you covered. My mission is to simplify your e-commerce journey
+              so you can focus on growing.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-10">

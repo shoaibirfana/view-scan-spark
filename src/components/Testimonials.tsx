@@ -7,25 +7,25 @@ import davidImg from "@/assets/testimonial-david.png";
 
 const testimonials = [
   {
-    quote: "Helped me launch a fully branded Shopify store under 'FlipNest'. It looks professional and runs smoothly. Loved the support team too!",
+    quote: "Ecom Surgent helped me launch a fully branded Shopify store under 'FlipNest'. It looks professional and runs smoothly. Loved the support team too!",
     name: "Fatima Amir",
     role: "Student",
     img: fatimaImg,
   },
   {
-    quote: "Got my eBay service bundle through Muaz. Everything from account setup to listing optimization was on point. Great value!",
+    quote: "Got my eBay service bundle through Ecom Surgent. Everything from account setup to listing optimization was on point. Great value!",
     name: "Aleena Tahir",
-    role: "eBay Seller",
+    role: "eBay",
     img: aleenaImg,
   },
   {
-    quote: "Helped me turn my eBay store into a full-time income source. The beginner-to-pro training was crystal clear and easy to follow.",
+    quote: "Ecom Surgent helped me turn my eBay store into a full-time income source. Their beginner-to-pro training was crystal clear and easy to follow.",
     name: "Hassan Raza",
-    role: "Shopify Seller",
+    role: "Shopify",
     img: hassanImg,
   },
   {
-    quote: "I had zero experience in online selling. Thanks to the 'Zero to Hero' service, I now run my Amazon and Shopify stores smoothly.",
+    quote: "I had zero experience in online selling. Thanks to Ecom Surgent's 'Zero to Hero' service, I now run my Amazon and Shopify stores smoothly.",
     name: "David Owens",
     role: "Shopify Dubai",
     img: davidImg,
@@ -49,8 +49,8 @@ const Testimonials = () => {
             What Our Clients Have To Say
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Many clients have built successful online brands, earning consistent revenue and
-            transitioning into full-time entrepreneurship.
+            Many of our students and clients have built successful online brands, earning consistent
+            revenue and transitioning into full-time entrepreneurship.
           </p>
         </motion.div>
 
