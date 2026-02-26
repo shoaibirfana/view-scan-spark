@@ -21,7 +21,7 @@ const Hero = () => {
               E-Commerce Expert
             </span>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold leading-tight mb-6">
-              I'm{" "}
+              Meet Our CEO{" "}
               <span className="text-gradient">Muaz Tanzeel</span>
               <br />
               Your Partner in E-Commerce Success
@@ -60,7 +60,7 @@ const Hero = () => {
               <img
                 src={muazPhoto}
                 alt="Muaz Tanzeel - E-Commerce Expert"
-                className="w-72 h-80 sm:w-80 sm:h-96 object-cover object-bottom rounded-2xl shadow-xl"
+                className="w-72 h-80 sm:w-80 sm:h-96 object-cover object-[center_30%] rounded-2xl shadow-xl"
               />
               {/* Stat cards */}
               <div className="absolute -left-8 bottom-12 bg-card rounded-xl p-4 card-elevated">
@@ -68,7 +68,7 @@ const Hero = () => {
                 <p className="text-xs text-muted-foreground mt-1">Clients Served</p>
               </div>
               <div className="absolute -right-8 top-8 bg-card rounded-xl p-4 card-elevated">
-                <span className="text-2xl font-heading font-bold text-primary">5+</span>
+                <span className="text-2xl font-heading font-bold text-primary">4+</span>
                 <p className="text-xs text-muted-foreground mt-1">Years Experience</p>
               </div>
             </div>

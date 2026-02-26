@@ -13,7 +13,7 @@ const highlights = [
 
 const stats = [
   { value: "300+", label: "Clients Served" },
-  { value: "5+", label: "Years Experience" },
+  { value: "4+", label: "Years Experience" },
   { value: "12+", label: "Services Offered" },
   { value: "100%", label: "Client Satisfaction" },
 ];
@@ -33,7 +33,7 @@ const About = () => {
             <img
               src={muazPhoto}
               alt="Muaz Tanzeel"
-              className="w-72 h-80 sm:w-80 sm:h-96 object-cover object-bottom rounded-2xl shadow-xl"
+              className="w-72 h-80 sm:w-80 sm:h-96 object-cover object-[center_30%] rounded-2xl shadow-xl"
             />
           </motion.div>
 
@@ -47,10 +47,10 @@ const About = () => {
               About Me
             </span>
             <h2 className="text-3xl sm:text-4xl font-heading font-bold mb-6">
-              Hi, I'm <span className="text-gradient">Muaz Tanzeel</span>
+              Our CEO, <span className="text-gradient">Muaz Tanzeel</span>
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              I'm a dedicated e-commerce professional with 5+ years of experience helping
+              A dedicated e-commerce professional with 4+ years of experience helping
               entrepreneurs launch and scale their online businesses across Amazon, Shopify,
               TikTok, eBay, and Walmart.
             </p>
