@@ -5,14 +5,14 @@ import muazPhoto from "@/assets/muaz-photo.png";
 const highlights = [
   "Amazon, Shopify, TikTok & eBay Expert",
   "LLC, Trademark & Brand Registry Services",
-  "500+ Clients Worldwide",
+  "300+ Clients Worldwide",
   "Suspended Account Recovery Specialist",
   "Product Sourcing from China",
   "End-to-End Business Setup",
 ];
 
 const stats = [
-  { value: "500+", label: "Clients Served" },
+  { value: "300+", label: "Clients Served" },
   { value: "5+", label: "Years Experience" },
   { value: "12+", label: "Services Offered" },
   { value: "100%", label: "Client Satisfaction" },
@@ -33,7 +33,7 @@ const About = () => {
             <img
               src={muazPhoto}
               alt="Muaz Tanzeel"
-              className="w-72 h-80 sm:w-80 sm:h-96 object-cover rounded-2xl shadow-xl"
+              className="w-72 h-80 sm:w-80 sm:h-96 object-cover object-bottom rounded-2xl shadow-xl"
             />
           </motion.div>
 
