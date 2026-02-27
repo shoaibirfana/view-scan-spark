@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 
-/* ─── Floating service tag — only in right/empty areas ─── */
+/* ─── Floating service tag ─── */
 const FloatingTag = ({
   label,
   style,
@@ -27,18 +27,17 @@ const FloatingTag = ({
   </motion.div>
 );
 
-/* ─── Lightweight network canvas ─── */
+/* ─── Optimized particle network using spatial grid ─── */
 const NetworkCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
     let animId: number;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
     let cw = 0;
     let ch = 0;
 
@@ -46,109 +45,186 @@ const NetworkCanvas = () => {
       const rect = canvas.getBoundingClientRect();
       cw = rect.width;
       ch = rect.height;
-      canvas.width = cw * dpr;
-      canvas.height = ch * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      // Use 1x resolution — much faster, still looks great
+      canvas.width = cw;
+      canvas.height = ch;
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
     };
     resize();
     window.addEventListener("resize", resize);
 
-    // 80 particles — good density without lag
-    const COUNT = 80;
-    const particles = new Float32Array(COUNT * 6); // x, y, vx, vy, r, phase
+    const COUNT = 70;
+    const CONNECT_DIST = 140;
+
+    // Separate typed arrays for x, y, vx, vy — cache friendly
+    const px = new Float32Array(COUNT);
+    const py = new Float32Array(COUNT);
+    const vx = new Float32Array(COUNT);
+    const vy = new Float32Array(COUNT);
+    const radii = new Float32Array(COUNT);
 
     for (let i = 0; i < COUNT; i++) {
-      const idx = i * 6;
-      particles[idx] = Math.random() * cw;      // x
-      particles[idx + 1] = Math.random() * ch;   // y
-      particles[idx + 2] = (Math.random() - 0.5) * 0.25; // vx — slow & smooth
-      particles[idx + 3] = (Math.random() - 0.5) * 0.25; // vy
-      particles[idx + 4] = Math.random() * 1.8 + 0.8;    // r
-      particles[idx + 5] = Math.random() * Math.PI * 2;   // phase for pulse
+      px[i] = Math.random() * (cw || 1200);
+      py[i] = Math.random() * (ch || 800);
+      vx[i] = (Math.random() - 0.5) * 0.3;
+      vy[i] = (Math.random() - 0.5) * 0.3;
+      radii[i] = Math.random() * 1.5 + 1;
     }
 
-    const CONNECT_DIST = 160;
-    const CONNECT_DIST_SQ = CONNECT_DIST * CONNECT_DIST;
+    // Spatial grid for O(n) neighbor lookup instead of O(n²)
+    const CELL = CONNECT_DIST;
+    let cols = 0;
+    let rows = 0;
+    let grid: Int16Array;
+    let gridCount: Int16Array;
+    const MAX_PER_CELL = 8;
 
-    const draw = () => {
+    const rebuildGrid = () => {
+      cols = Math.ceil(cw / CELL) || 1;
+      rows = Math.ceil(ch / CELL) || 1;
+      grid = new Int16Array(cols * rows * MAX_PER_CELL);
+      gridCount = new Int16Array(cols * rows);
+    };
+    rebuildGrid();
+    
+    const origResize = resize;
+    const resizeWithGrid = () => { origResize(); rebuildGrid(); };
+    window.removeEventListener("resize", resize);
+    window.addEventListener("resize", resizeWithGrid);
+
+    // Pre-compute teal color string
+    const DOT_COLOR = "rgba(13,148,136,";
+    const LINE_COLOR = "rgba(13,148,136,";
+
+    let lastTime = performance.now();
+
+    const draw = (now: number) => {
+      // Delta time for frame-rate independent movement
+      const dt = Math.min((now - lastTime) / 16.667, 3); // normalize to 60fps, cap at 3x
+      lastTime = now;
+
       ctx.clearRect(0, 0, cw, ch);
 
-      // Update positions
-      for (let i = 0; i < COUNT; i++) {
-        const idx = i * 6;
-        particles[idx] += particles[idx + 2];
-        particles[idx + 1] += particles[idx + 3];
-        particles[idx + 5] += 0.015;
+      // Clear grid
+      gridCount.fill(0);
 
-        // Wrap
-        if (particles[idx] < -5) particles[idx] = cw + 5;
-        else if (particles[idx] > cw + 5) particles[idx] = -5;
-        if (particles[idx + 1] < -5) particles[idx + 1] = ch + 5;
-        else if (particles[idx + 1] > ch + 5) particles[idx + 1] = -5;
+      // Update positions & populate grid
+      for (let i = 0; i < COUNT; i++) {
+        px[i] += vx[i] * dt;
+        py[i] += vy[i] * dt;
+
+        if (px[i] < 0) px[i] += cw;
+        else if (px[i] > cw) px[i] -= cw;
+        if (py[i] < 0) py[i] += ch;
+        else if (py[i] > ch) py[i] -= ch;
+
+        const col = Math.min((px[i] / CELL) | 0, cols - 1);
+        const row = Math.min((py[i] / CELL) | 0, rows - 1);
+        const cellIdx = row * cols + col;
+        const count = gridCount[cellIdx];
+        if (count < MAX_PER_CELL) {
+          grid[cellIdx * MAX_PER_CELL + count] = i;
+          gridCount[cellIdx] = count + 1;
+        }
       }
 
-      // Draw connections first (batch)
-      ctx.lineWidth = 0.6;
-      for (let i = 0; i < COUNT; i++) {
-        const ix = i * 6;
-        const ax = particles[ix];
-        const ay = particles[ix + 1];
-        for (let j = i + 1; j < COUNT; j++) {
-          const jx = j * 6;
-          const dx = ax - particles[jx];
-          const dy = ay - particles[jx + 1];
-          const distSq = dx * dx + dy * dy;
-          if (distSq < CONNECT_DIST_SQ) {
-            const alpha = 0.1 * (1 - distSq / CONNECT_DIST_SQ);
-            ctx.beginPath();
-            ctx.moveTo(ax, ay);
-            ctx.lineTo(particles[jx], particles[jx + 1]);
-            ctx.strokeStyle = `rgba(13,148,136,${alpha})`;
-            ctx.stroke();
+      // Draw connections using grid neighbors only
+      ctx.lineWidth = 1;
+      const distSqMax = CONNECT_DIST * CONNECT_DIST;
+
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          const cellIdx = row * cols + col;
+          const cCount = gridCount[cellIdx];
+          if (cCount === 0) continue;
+
+          // Check this cell + right, bottom, bottom-right, bottom-left neighbors
+          for (let dr = 0; dr <= 1; dr++) {
+            for (let dc = (dr === 0 ? 0 : -1); dc <= 1; dc++) {
+              const nr = row + dr;
+              const nc = col + dc;
+              if (nr >= rows || nc < 0 || nc >= cols) continue;
+              if (dr === 0 && dc === 0) {
+                // Same cell — compare within
+                const base = cellIdx * MAX_PER_CELL;
+                for (let a = 0; a < cCount; a++) {
+                  const i = grid[base + a];
+                  for (let b = a + 1; b < cCount; b++) {
+                    const j = grid[base + b];
+                    const ddx = px[i] - px[j];
+                    const ddy = py[i] - py[j];
+                    const dSq = ddx * ddx + ddy * ddy;
+                    if (dSq < distSqMax) {
+                      const alpha = 0.18 * (1 - dSq / distSqMax);
+                      ctx.strokeStyle = LINE_COLOR + alpha.toFixed(3) + ")";
+                      ctx.beginPath();
+                      ctx.moveTo(px[i], py[i]);
+                      ctx.lineTo(px[j], py[j]);
+                      ctx.stroke();
+                    }
+                  }
+                }
+              } else {
+                // Neighbor cell
+                const nIdx = nr * cols + nc;
+                const nCount = gridCount[nIdx];
+                if (nCount === 0) continue;
+                const base1 = cellIdx * MAX_PER_CELL;
+                const base2 = nIdx * MAX_PER_CELL;
+                for (let a = 0; a < cCount; a++) {
+                  const i = grid[base1 + a];
+                  for (let b = 0; b < nCount; b++) {
+                    const j = grid[base2 + b];
+                    const ddx = px[i] - px[j];
+                    const ddy = py[i] - py[j];
+                    const dSq = ddx * ddx + ddy * ddy;
+                    if (dSq < distSqMax) {
+                      const alpha = 0.18 * (1 - dSq / distSqMax);
+                      ctx.strokeStyle = LINE_COLOR + alpha.toFixed(3) + ")";
+                      ctx.beginPath();
+                      ctx.moveTo(px[i], py[i]);
+                      ctx.lineTo(px[j], py[j]);
+                      ctx.stroke();
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
 
-      // Draw dots (batch by similar opacity)
+      // Draw dots — bigger, more visible
       for (let i = 0; i < COUNT; i++) {
-        const idx = i * 6;
-        const x = particles[idx];
-        const y = particles[idx + 1];
-        const r = particles[idx + 4] + Math.sin(particles[idx + 5]) * 0.3;
-        const op = 0.3 + Math.sin(particles[idx + 5]) * 0.1;
-
         ctx.beginPath();
-        ctx.arc(x, y, r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(13,148,136,${op})`;
+        ctx.arc(px[i], py[i], radii[i], 0, Math.PI * 2);
+        ctx.fillStyle = DOT_COLOR + "0.45)";
         ctx.fill();
       }
 
       animId = requestAnimationFrame(draw);
     };
 
-    draw();
+    animId = requestAnimationFrame(draw);
 
     return () => {
       cancelAnimationFrame(animId);
-      window.removeEventListener("resize", resize);
+      window.removeEventListener("resize", resizeWithGrid);
     };
   }, []);
 
   return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />;
 };
 
-/* ─── Tags placed ONLY in empty/right areas, NOT over text ─── */
+/* ─── Tags in empty spaces only ─── */
 const tagPositions: { label: string; style: React.CSSProperties; delay: number }[] = [
-  // Top area (above text, safe)
   { label: "Amazon FBA", style: { top: "6%", left: "5%" }, delay: 0.3 },
   { label: "Shopify", style: { top: "4%", right: "8%" }, delay: 0.5 },
   { label: "EIN Number", style: { top: "12%", left: "42%" }, delay: 0.9 },
-  // Right half / middle (no text there)
   { label: "Brand Registry", style: { top: "28%", left: "38%" }, delay: 0.7 },
   { label: "PPC Ads", style: { top: "50%", right: "38%" }, delay: 0.6 },
   { label: "Consulting", style: { top: "35%", right: "6%" }, delay: 1.0 },
   { label: "Trademark", style: { bottom: "30%", right: "32%" }, delay: 1.2 },
-  // Bottom area (below buttons)
   { label: "Walmart", style: { bottom: "8%", left: "18%" }, delay: 1.1 },
   { label: "Account Recovery", style: { bottom: "5%", left: "42%" }, delay: 1.3 },
   { label: "TikTok Shop", style: { bottom: "12%", right: "10%" }, delay: 0.8 },
@@ -160,7 +236,6 @@ const HeroBackground = () => {
     <div className="absolute inset-0 z-0 overflow-hidden">
       <NetworkCanvas />
 
-      {/* Gradient orbs */}
       <motion.div
         animate={{ scale: [1, 1.1, 1], opacity: [0.15, 0.25, 0.15] }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
@@ -177,7 +252,6 @@ const HeroBackground = () => {
         className="absolute top-1/3 right-1/4 w-64 h-64 bg-primary/10 rounded-full blur-[80px]"
       />
 
-      {/* Tags only in empty spaces */}
       {tagPositions.map((t) => (
         <FloatingTag key={t.label} label={t.label} style={t.style} delay={t.delay} />
       ))}
