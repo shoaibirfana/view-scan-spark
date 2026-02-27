@@ -40,7 +40,7 @@ const Footer = () => (
               <MessageCircle size={16} className="text-primary" />
             </a>
             <a
-              href="mailto:contact@teamecomify.com"
+              href="mailto:muazxsocial@gmail.com"
               className="w-9 h-9 rounded-full bg-primary/20 flex items-center justify-center hover:bg-primary/30 transition-colors"
             >
               <Mail size={16} className="text-primary" />
@@ -95,7 +95,12 @@ const Footer = () => (
             </li>
             <li className="flex items-start gap-3">
               <Mail size={16} className="text-primary mt-0.5 flex-shrink-0" />
-              <span className="text-sm text-[hsl(210,15%,65%)]">contact@teamecomify.com</span>
+              <a
+                href="mailto:muazxsocial@gmail.com"
+                className="text-sm text-[hsl(210,15%,65%)] hover:text-primary transition-colors"
+              >
+                muazxsocial@gmail.com
+              </a>
             </li>
             <li className="flex items-start gap-3">
               <MapPin size={16} className="text-primary mt-0.5 flex-shrink-0" />
