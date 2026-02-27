@@ -21,18 +21,21 @@ const services = [
 
 const Services = () => {
   return (
-    <section id="services" className="py-24 bg-background">
-      <div className="container mx-auto px-4 lg:px-8">
+    <section id="services" className="py-24 bg-background relative overflow-hidden">
+      {/* Subtle background decoration */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[150px]" />
+      
+      <div className="container mx-auto px-4 lg:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <span className="text-xs font-semibold tracking-[0.2em] uppercase text-primary mb-3 block">
-            What I Offer
+          <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.2em] uppercase text-primary mb-3 bg-primary/10 px-4 py-2 rounded-full">
+            What We Offer
           </span>
-          <h2 className="text-3xl sm:text-4xl font-heading font-bold">
+          <h2 className="text-3xl sm:text-4xl font-heading font-bold mt-4">
             Everything You Need to{" "}
             <span className="text-gradient">Build & Scale</span>
             <br />
@@ -48,25 +51,28 @@ const Services = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
-              className="bg-card rounded-xl p-6 card-elevated group"
+              className="group relative bg-card/80 backdrop-blur-sm rounded-xl p-6 card-elevated border border-border/50 hover:border-primary/30 transition-all duration-300"
             >
-              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                <service.icon className="text-primary" size={24} />
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
+                  <service.icon className="text-primary" size={24} />
+                </div>
+                <h3 className="font-heading font-semibold text-card-foreground mb-2">
+                  {service.title}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                  {service.desc}
+                </p>
+                <a
+                  href="https://wa.me/19413050102"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary text-sm font-semibold hover:underline inline-flex items-center gap-1 group-hover:gap-2 transition-all"
+                >
+                  Get Started →
+                </a>
               </div>
-              <h3 className="font-heading font-semibold text-card-foreground mb-2">
-                {service.title}
-              </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                {service.desc}
-              </p>
-              <a
-                href="https://wa.me/19413050102"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary text-sm font-semibold hover:underline"
-              >
-                Get Started →
-              </a>
             </motion.div>
           ))}
         </div>
