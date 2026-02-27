@@ -15,15 +15,10 @@ const FloatingTag = ({
     initial={{ opacity: 0, scale: 0.85 }}
     animate={{ opacity: 1, scale: 1 }}
     transition={{ delay, duration: 0.8, ease: "easeOut" }}
-    className="absolute px-3 py-1.5 rounded-full text-[11px] font-semibold bg-primary/10 text-primary/50 border border-primary/15 backdrop-blur-sm select-none pointer-events-none"
+    className="absolute px-3 py-1.5 rounded-full text-[11px] font-semibold bg-primary/10 text-primary/50 border border-primary/15 backdrop-blur-sm select-none pointer-events-none flex items-center justify-center"
     style={style}
   >
-    <motion.div
-      animate={{ y: [0, -5, 0] }}
-      transition={{ duration: 5 + delay, repeat: Infinity, ease: "easeInOut" }}
-    >
-      {label}
-    </motion.div>
+    {label}
   </motion.div>
 );
 
