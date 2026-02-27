@@ -48,7 +48,7 @@ const NetworkCanvas = () => {
     resize();
     window.addEventListener("resize", resize);
 
-    const COUNT = 70;
+    const COUNT = 90;
     const CONNECT_DIST = 140;
 
     // Separate typed arrays for x, y, vx, vy — cache friendly
@@ -63,7 +63,7 @@ const NetworkCanvas = () => {
       py[i] = Math.random() * (ch || 800);
       vx[i] = (Math.random() - 0.5) * 0.3;
       vy[i] = (Math.random() - 0.5) * 0.3;
-      radii[i] = Math.random() * 1.5 + 1;
+      radii[i] = Math.random() * 2 + 1.5;
     }
 
     // Spatial grid for O(n) neighbor lookup instead of O(n²)
@@ -150,7 +150,7 @@ const NetworkCanvas = () => {
                     const ddy = py[i] - py[j];
                     const dSq = ddx * ddx + ddy * ddy;
                     if (dSq < distSqMax) {
-                      const alpha = 0.18 * (1 - dSq / distSqMax);
+                      const alpha = 0.25 * (1 - dSq / distSqMax);
                       ctx.strokeStyle = LINE_COLOR + alpha.toFixed(3) + ")";
                       ctx.beginPath();
                       ctx.moveTo(px[i], py[i]);
@@ -174,7 +174,7 @@ const NetworkCanvas = () => {
                     const ddy = py[i] - py[j];
                     const dSq = ddx * ddx + ddy * ddy;
                     if (dSq < distSqMax) {
-                      const alpha = 0.18 * (1 - dSq / distSqMax);
+                      const alpha = 0.25 * (1 - dSq / distSqMax);
                       ctx.strokeStyle = LINE_COLOR + alpha.toFixed(3) + ")";
                       ctx.beginPath();
                       ctx.moveTo(px[i], py[i]);
@@ -189,11 +189,12 @@ const NetworkCanvas = () => {
         }
       }
 
-      // Draw dots — bigger, more visible
+      // Draw dots — prominent
+      ctx.lineWidth = 1;
       for (let i = 0; i < COUNT; i++) {
         ctx.beginPath();
         ctx.arc(px[i], py[i], radii[i], 0, Math.PI * 2);
-        ctx.fillStyle = DOT_COLOR + "0.45)";
+        ctx.fillStyle = DOT_COLOR + "0.55)";
         ctx.fill();
       }
 
@@ -213,7 +214,7 @@ const NetworkCanvas = () => {
 
 /* ─── Tags in empty spaces only ─── */
 const tagPositions: { label: string; style: React.CSSProperties; delay: number }[] = [
-  { label: "Amazon FBA", style: { top: "6%", left: "5%" }, delay: 0.3 },
+  { label: "Amazon FBA", style: { top: "6%", right: "30%" }, delay: 0.3 },
   { label: "Shopify", style: { top: "4%", right: "8%" }, delay: 0.5 },
   { label: "EIN Number", style: { top: "12%", left: "42%" }, delay: 0.9 },
   { label: "Brand Registry", style: { top: "28%", left: "38%" }, delay: 0.7 },
