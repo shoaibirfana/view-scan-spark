@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 
-/* ─── Floating service tag ─── */
+/* ─── Floating service tag — only in right/empty areas ─── */
 const FloatingTag = ({
   label,
   style,
@@ -12,22 +12,22 @@ const FloatingTag = ({
   delay: number;
 }) => (
   <motion.div
-    initial={{ opacity: 0, scale: 0.8 }}
+    initial={{ opacity: 0, scale: 0.85 }}
     animate={{ opacity: 1, scale: 1 }}
-    transition={{ delay, duration: 0.6 }}
-    className="absolute px-3 py-1.5 rounded-full text-[11px] font-semibold bg-primary/10 text-primary/60 border border-primary/15 backdrop-blur-sm select-none pointer-events-none"
+    transition={{ delay, duration: 0.8, ease: "easeOut" }}
+    className="absolute px-3 py-1.5 rounded-full text-[11px] font-semibold bg-primary/10 text-primary/50 border border-primary/15 backdrop-blur-sm select-none pointer-events-none"
     style={style}
   >
     <motion.div
-      animate={{ y: [0, -6, 0], x: [0, 3, 0] }}
-      transition={{ duration: 3 + delay * 0.5, repeat: Infinity, ease: "easeInOut" }}
+      animate={{ y: [0, -5, 0] }}
+      transition={{ duration: 5 + delay, repeat: Infinity, ease: "easeInOut" }}
     >
       {label}
     </motion.div>
   </motion.div>
 );
 
-/* ─── Network canvas ─── */
+/* ─── Lightweight network canvas ─── */
 const NetworkCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -38,94 +38,89 @@ const NetworkCanvas = () => {
     if (!ctx) return;
 
     let animId: number;
-    const dpr = window.devicePixelRatio || 1;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let cw = 0;
+    let ch = 0;
 
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
+      cw = rect.width;
+      ch = rect.height;
+      canvas.width = cw * dpr;
+      canvas.height = ch * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
     window.addEventListener("resize", resize);
 
-    const w = () => canvas.getBoundingClientRect().width;
-    const h = () => canvas.getBoundingClientRect().height;
+    // 80 particles — good density without lag
+    const COUNT = 80;
+    const particles = new Float32Array(COUNT * 6); // x, y, vx, vy, r, phase
 
-    // More particles, denser
-    const particles: {
-      x: number; y: number; vx: number; vy: number;
-      r: number; opacity: number; pulse: number; pulseSpeed: number;
-    }[] = [];
-
-    for (let i = 0; i < 120; i++) {
-      particles.push({
-        x: Math.random() * w(),
-        y: Math.random() * h(),
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        r: Math.random() * 2.5 + 0.8,
-        opacity: Math.random() * 0.5 + 0.15,
-        pulse: Math.random() * Math.PI * 2,
-        pulseSpeed: 0.01 + Math.random() * 0.02,
-      });
+    for (let i = 0; i < COUNT; i++) {
+      const idx = i * 6;
+      particles[idx] = Math.random() * cw;      // x
+      particles[idx + 1] = Math.random() * ch;   // y
+      particles[idx + 2] = (Math.random() - 0.5) * 0.25; // vx — slow & smooth
+      particles[idx + 3] = (Math.random() - 0.5) * 0.25; // vy
+      particles[idx + 4] = Math.random() * 1.8 + 0.8;    // r
+      particles[idx + 5] = Math.random() * Math.PI * 2;   // phase for pulse
     }
 
-    let time = 0;
+    const CONNECT_DIST = 160;
+    const CONNECT_DIST_SQ = CONNECT_DIST * CONNECT_DIST;
 
     const draw = () => {
-      const cw = w();
-      const ch = h();
       ctx.clearRect(0, 0, cw, ch);
-      time += 0.016;
 
-      // Update & draw particles
-      particles.forEach((p) => {
-        p.x += p.vx;
-        p.y += p.vy;
-        p.pulse += p.pulseSpeed;
+      // Update positions
+      for (let i = 0; i < COUNT; i++) {
+        const idx = i * 6;
+        particles[idx] += particles[idx + 2];
+        particles[idx + 1] += particles[idx + 3];
+        particles[idx + 5] += 0.015;
 
-        // Smooth wrapping
-        if (p.x < -10) p.x = cw + 10;
-        if (p.x > cw + 10) p.x = -10;
-        if (p.y < -10) p.y = ch + 10;
-        if (p.y > ch + 10) p.y = -10;
+        // Wrap
+        if (particles[idx] < -5) particles[idx] = cw + 5;
+        else if (particles[idx] > cw + 5) particles[idx] = -5;
+        if (particles[idx + 1] < -5) particles[idx + 1] = ch + 5;
+        else if (particles[idx + 1] > ch + 5) particles[idx + 1] = -5;
+      }
 
-        const pulseOpacity = p.opacity + Math.sin(p.pulse) * 0.1;
-        const pulseR = p.r + Math.sin(p.pulse * 1.5) * 0.4;
-
-        // Glow effect
-        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, pulseR * 3);
-        gradient.addColorStop(0, `rgba(13, 148, 136, ${pulseOpacity})`);
-        gradient.addColorStop(1, `rgba(13, 148, 136, 0)`);
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, pulseR * 3, 0, Math.PI * 2);
-        ctx.fillStyle = gradient;
-        ctx.fill();
-
-        // Core dot
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, pulseR, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(13, 148, 136, ${pulseOpacity + 0.1})`;
-        ctx.fill();
-      });
-
-      // Draw connections — increased range
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 180) {
-            const alpha = 0.12 * (1 - dist / 180);
+      // Draw connections first (batch)
+      ctx.lineWidth = 0.6;
+      for (let i = 0; i < COUNT; i++) {
+        const ix = i * 6;
+        const ax = particles[ix];
+        const ay = particles[ix + 1];
+        for (let j = i + 1; j < COUNT; j++) {
+          const jx = j * 6;
+          const dx = ax - particles[jx];
+          const dy = ay - particles[jx + 1];
+          const distSq = dx * dx + dy * dy;
+          if (distSq < CONNECT_DIST_SQ) {
+            const alpha = 0.1 * (1 - distSq / CONNECT_DIST_SQ);
             ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(13, 148, 136, ${alpha})`;
-            ctx.lineWidth = 0.8;
+            ctx.moveTo(ax, ay);
+            ctx.lineTo(particles[jx], particles[jx + 1]);
+            ctx.strokeStyle = `rgba(13,148,136,${alpha})`;
             ctx.stroke();
           }
         }
+      }
+
+      // Draw dots (batch by similar opacity)
+      for (let i = 0; i < COUNT; i++) {
+        const idx = i * 6;
+        const x = particles[idx];
+        const y = particles[idx + 1];
+        const r = particles[idx + 4] + Math.sin(particles[idx + 5]) * 0.3;
+        const op = 0.3 + Math.sin(particles[idx + 5]) * 0.1;
+
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(13,148,136,${op})`;
+        ctx.fill();
       }
 
       animId = requestAnimationFrame(draw);
@@ -139,61 +134,50 @@ const NetworkCanvas = () => {
     };
   }, []);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 w-full h-full"
-    />
-  );
+  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />;
 };
 
-/* ─── More tags, tighter placement ─── */
+/* ─── Tags placed ONLY in empty/right areas, NOT over text ─── */
 const tagPositions: { label: string; style: React.CSSProperties; delay: number }[] = [
-  { label: "Amazon FBA", style: { top: "10%", left: "4%" }, delay: 0.3 },
-  { label: "Shopify", style: { top: "6%", right: "12%" }, delay: 0.5 },
-  { label: "TikTok Shop", style: { bottom: "35%", left: "6%" }, delay: 0.7 },
-  { label: "Brand Registry", style: { top: "22%", left: "28%" }, delay: 0.9 },
-  { label: "LLC Formation", style: { bottom: "18%", right: "6%" }, delay: 1.1 },
-  { label: "Product Sourcing", style: { top: "55%", left: "3%" }, delay: 1.3 },
-  { label: "Walmart", style: { bottom: "10%", left: "22%" }, delay: 1.5 },
-  { label: "PPC Ads", style: { top: "38%", right: "4%" }, delay: 0.6 },
-  { label: "Trademark", style: { bottom: "25%", right: "20%" }, delay: 1.0 },
-  { label: "eBay", style: { top: "68%", right: "10%" }, delay: 0.4 },
-  { label: "EIN Number", style: { top: "15%", left: "48%" }, delay: 1.2 },
-  { label: "Account Recovery", style: { bottom: "5%", left: "45%" }, delay: 1.4 },
-  { label: "Store Setup", style: { top: "42%", left: "15%" }, delay: 0.8 },
-  { label: "Consulting", style: { bottom: "40%", right: "15%" }, delay: 1.6 },
+  // Top area (above text, safe)
+  { label: "Amazon FBA", style: { top: "6%", left: "5%" }, delay: 0.3 },
+  { label: "Shopify", style: { top: "4%", right: "8%" }, delay: 0.5 },
+  { label: "EIN Number", style: { top: "12%", left: "42%" }, delay: 0.9 },
+  // Right half / middle (no text there)
+  { label: "Brand Registry", style: { top: "28%", left: "38%" }, delay: 0.7 },
+  { label: "PPC Ads", style: { top: "50%", right: "38%" }, delay: 0.6 },
+  { label: "Consulting", style: { top: "35%", right: "6%" }, delay: 1.0 },
+  { label: "Trademark", style: { bottom: "30%", right: "32%" }, delay: 1.2 },
+  // Bottom area (below buttons)
+  { label: "Walmart", style: { bottom: "8%", left: "18%" }, delay: 1.1 },
+  { label: "Account Recovery", style: { bottom: "5%", left: "42%" }, delay: 1.3 },
+  { label: "TikTok Shop", style: { bottom: "12%", right: "10%" }, delay: 0.8 },
+  { label: "Product Sourcing", style: { bottom: "18%", right: "38%" }, delay: 1.4 },
 ];
 
 const HeroBackground = () => {
   return (
     <div className="absolute inset-0 z-0 overflow-hidden">
-      {/* Animated network canvas */}
       <NetworkCanvas />
 
-      {/* Gradient orbs — smoother, more visible */}
+      {/* Gradient orbs */}
       <motion.div
-        animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0.35, 0.2] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-5 left-5 w-72 h-72 bg-primary/20 rounded-full blur-[80px]"
+        animate={{ scale: [1, 1.1, 1], opacity: [0.15, 0.25, 0.15] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute -top-10 -left-10 w-72 h-72 bg-primary/15 rounded-full blur-[80px]"
       />
       <motion.div
-        animate={{ scale: [1.1, 1, 1.1], opacity: [0.15, 0.3, 0.15] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-        className="absolute bottom-5 right-5 w-80 h-80 bg-primary/15 rounded-full blur-[90px]"
-      />
-      <motion.div
-        animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.25, 0.1] }}
-        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 3 }}
-        className="absolute top-1/3 left-1/3 w-96 h-96 bg-primary/12 rounded-full blur-[100px]"
-      />
-      <motion.div
-        animate={{ x: [0, 30, 0], y: [0, -20, 0], opacity: [0.1, 0.2, 0.1] }}
+        animate={{ scale: [1, 1.15, 1], opacity: [0.1, 0.2, 0.1] }}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        className="absolute bottom-1/3 right-1/4 w-60 h-60 bg-primary/10 rounded-full blur-[70px]"
+        className="absolute -bottom-10 -right-10 w-80 h-80 bg-primary/12 rounded-full blur-[90px]"
+      />
+      <motion.div
+        animate={{ scale: [1, 1.1, 1], opacity: [0.08, 0.18, 0.08] }}
+        transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 4 }}
+        className="absolute top-1/3 right-1/4 w-64 h-64 bg-primary/10 rounded-full blur-[80px]"
       />
 
-      {/* Floating service tags */}
+      {/* Tags only in empty spaces */}
       {tagPositions.map((t) => (
         <FloatingTag key={t.label} label={t.label} style={t.style} delay={t.delay} />
       ))}
