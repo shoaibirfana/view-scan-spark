@@ -248,9 +248,11 @@ const HeroBackground = () => {
         className="absolute top-1/3 right-1/4 w-64 h-64 bg-primary/10 rounded-full blur-[80px]"
       />
 
-      {tagPositions.map((t) => (
-        <FloatingTag key={t.label} label={t.label} style={t.style} delay={t.delay} />
-      ))}
+      <div className="hidden lg:block">
+        {tagPositions.map((t) => (
+          <FloatingTag key={t.label} label={t.label} style={t.style} delay={t.delay} />
+        ))}
+      </div>
     </div>
   );
 };
