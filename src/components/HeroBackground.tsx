@@ -214,8 +214,8 @@ const NetworkCanvas = () => {
 
 /* ─── Tags in empty spaces only ─── */
 const tagPositions: { label: string; style: React.CSSProperties; delay: number }[] = [
-  { label: "Amazon FBA", style: { top: "6%", right: "30%" }, delay: 0.3 },
-  { label: "Shopify", style: { top: "4%", right: "8%" }, delay: 0.5 },
+  { label: "Amazon FBA", style: { top: "10%", right: "30%" }, delay: 0.3 },
+  { label: "Shopify", style: { top: "12%", right: "8%" }, delay: 0.5 },
   { label: "EIN Number", style: { top: "12%", left: "42%" }, delay: 0.9 },
   { label: "Brand Registry", style: { top: "28%", left: "38%" }, delay: 0.7 },
   { label: "PPC Ads", style: { top: "50%", right: "38%" }, delay: 0.6 },
