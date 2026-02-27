@@ -1,17 +1,13 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import muazPhoto from "@/assets/muaz-photo.png";
-import Scene3D from "./Scene3D";
+import HeroBackground from "./HeroBackground";
 
 const Hero = () => {
   return (
     <section id="home" className="hero-bg min-h-screen flex items-center pt-20 relative overflow-hidden">
-      {/* 3D Background */}
-      <Scene3D />
-
-      {/* Animated gradient orbs */}
-      <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-[100px] animate-pulse" />
-      <div className="absolute bottom-10 right-10 w-96 h-96 bg-primary/5 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: "1s" }} />
+      {/* Animated Background */}
+      <HeroBackground />
 
       <div className="container mx-auto px-4 lg:px-8 py-16 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
