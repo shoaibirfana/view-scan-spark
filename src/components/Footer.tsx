@@ -1,4 +1,5 @@
 import { MessageCircle, Mail, Phone, MapPin } from "lucide-react";
+import logo from "@/assets/logo.jpg";
 
 const quickLinks = [
   { label: "Home", href: "#home" },
@@ -23,9 +24,12 @@ const Footer = () => (
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
         {/* Brand */}
         <div>
-          <a href="#home" className="text-2xl font-heading font-bold block mb-4">
-            <span className="text-primary">Team</span>{" "}
-            <span className="text-white">Ecomify</span>
+          <a href="#home" className="flex items-center gap-2 text-2xl font-heading font-bold mb-4">
+            <img src={logo} alt="Team Ecomify logo" className="w-8 h-8 object-contain" />
+            <span>
+              <span className="text-primary">Team</span>{" "}
+              <span className="text-white">Ecomify</span>
+            </span>
           </a>
           <p className="text-sm leading-relaxed text-[hsl(210,15%,65%)] mb-6">
             Your trusted partner in e-commerce success. We help entrepreneurs build, launch, and scale profitable online businesses.

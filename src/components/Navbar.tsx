@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import logo from "@/assets/logo.jpg";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
@@ -27,9 +28,12 @@ const Navbar = () => {
       }`}
     >
       <div className="container mx-auto flex items-center justify-between py-4 px-4 lg:px-8">
-        <a href="#home" className="text-2xl font-heading font-bold">
-          <span className="text-primary">Team</span>{" "}
-          <span className="text-foreground">Ecomify</span>
+        <a href="#home" className="flex items-center gap-2 text-2xl font-heading font-bold">
+          <img src={logo} alt="Team Ecomify logo" className="w-8 h-8 object-contain" />
+          <span>
+            <span className="text-primary">Team</span>{" "}
+            <span className="text-foreground">Ecomify</span>
+          </span>
         </a>
 
         {/* Desktop */}
