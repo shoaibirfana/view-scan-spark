@@ -3,7 +3,7 @@ import {
   Store, ShoppingCart, Video, Tag, Building2, Shield,
   FileText, RefreshCw, Package, BarChart3, Users, Warehouse,
 } from "lucide-react";
-
+import logo from "@/assets/logo.png";
 const services = [
   { icon: Store, title: "Amazon Store Management", desc: "Complete Amazon seller account setup, product listing optimization, PPC campaigns, and full store management." },
   { icon: ShoppingCart, title: "Shopify Store Development", desc: "Custom Shopify store design, development, theme customization, and ready-to-run store packages." },
@@ -33,7 +33,7 @@ const Services = () => {
           className="text-center mb-16"
         >
           <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.2em] uppercase text-primary mb-3 bg-primary/10 px-4 py-2 rounded-full">
-            What We Offer
+            <img src={logo} alt="" className="w-4 h-4 object-contain" /> What We Offer
           </span>
           <h2 className="text-3xl sm:text-4xl font-heading font-bold mt-4">
             Everything You Need to{" "}
@@ -65,9 +65,7 @@ const Services = () => {
                   {service.desc}
                 </p>
                 <a
-                  href="https://wa.me/19413050102"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="#contact"
                   className="text-primary text-sm font-semibold hover:underline inline-flex items-center gap-1 group-hover:gap-2 transition-all"
                 >
                   Get Started →
