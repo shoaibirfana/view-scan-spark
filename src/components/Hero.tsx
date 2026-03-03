@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import muazPhoto from "@/assets/muaz-photo.png";
+import logo from "@/assets/logo.png";
 import HeroBackground from "./HeroBackground";
 
 const Hero = () => {
@@ -23,7 +24,7 @@ const Hero = () => {
               transition={{ delay: 0.3, duration: 0.5 }}
               className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.2em] uppercase text-primary mb-4 bg-primary/10 px-4 py-2 rounded-full backdrop-blur-sm border border-primary/20"
             >
-              <Sparkles size={14} /> E-Commerce Expert
+              <img src={logo} alt="" className="w-4 h-4 object-contain" /> E-Commerce Expert
             </motion.span>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold leading-tight mb-6">
               <motion.span
