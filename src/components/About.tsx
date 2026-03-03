@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Check, Award } from "lucide-react";
 import muazPhoto from "@/assets/muaz-photo.png";
+import logo from "@/assets/logo.png";
 
 const highlights = [
   "Amazon, Shopify, TikTok & eBay Expert",
@@ -58,7 +59,7 @@ const About = () => {
             viewport={{ once: true }}
           >
             <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.2em] uppercase text-primary mb-3 bg-primary/10 px-4 py-2 rounded-full">
-              About Us
+              <img src={logo} alt="" className="w-4 h-4 object-contain" /> About Us
             </span>
             <h2 className="text-3xl sm:text-4xl font-heading font-bold mb-6 mt-4">
               Our CEO, <span className="text-gradient">Muaz Tanzeel</span>
