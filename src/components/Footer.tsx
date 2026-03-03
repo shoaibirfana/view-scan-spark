@@ -1,5 +1,5 @@
 import { MessageCircle, Mail, Phone, MapPin } from "lucide-react";
-import logo from "@/assets/logo.jpg";
+import logo from "@/assets/logo.png";
 
 const quickLinks = [
   { label: "Home", href: "#home" },
