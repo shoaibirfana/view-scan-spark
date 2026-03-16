@@ -1,5 +1,5 @@
-import { motion, useInView } from "framer-motion";
-import { useRef, useEffect, useState, useCallback } from "react";
+import { motion } from "framer-motion";
+import { useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import logo from "@/assets/logo.png";
 
@@ -32,21 +32,11 @@ const INTERVAL = 3500;
 
 const Team = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, { once: false, amount: 0.3 });
   const [index, setIndex] = useState(0);
   const maxIndex = members.length - VISIBLE;
 
-  const next = useCallback(() => {
-    setIndex((i) => (i >= maxIndex ? 0 : i + 1));
-  }, [maxIndex]);
-
+  const next = () => setIndex((i) => (i >= maxIndex ? 0 : i + 1));
   const prev = () => setIndex((i) => (i <= 0 ? maxIndex : i - 1));
-
-  useEffect(() => {
-    if (!isInView) return;
-    const id = setInterval(next, INTERVAL);
-    return () => clearInterval(id);
-  }, [isInView, next]);
 
   return (
     <section ref={sectionRef} className="py-24 bg-background relative overflow-hidden">
@@ -84,15 +74,15 @@ const Team = () => {
           </button>
 
           <div className="overflow-hidden">
-            <motion.div
-              className="flex gap-6"
-              animate={{ x: `-${index * (100 / VISIBLE + 2)}%` }}
-              transition={{ type: "spring", stiffness: 200, damping: 30 }}
+            <div
+              className="flex transition-transform duration-500 ease-in-out"
+              style={{ transform: `translateX(-${index * (100 / VISIBLE)}%)`, gap: '1.5rem' }}
             >
               {members.map((m, i) => (
                 <div
                   key={i}
-                  className="min-w-[calc(33.333%-1rem)] flex-shrink-0"
+                  className="flex-shrink-0"
+                  style={{ width: `calc(${100 / VISIBLE}% - 1rem)` }}
                 >
                   <div className="bg-card/80 backdrop-blur-sm rounded-2xl overflow-hidden card-elevated border border-border/50 group">
                     <div className="aspect-[3/4] overflow-hidden">
@@ -109,7 +99,7 @@ const Team = () => {
                   </div>
                 </div>
               ))}
-            </motion.div>
+            </div>
           </div>
 
           {/* Dots */}
