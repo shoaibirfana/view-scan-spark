@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import logo from "@/assets/logo.png";
 
@@ -32,8 +32,21 @@ const INTERVAL = 3500;
 
 const Team = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
+  const [slideWidth, setSlideWidth] = useState(0);
   const maxIndex = members.length - VISIBLE;
+
+  useEffect(() => {
+    const updateWidth = () => {
+      if (containerRef.current) {
+        setSlideWidth(containerRef.current.offsetWidth / VISIBLE);
+      }
+    };
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
+  }, []);
 
   const next = () => setIndex((i) => (i >= maxIndex ? 0 : i + 1));
   const prev = () => setIndex((i) => (i <= 0 ? maxIndex : i - 1));
@@ -73,16 +86,18 @@ const Team = () => {
             <ChevronRight size={20} />
           </button>
 
-          <div className="overflow-hidden">
+          <div className="overflow-hidden" ref={containerRef}>
             <div
               className="flex transition-transform duration-500 ease-in-out"
-              style={{ transform: `translateX(-${index * (100 / VISIBLE)}%)`, gap: '1.5rem' }}
+              style={{
+                transform: `translateX(-${index * slideWidth}px)`,
+              }}
             >
               {members.map((m, i) => (
                 <div
                   key={i}
-                  className="flex-shrink-0"
-                  style={{ width: `calc(${100 / VISIBLE}% - 1rem)` }}
+                  className="flex-shrink-0 px-3"
+                  style={{ width: `${slideWidth}px` }}
                 >
                   <div className="bg-card/80 backdrop-blur-sm rounded-2xl overflow-hidden card-elevated border border-border/50 group">
                     <div className="aspect-[3/4] overflow-hidden">
