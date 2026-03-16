@@ -32,21 +32,11 @@ const INTERVAL = 3500;
 
 const Team = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, { once: false, amount: 0.3 });
   const [index, setIndex] = useState(0);
   const maxIndex = members.length - VISIBLE;
 
-  const next = useCallback(() => {
-    setIndex((i) => (i >= maxIndex ? 0 : i + 1));
-  }, [maxIndex]);
-
+  const next = () => setIndex((i) => (i >= maxIndex ? 0 : i + 1));
   const prev = () => setIndex((i) => (i <= 0 ? maxIndex : i - 1));
-
-  useEffect(() => {
-    if (!isInView) return;
-    const id = setInterval(next, INTERVAL);
-    return () => clearInterval(id);
-  }, [isInView, next]);
 
   return (
     <section ref={sectionRef} className="py-24 bg-background relative overflow-hidden">
