@@ -74,15 +74,15 @@ const Team = () => {
           </button>
 
           <div className="overflow-hidden">
-            <motion.div
-              className="flex gap-6"
-              animate={{ x: `-${index * (100 / VISIBLE + 2)}%` }}
-              transition={{ type: "spring", stiffness: 200, damping: 30 }}
+            <div
+              className="flex transition-transform duration-500 ease-in-out"
+              style={{ transform: `translateX(-${index * (100 / VISIBLE)}%)`, gap: '1.5rem' }}
             >
               {members.map((m, i) => (
                 <div
                   key={i}
-                  className="min-w-[calc(33.333%-1rem)] flex-shrink-0"
+                  className="flex-shrink-0"
+                  style={{ width: `calc(${100 / VISIBLE}% - 1rem)` }}
                 >
                   <div className="bg-card/80 backdrop-blur-sm rounded-2xl overflow-hidden card-elevated border border-border/50 group">
                     <div className="aspect-[3/4] overflow-hidden">
