@@ -15,16 +15,16 @@ import team9 from "@/assets/team-9.jpg";
 import team10 from "@/assets/team-10.jpg";
 
 const members = [
-  { name: "Amina Javed", role: "Trademark Specialist", photo: team7 },
-  { name: "Sana Noor", role: "eBay Specialist", photo: team8 },
-  { name: "Hina Malik", role: "Brand Strategist", photo: team3 },
-  { name: "Zainab Tariq", role: "Product Sourcing Lead", photo: team5 },
-  { name: "Ayesha Khan", role: "Amazon Specialist", photo: team1 },
-  { name: "Sara Ahmed", role: "Shopify Expert", photo: team2 },
-  { name: "Nadia Hussain", role: "TikTok Shop Manager", photo: team4 },
-  { name: "Fatima Raza", role: "Account Recovery Expert", photo: team6 },
-  { name: "Mariam Ali", role: "Walmart Expert", photo: team9 },
-  { name: "Rabia Sheikh", role: "LLC Formation Lead", photo: team10 },
+  { name: "Anosh Saleem", role: "Digital Marketing Expert", photo: team1 },
+  { name: "Anisa Ilyas", role: "TikTok Shop Expert", photo: team2 },
+  { name: "Maryyum Manan", role: "Social Media Manager / Google Ads", photo: team3 },
+  { name: "Moaz Akram", role: "Shopify Expert", photo: team4 },
+  { name: "Hamza", role: "Ecommerce Expert", photo: team5 },
+  { name: "Shoaib Irfan", role: "Amazon Private Label Expert", photo: team6 },
+  { name: "Shayan Yousaf", role: "Senior Sales Manager", photo: team7 },
+  { name: "Muhammad Furqan Ahmad", role: "Senior Sourcing Manager", photo: team8 },
+  { name: "Safiullah Sajid", role: "Amazon UAE / Shopify UAE Expert", photo: team9 },
+  { name: "Muaz Tanzeel", role: "Amazon, Shopify, TikTok & eBay Senior Expert", photo: team10 },
 ];
 
 function getVisibleCount(width: number) {
