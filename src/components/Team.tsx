@@ -73,16 +73,18 @@ const Team = () => {
             <ChevronRight size={20} />
           </button>
 
-          <div className="overflow-hidden">
+          <div className="overflow-hidden" ref={containerRef}>
             <div
               className="flex transition-transform duration-500 ease-in-out"
-              style={{ transform: `translateX(-${index * (100 / VISIBLE)}%)`, gap: '1.5rem' }}
+              style={{
+                transform: `translateX(-${index * slideWidth}px)`,
+              }}
             >
               {members.map((m, i) => (
                 <div
                   key={i}
-                  className="flex-shrink-0"
-                  style={{ width: `calc(${100 / VISIBLE}% - 1rem)` }}
+                  className="flex-shrink-0 px-3"
+                  style={{ width: `${slideWidth}px` }}
                 >
                   <div className="bg-card/80 backdrop-blur-sm rounded-2xl overflow-hidden card-elevated border border-border/50 group">
                     <div className="aspect-[3/4] overflow-hidden">
