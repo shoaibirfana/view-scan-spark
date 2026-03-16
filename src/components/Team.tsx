@@ -16,9 +16,9 @@ import team10 from "@/assets/team-10.jpg";
 
 const members = [
   { name: "Amina Javed", role: "Trademark Specialist", photo: team7 },
-  { name: "Zainab Tariq", role: "Product Sourcing Lead", photo: team5 },
   { name: "Sana Noor", role: "eBay Specialist", photo: team8 },
   { name: "Hina Malik", role: "Brand Strategist", photo: team3 },
+  { name: "Zainab Tariq", role: "Product Sourcing Lead", photo: team5 },
   { name: "Ayesha Khan", role: "Amazon Specialist", photo: team1 },
   { name: "Sara Ahmed", role: "Shopify Expert", photo: team2 },
   { name: "Nadia Hussain", role: "TikTok Shop Manager", photo: team4 },
