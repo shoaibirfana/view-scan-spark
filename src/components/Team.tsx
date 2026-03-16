@@ -15,15 +15,15 @@ import team9 from "@/assets/team-9.jpg";
 import team10 from "@/assets/team-10.jpg";
 
 const members = [
-  { name: "Zainab Tariq", role: "Product Sourcing Lead", photo: team8 },
-  { name: "Sana Noor", role: "eBay Specialist", photo: team9 },
+  { name: "Zainab Tariq", role: "Product Sourcing Lead", photo: team5 },
+  { name: "Sana Noor", role: "eBay Specialist", photo: team8 },
   { name: "Hina Malik", role: "Brand Strategist", photo: team3 },
   { name: "Ayesha Khan", role: "Amazon Specialist", photo: team1 },
   { name: "Sara Ahmed", role: "Shopify Expert", photo: team2 },
   { name: "Nadia Hussain", role: "TikTok Shop Manager", photo: team4 },
-  { name: "Zainab Tariq", role: "Product Sourcing Lead", photo: team5 },
   { name: "Fatima Raza", role: "Account Recovery Expert", photo: team6 },
   { name: "Amina Javed", role: "Trademark Specialist", photo: team7 },
+  { name: "Mariam Ali", role: "Walmart Expert", photo: team9 },
   { name: "Rabia Sheikh", role: "LLC Formation Lead", photo: team10 },
 ];
 
