@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import logo from "@/assets/logo.png";
 
