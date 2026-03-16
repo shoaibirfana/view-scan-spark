@@ -32,8 +32,21 @@ const INTERVAL = 3500;
 
 const Team = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
+  const [slideWidth, setSlideWidth] = useState(0);
   const maxIndex = members.length - VISIBLE;
+
+  useEffect(() => {
+    const updateWidth = () => {
+      if (containerRef.current) {
+        setSlideWidth(containerRef.current.offsetWidth / VISIBLE);
+      }
+    };
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
+  }, []);
 
   const next = () => setIndex((i) => (i >= maxIndex ? 0 : i + 1));
   const prev = () => setIndex((i) => (i <= 0 ? maxIndex : i - 1));
