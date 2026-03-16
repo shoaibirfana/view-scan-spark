@@ -99,7 +99,7 @@ const Team = () => {
                   </div>
                 </div>
               ))}
-            </motion.div>
+            </div>
           </div>
 
           {/* Dots */}
