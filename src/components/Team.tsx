@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import logo from "@/assets/logo.png";
 
@@ -15,6 +15,7 @@ import team9 from "@/assets/team-9.jpg";
 import team10 from "@/assets/team-10.jpg";
 
 const members = [
+  { name: "Amina Javed", role: "Trademark Specialist", photo: team7 },
   { name: "Zainab Tariq", role: "Product Sourcing Lead", photo: team5 },
   { name: "Sana Noor", role: "eBay Specialist", photo: team8 },
   { name: "Hina Malik", role: "Brand Strategist", photo: team3 },
@@ -22,31 +23,45 @@ const members = [
   { name: "Sara Ahmed", role: "Shopify Expert", photo: team2 },
   { name: "Nadia Hussain", role: "TikTok Shop Manager", photo: team4 },
   { name: "Fatima Raza", role: "Account Recovery Expert", photo: team6 },
-  { name: "Amina Javed", role: "Trademark Specialist", photo: team7 },
   { name: "Mariam Ali", role: "Walmart Expert", photo: team9 },
   { name: "Rabia Sheikh", role: "LLC Formation Lead", photo: team10 },
 ];
 
-const VISIBLE = 3;
-const INTERVAL = 3500;
+function getVisibleCount(width: number) {
+  if (width >= 1280) return 4;
+  if (width >= 1024) return 3;
+  if (width >= 640) return 2;
+  return 1;
+}
 
 const Team = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
+  const [visible, setVisible] = useState(3);
   const [slideWidth, setSlideWidth] = useState(0);
-  const maxIndex = members.length - VISIBLE;
+
+  const maxIndex = Math.max(members.length - visible, 0);
+
+  const recalc = useCallback(() => {
+    const w = window.innerWidth;
+    const v = getVisibleCount(w);
+    setVisible(v);
+    if (containerRef.current) {
+      setSlideWidth(containerRef.current.offsetWidth / v);
+    }
+  }, []);
 
   useEffect(() => {
-    const updateWidth = () => {
-      if (containerRef.current) {
-        setSlideWidth(containerRef.current.offsetWidth / VISIBLE);
-      }
-    };
-    updateWidth();
-    window.addEventListener("resize", updateWidth);
-    return () => window.removeEventListener("resize", updateWidth);
-  }, []);
+    recalc();
+    window.addEventListener("resize", recalc);
+    return () => window.removeEventListener("resize", recalc);
+  }, [recalc]);
+
+  // Clamp index when visible count changes
+  useEffect(() => {
+    setIndex((i) => Math.min(i, maxIndex));
+  }, [maxIndex]);
 
   const next = () => setIndex((i) => (i >= maxIndex ? 0 : i + 1));
   const prev = () => setIndex((i) => (i <= 0 ? maxIndex : i - 1));
@@ -72,7 +87,7 @@ const Team = () => {
         </motion.div>
 
         {/* Carousel */}
-        <div className="relative max-w-5xl mx-auto">
+        <div className="relative max-w-6xl mx-auto">
           <button
             onClick={prev}
             className="absolute -left-4 sm:-left-10 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-card border border-border/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 transition-colors"
@@ -89,9 +104,7 @@ const Team = () => {
           <div className="overflow-hidden" ref={containerRef}>
             <div
               className="flex transition-transform duration-500 ease-in-out"
-              style={{
-                transform: `translateX(-${index * slideWidth}px)`,
-              }}
+              style={{ transform: `translateX(-${index * slideWidth}px)` }}
             >
               {members.map((m, i) => (
                 <div
