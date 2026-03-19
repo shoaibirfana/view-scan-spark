@@ -201,16 +201,16 @@ const NetworkCanvas = () => {
 // - Hidden on mobile (no space) 
 // - On md+: placed in truly empty peripheral zones
 // - Never overlap navbar, hero text, video circle, stats row, or orbit icons
-const floatingTags = [
+const floatingTags: { label: string; top?: string; right?: string; bottom?: string; left?: string; delay: number; hideOnMd?: boolean }[] = [
   // Top-right area — moved down to clear navbar
-  { label: "Brand Registry", top: "18%", right: "22%", delay: 2 },
+  { label: "Brand Registry", top: "18%", right: "22%", delay: 2, hideOnMd: true },
   { label: "Shopify", top: "18%", right: "4%", delay: 0.5 },
   // Right edge — mid-height, outside orbit radius
-  { label: "TikTok Shop", top: "50%", right: "1.5%", delay: 3 },
+  { label: "TikTok Shop", top: "50%", right: "1.5%", delay: 3, hideOnMd: true },
   // Bottom strip — below everything, evenly spaced
   { label: "Amazon FBA", bottom: "1.5%", left: "4%", delay: 1 },
-  { label: "Product Sourcing", bottom: "1.5%", left: "38%", delay: 2.5 },
-  { label: "ITIN Number", bottom: "1.5%", right: "20%", delay: 3.5 },
+  { label: "Product Sourcing", bottom: "1.5%", left: "38%", delay: 2.5, hideOnMd: true },
+  { label: "ITIN Number", bottom: "1.5%", right: "20%", delay: 3.5, hideOnMd: true },
   { label: "LLC Formation", bottom: "1.5%", right: "1.5%", delay: 1.5 },
   // Left edge — between hero text bottom and stats
   { label: "EIN Number", bottom: "15%", left: "1.5%", delay: 0 },
@@ -240,18 +240,13 @@ const HeroBackground = () => (
       <motion.div
         key={tag.label}
         initial={{ opacity: 0, scale: 0.85 }}
-        animate={{
-          opacity: [0.5, 0.8, 0.5],
-          y: [0, -6, 0],
-          scale: 1,
-        }}
+        animate={{ opacity: 1, scale: 1 }}
         transition={{
-          duration: 5,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: tag.delay,
+          duration: 0.6,
+          ease: "easeOut",
+          delay: tag.delay * 0.3,
         }}
-        className="absolute hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card/55 backdrop-blur-md border border-primary/12 shadow-[0_0_8px_hsl(var(--primary)/0.06)] text-xs font-medium text-muted-foreground/80"
+        className={`absolute items-center gap-1.5 px-3 py-1.5 rounded-full bg-card/80 backdrop-blur-md border border-primary/20 shadow-[0_4px_16px_hsl(var(--primary)/0.1)] text-xs font-semibold text-foreground ${tag.hideOnMd ? 'hidden lg:flex' : 'hidden md:flex'}`}
         style={{
           top: tag.top,
           left: tag.left,
@@ -259,7 +254,7 @@ const HeroBackground = () => (
           bottom: tag.bottom,
         }}
       >
-        <span className="w-1.5 h-1.5 rounded-full bg-primary/60" />
+        <span className="w-1.5 h-1.5 rounded-full bg-primary/70" />
         {tag.label}
       </motion.div>
     ))}
