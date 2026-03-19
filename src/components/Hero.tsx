@@ -106,81 +106,22 @@ const Hero = () => {
             </motion.div>
           </motion.div>
 
-          {/* Right side — service icons grid */}
+          {/* Right side — video */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="relative hidden lg:flex justify-center items-center"
           >
-            <div className="relative w-[420px] h-[420px]">
-              {/* Dashed orbit ring */}
-              <div className="absolute inset-0 rounded-full border-2 border-dashed border-primary/15" />
-              <div className="absolute inset-10 rounded-full border-2 border-dashed border-primary/10" />
-
-              {/* Center logo */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-24 h-24 bg-card rounded-2xl card-elevated border border-border/50 flex items-center justify-center">
-                  <img src={logo} alt="Logo" className="w-14 h-14 object-contain" />
-                </div>
-              </div>
-
-              {/* Floating icon cards */}
-              <motion.div
-                animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -top-2 left-1/2 -translate-x-1/2 bg-card/90 backdrop-blur-xl rounded-xl p-4 card-elevated border border-border/50 flex items-center gap-3"
-              >
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <ShoppingCart size={20} className="text-primary" />
-                </div>
-                <div>
-                  <span className="text-sm font-semibold block">Amazon FBA</span>
-                  <span className="text-xs text-muted-foreground">Full Setup</span>
-                </div>
-              </motion.div>
-
-              <motion.div
-                animate={{ y: [0, 8, 0] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                className="absolute top-1/2 -right-4 -translate-y-1/2 bg-card/90 backdrop-blur-xl rounded-xl p-4 card-elevated border border-border/50 flex items-center gap-3"
-              >
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <TrendingUp size={20} className="text-primary" />
-                </div>
-                <div>
-                  <span className="text-sm font-semibold block">180+</span>
-                  <span className="text-xs text-muted-foreground">Brands Joined</span>
-                </div>
-              </motion.div>
-
-              <motion.div
-                animate={{ y: [0, -6, 0] }}
-                transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-                className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-card/90 backdrop-blur-xl rounded-xl p-4 card-elevated border border-border/50 flex items-center gap-3"
-              >
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <Globe size={20} className="text-primary" />
-                </div>
-                <div>
-                  <span className="text-sm font-semibold block">Global Reach</span>
-                  <span className="text-xs text-muted-foreground">USA, UAE & More</span>
-                </div>
-              </motion.div>
-
-              <motion.div
-                animate={{ y: [0, 6, 0] }}
-                transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                className="absolute top-1/2 -left-4 -translate-y-1/2 bg-card/90 backdrop-blur-xl rounded-xl p-4 card-elevated border border-border/50 flex items-center gap-3"
-              >
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <Headphones size={20} className="text-primary" />
-                </div>
-                <div>
-                  <span className="text-sm font-semibold block">24/7 Support</span>
-                  <span className="text-xs text-muted-foreground">Always Here</span>
-                </div>
-              </motion.div>
+            <div className="relative w-full max-w-[500px] rounded-2xl overflow-hidden card-elevated border border-border/50">
+              <video
+                src={heroVideo}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-auto object-cover rounded-2xl"
+              />
             </div>
           </motion.div>
         </div>
