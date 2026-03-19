@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Store, ShoppingCart, Video, Tag, Building2, Shield,
@@ -22,11 +22,34 @@ const services = [
   { icon: Warehouse, title: "Walmart Store Setup", desc: "Get approved and launch your Walmart Marketplace seller account with optimized listings." },
 ];
 
-const INITIAL_COUNT = 8; // 2 rows × 4 cols on xl
-
 const Services = () => {
   const [showAll, setShowAll] = useState(false);
-  const visible = showAll ? services : services.slice(0, INITIAL_COUNT);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const [cols, setCols] = useState(4);
+
+  useEffect(() => {
+    const detectCols = () => {
+      if (!gridRef.current) return;
+      const firstChild = gridRef.current.children[0] as HTMLElement | undefined;
+      if (!firstChild) return;
+      const gridWidth = gridRef.current.offsetWidth;
+      const childWidth = firstChild.offsetWidth;
+      if (childWidth > 0) {
+        setCols(Math.max(1, Math.round(gridWidth / childWidth)));
+      }
+    };
+
+    // Detect after render
+    const timeout = setTimeout(detectCols, 100);
+    window.addEventListener("resize", detectCols);
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener("resize", detectCols);
+    };
+  }, []);
+
+  const initialCount = cols * 2;
+  const visible = showAll ? services : services.slice(0, initialCount);
 
   return (
     <section id="services" className="py-24 bg-background relative overflow-hidden">
