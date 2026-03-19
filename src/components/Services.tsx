@@ -108,7 +108,7 @@ const Services = () => {
         </div>
 
         {/* Show More / Show Less */}
-        {services.length > INITIAL_COUNT && (
+        {services.length > initialCount && (
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
