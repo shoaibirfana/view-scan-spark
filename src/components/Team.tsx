@@ -15,14 +15,14 @@ import team9 from "@/assets/team-9.jpg";
 import team10 from "@/assets/team-10.jpg";
 
 const members = [
-  { name: "Anosh Saleem", role: "Digital Marketing Expert", photo: team7 },
-  { name: "Anisa Ilyas", role: "TikTok Shop Expert", photo: team8 },
-  { name: "Maryyum Manan", role: "Social Media Manager / Google Ads", photo: team3 },
-  { name: "Moaz Akram", role: "Shopify Expert", photo: team5 },
-  { name: "Hamza", role: "Ecommerce Expert", photo: team1 },
-  { name: "Shoaib Irfan", role: "Amazon Private Label Expert", photo: team2 },
   { name: "Shayan Yousaf", role: "Senior Sales Manager", photo: team4 },
+  { name: "Anisa Ilyas", role: "TikTok Shop Expert", photo: team8 },
+  { name: "Shoaib Irfan", role: "Amazon Private Label Expert", photo: team2 },
+  { name: "Maryyum Manan", role: "Social Media Manager / Google Ads", photo: team3 },
   { name: "Muhammad Furqan Ahmad", role: "Senior Sourcing Manager", photo: team6 },
+  { name: "Moaz Akram", role: "Shopify Expert", photo: team5 },
+  { name: "Anosh Saleem", role: "Digital Marketing Expert", photo: team7 },
+  { name: "Hamza", role: "Ecommerce Expert", photo: team1 },
   { name: "Safiullah Sajid", role: "Amazon UAE / Shopify UAE Expert", photo: team9 },
   { name: "Muaz Tanzeel", role: "Amazon, Shopify, TikTok & eBay Senior Expert", photo: team10 },
 ];
