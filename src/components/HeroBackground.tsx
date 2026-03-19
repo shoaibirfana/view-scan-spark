@@ -197,6 +197,17 @@ const NetworkCanvas = () => {
   return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />;
 };
 
+const floatingTags = [
+  { label: "EIN Number", top: "8%", left: "5%", delay: 0 },
+  { label: "Shopify", top: "18%", right: "8%", delay: 0.5 },
+  { label: "Amazon FBA", bottom: "25%", left: "3%", delay: 1 },
+  { label: "LLC Formation", top: "45%", right: "4%", delay: 1.5 },
+  { label: "Brand Registry", bottom: "12%", right: "12%", delay: 2 },
+  { label: "Product Sourcing", bottom: "8%", left: "15%", delay: 2.5 },
+  { label: "TikTok Shop", top: "30%", left: "10%", delay: 3 },
+  { label: "ITIN Number", top: "60%", right: "6%", delay: 3.5 },
+];
+
 const HeroBackground = () => (
   <div className="absolute inset-0 z-0 overflow-hidden">
     <NetworkCanvas />
@@ -215,6 +226,35 @@ const HeroBackground = () => (
       transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 4 }}
       className="absolute top-1/3 right-1/4 w-64 h-64 bg-primary/10 rounded-full blur-[80px]"
     />
+
+    {/* Floating service tags */}
+    {floatingTags.map((tag) => (
+      <motion.div
+        key={tag.label}
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{
+          opacity: [0.6, 0.9, 0.6],
+          y: [0, -10, 0],
+          scale: 1,
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: tag.delay,
+        }}
+        className="absolute hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card/70 backdrop-blur-md border border-primary/20 shadow-[0_0_12px_hsl(var(--primary)/0.1)] text-xs font-medium text-muted-foreground"
+        style={{
+          top: tag.top,
+          left: tag.left,
+          right: tag.right,
+          bottom: tag.bottom,
+        }}
+      >
+        <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+        {tag.label}
+      </motion.div>
+    ))}
   </div>
 );
 
