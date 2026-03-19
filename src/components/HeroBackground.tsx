@@ -201,16 +201,16 @@ const NetworkCanvas = () => {
 // - Hidden on mobile (no space) 
 // - On md+: placed in truly empty peripheral zones
 // - Never overlap navbar, hero text, video circle, stats row, or orbit icons
-const floatingTags = [
+const floatingTags: { label: string; top?: string; right?: string; bottom?: string; left?: string; delay: number; hideOnMd?: boolean }[] = [
   // Top-right area — moved down to clear navbar
-  { label: "Brand Registry", top: "18%", right: "22%", delay: 2 },
+  { label: "Brand Registry", top: "18%", right: "22%", delay: 2, hideOnMd: true },
   { label: "Shopify", top: "18%", right: "4%", delay: 0.5 },
   // Right edge — mid-height, outside orbit radius
-  { label: "TikTok Shop", top: "50%", right: "1.5%", delay: 3 },
+  { label: "TikTok Shop", top: "50%", right: "1.5%", delay: 3, hideOnMd: true },
   // Bottom strip — below everything, evenly spaced
   { label: "Amazon FBA", bottom: "1.5%", left: "4%", delay: 1 },
-  { label: "Product Sourcing", bottom: "1.5%", left: "38%", delay: 2.5 },
-  { label: "ITIN Number", bottom: "1.5%", right: "20%", delay: 3.5 },
+  { label: "Product Sourcing", bottom: "1.5%", left: "38%", delay: 2.5, hideOnMd: true },
+  { label: "ITIN Number", bottom: "1.5%", right: "20%", delay: 3.5, hideOnMd: true },
   { label: "LLC Formation", bottom: "1.5%", right: "1.5%", delay: 1.5 },
   // Left edge — between hero text bottom and stats
   { label: "EIN Number", bottom: "15%", left: "1.5%", delay: 0 },
