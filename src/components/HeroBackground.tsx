@@ -202,17 +202,17 @@ const NetworkCanvas = () => {
 // - On md+: placed in truly empty peripheral zones
 // - Never overlap navbar, hero text, video circle, stats row, or orbit icons
 const floatingTags = [
-  // Top-right area — empty space above & right of orbit
-  { label: "Shopify", top: "7%", right: "6%", delay: 0.5 },
-  { label: "Brand Registry", top: "7%", right: "24%", delay: 2 },
+  // Top-right area — moved down to clear navbar
+  { label: "Brand Registry", top: "18%", right: "22%", delay: 2 },
+  { label: "Shopify", top: "18%", right: "4%", delay: 0.5 },
   // Right edge — mid-height, outside orbit radius
   { label: "TikTok Shop", top: "50%", right: "1.5%", delay: 3 },
-  // Bottom strip — below everything, evenly spaced (golden ratio ~38/62 split)
+  // Bottom strip — below everything, evenly spaced
   { label: "Amazon FBA", bottom: "1.5%", left: "4%", delay: 1 },
   { label: "Product Sourcing", bottom: "1.5%", left: "38%", delay: 2.5 },
   { label: "ITIN Number", bottom: "1.5%", right: "20%", delay: 3.5 },
   { label: "LLC Formation", bottom: "1.5%", right: "1.5%", delay: 1.5 },
-  // Left edge — between hero text bottom and stats, vertically safe
+  // Left edge — between hero text bottom and stats
   { label: "EIN Number", bottom: "15%", left: "1.5%", delay: 0 },
 ];
 
