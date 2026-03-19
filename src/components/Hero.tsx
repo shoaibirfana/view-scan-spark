@@ -121,7 +121,7 @@ const Hero = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="relative hidden lg:flex justify-center items-center"
+            className="relative flex justify-center items-center mt-8 lg:mt-0"
           >
             {/* Orbiting items */}
             {orbitItems.map((item, i) => {
@@ -129,27 +129,27 @@ const Hero = () => {
               return (
                 <motion.div
                   key={item.label}
-                  className="absolute z-20"
+                  className="absolute z-20 w-[220px] h-[220px] sm:w-[270px] sm:h-[270px] lg:w-[340px] lg:h-[340px]"
                   animate={{ rotate: [angle, angle + 360] }}
                   transition={{ duration: 20, repeat: Infinity, ease: "linear", delay: item.delay * 0.3 }}
-                  style={{ width: 340, height: 340, transformOrigin: "center center" }}
+                  style={{ transformOrigin: "center center" }}
                 >
                   <motion.div
                     animate={{ rotate: [-(angle), -(angle + 360)] }}
                     transition={{ duration: 20, repeat: Infinity, ease: "linear", delay: item.delay * 0.3 }}
                     className="absolute -top-5 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1"
                   >
-                    <div className="w-11 h-11 rounded-xl bg-card/90 backdrop-blur-md border border-primary/30 shadow-[0_0_15px_hsl(var(--primary)/0.2)] flex items-center justify-center">
-                      <item.icon size={20} className="text-primary" />
+                    <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-card/90 backdrop-blur-md border border-primary/30 shadow-[0_0_15px_hsl(var(--primary)/0.2)] flex items-center justify-center">
+                      <item.icon className="text-primary w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
-                    <span className="text-[10px] font-semibold text-muted-foreground whitespace-nowrap">{item.label}</span>
+                    <span className="text-[8px] sm:text-[10px] font-semibold text-muted-foreground whitespace-nowrap">{item.label}</span>
                   </motion.div>
                 </motion.div>
               );
             })}
 
             {/* Video in center */}
-            <div className="relative w-[280px] h-[280px] rounded-full overflow-hidden border-2 border-primary/30 shadow-[0_0_40px_hsl(var(--primary)/0.25)]">
+            <div className="relative w-[180px] h-[180px] sm:w-[220px] sm:h-[220px] lg:w-[280px] lg:h-[280px] rounded-full overflow-hidden border-2 border-primary/30 shadow-[0_0_40px_hsl(var(--primary)/0.25)]">
               <video
                 src={HERO_VIDEO_URL}
                 autoPlay
