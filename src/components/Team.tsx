@@ -14,6 +14,7 @@ import team7 from "@/assets/team-7.jpg";
 import team8 from "@/assets/team-8.jpg";
 import team9 from "@/assets/team-9.jpg";
 import team10 from "@/assets/team-10.jpg";
+import teamAhmadShah from "@/assets/team-ahmad-shah.png";
 
 const members = [
   { name: "Shayan Yousaf", role: "Senior Sales Manager", photo: team4 },
@@ -26,6 +27,7 @@ const members = [
   { name: "Hamza", role: "Ecommerce Expert", photo: team1 },
   { name: "Safiullah Sajid", role: "Amazon UAE / Shopify UAE Expert", photo: team9 },
   { name: "Muaz Tanzeel", role: "Amazon, Shopify, TikTok & eBay Senior Expert", photo: team10 },
+  { name: "Ahmad Shah", role: "Walmart & TikTok Shop Expert", photo: teamAhmadShah },
 ];
 
 function getVisibleCount(width: number) {
