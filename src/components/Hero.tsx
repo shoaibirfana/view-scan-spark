@@ -129,7 +129,7 @@ const Hero = () => {
               return (
                 <motion.div
                   key={item.label}
-                  className="absolute z-20 w-[220px] h-[220px] sm:w-[270px] sm:h-[270px] lg:w-[340px] lg:h-[340px]"
+                  className="absolute z-20 w-[260px] h-[260px] sm:w-[320px] sm:h-[320px] lg:w-[400px] lg:h-[400px]"
                   animate={{ rotate: [angle, angle + 360] }}
                   transition={{ duration: 20, repeat: Infinity, ease: "linear", delay: item.delay * 0.3 }}
                   style={{ transformOrigin: "center center" }}
@@ -149,7 +149,7 @@ const Hero = () => {
             })}
 
             {/* Video in center */}
-            <div className="relative w-[180px] h-[180px] sm:w-[220px] sm:h-[220px] lg:w-[280px] lg:h-[280px] rounded-full overflow-hidden border-2 border-primary/30 shadow-[0_0_40px_hsl(var(--primary)/0.25)]">
+            <div className="relative w-[220px] h-[220px] sm:w-[270px] sm:h-[270px] lg:w-[340px] lg:h-[340px] rounded-full overflow-hidden border-2 border-primary/30 shadow-[0_0_40px_hsl(var(--primary)/0.25)]">
               <video
                 src={HERO_VIDEO_URL}
                 autoPlay
