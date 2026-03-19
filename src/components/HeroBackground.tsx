@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 
 const NetworkCanvas = () => {
@@ -14,7 +14,6 @@ const NetworkCanvas = () => {
     let cw = 0;
     let ch = 0;
 
-    // Responsive node count based on screen width
     const getNodeCount = (width: number) => {
       if (width < 480) return 25;
       if (width < 768) return 35;
@@ -34,7 +33,6 @@ const NetworkCanvas = () => {
 
     const initParticles = () => {
       COUNT = getNodeCount(cw);
-      // Space particles with minimum distance
       for (let i = 0; i < COUNT; i++) {
         let attempts = 0;
         do {
@@ -69,7 +67,6 @@ const NetworkCanvas = () => {
       rebuildGrid();
     };
 
-    // Spatial grid
     const CELL = CONNECT_DIST;
     let cols = 0, rows = 0;
     let grid: Int16Array;
@@ -197,24 +194,151 @@ const NetworkCanvas = () => {
   return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />;
 };
 
-// Bubble positions designed with golden ratio spacing:
-// - Hidden on mobile (no space) 
-// - On md+: placed in truly empty peripheral zones
-// - Never overlap navbar, hero text, video circle, stats row, or orbit icons
-const floatingTags: { label: string; top?: string; right?: string; bottom?: string; left?: string; delay: number; hideOnMd?: boolean }[] = [
-  // Top-right area — moved down to clear navbar
-  { label: "Brand Registry", top: "18%", right: "22%", delay: 2, hideOnMd: true },
-  { label: "Shopify", top: "18%", right: "4%", delay: 0.5 },
-  // Right edge — mid-height, outside orbit radius
-  { label: "TikTok Shop", top: "50%", right: "1.5%", delay: 3, hideOnMd: true },
-  // Bottom strip — below everything, evenly spaced
-  { label: "Amazon FBA", bottom: "1.5%", left: "4%", delay: 1 },
-  { label: "Product Sourcing", bottom: "1.5%", left: "38%", delay: 2.5, hideOnMd: true },
-  { label: "ITIN Number", bottom: "1.5%", right: "20%", delay: 3.5, hideOnMd: true },
-  { label: "LLC Formation", bottom: "1.5%", right: "1.5%", delay: 1.5 },
-  // Left edge — between hero text bottom and stats
-  { label: "EIN Number", bottom: "15%", left: "1.5%", delay: 0 },
+/* ── Floating bubble labels that drift across the hero ── */
+
+const BUBBLE_LABELS = [
+  "Brand Registry",
+  "Shopify",
+  "TikTok Shop",
+  "Amazon FBA",
+  "Product Sourcing",
+  "ITIN Number",
+  "LLC Formation",
+  "EIN Number",
 ];
+
+const NAV_HEIGHT = 72; // px reserved for the navbar
+const BUBBLE_W = 130; // approx bubble width
+const BUBBLE_H = 32;  // approx bubble height
+const MIN_DIST = 150;  // min distance between bubble centres
+const SPEED = 0.35;    // px per frame-unit
+
+interface BubbleState {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+}
+
+const FloatingBubbles = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const bubblesRef = useRef<BubbleState[]>([]);
+  const [positions, setPositions] = useState<{ x: number; y: number }[]>([]);
+  const animRef = useRef<number>(0);
+
+  const init = useCallback(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const w = el.offsetWidth;
+    const h = el.offsetHeight;
+    const minY = NAV_HEIGHT + 10;
+
+    const bubbles: BubbleState[] = [];
+    for (let i = 0; i < BUBBLE_LABELS.length; i++) {
+      let x: number, y: number, attempts = 0, ok = false;
+      do {
+        x = Math.random() * (w - BUBBLE_W);
+        y = minY + Math.random() * (h - minY - BUBBLE_H);
+        ok = true;
+        for (const b of bubbles) {
+          const dx = x - b.x;
+          const dy = y - b.y;
+          if (Math.sqrt(dx * dx + dy * dy) < MIN_DIST) { ok = false; break; }
+        }
+        attempts++;
+      } while (!ok && attempts < 60);
+
+      const angle = Math.random() * Math.PI * 2;
+      bubbles.push({ x, y, vx: Math.cos(angle) * SPEED, vy: Math.sin(angle) * SPEED });
+    }
+    bubblesRef.current = bubbles;
+    setPositions(bubbles.map(b => ({ x: b.x, y: b.y })));
+  }, []);
+
+  useEffect(() => {
+    init();
+    window.addEventListener("resize", init);
+    return () => window.removeEventListener("resize", init);
+  }, [init]);
+
+  useEffect(() => {
+    let lastTime = performance.now();
+
+    const tick = (now: number) => {
+      const el = containerRef.current;
+      if (!el) { animRef.current = requestAnimationFrame(tick); return; }
+      const dt = Math.min((now - lastTime) / 16.667, 3);
+      lastTime = now;
+
+      const w = el.offsetWidth;
+      const h = el.offsetHeight;
+      const minY = NAV_HEIGHT + 10;
+      const bs = bubblesRef.current;
+
+      // Move & bounce off walls
+      for (let i = 0; i < bs.length; i++) {
+        bs[i].x += bs[i].vx * dt;
+        bs[i].y += bs[i].vy * dt;
+
+        if (bs[i].x < 0) { bs[i].x = 0; bs[i].vx = Math.abs(bs[i].vx); }
+        if (bs[i].x > w - BUBBLE_W) { bs[i].x = w - BUBBLE_W; bs[i].vx = -Math.abs(bs[i].vx); }
+        if (bs[i].y < minY) { bs[i].y = minY; bs[i].vy = Math.abs(bs[i].vy); }
+        if (bs[i].y > h - BUBBLE_H) { bs[i].y = h - BUBBLE_H; bs[i].vy = -Math.abs(bs[i].vy); }
+      }
+
+      // Repel overlapping bubbles
+      for (let i = 0; i < bs.length; i++) {
+        for (let j = i + 1; j < bs.length; j++) {
+          const dx = bs[j].x - bs[i].x;
+          const dy = bs[j].y - bs[i].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < MIN_DIST && dist > 0) {
+            const force = (MIN_DIST - dist) * 0.005;
+            const nx = dx / dist;
+            const ny = dy / dist;
+            bs[i].vx -= nx * force;
+            bs[i].vy -= ny * force;
+            bs[j].vx += nx * force;
+            bs[j].vy += ny * force;
+          }
+        }
+      }
+
+      // Clamp speed
+      for (let i = 0; i < bs.length; i++) {
+        const spd = Math.sqrt(bs[i].vx * bs[i].vx + bs[i].vy * bs[i].vy);
+        if (spd > SPEED * 1.5) {
+          bs[i].vx = (bs[i].vx / spd) * SPEED;
+          bs[i].vy = (bs[i].vy / spd) * SPEED;
+        }
+      }
+
+      setPositions(bs.map(b => ({ x: b.x, y: b.y })));
+      animRef.current = requestAnimationFrame(tick);
+    };
+
+    animRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(animRef.current);
+  }, []);
+
+  return (
+    <div ref={containerRef} className="absolute inset-0 pointer-events-none hidden md:block">
+      {positions.map((pos, i) => (
+        <div
+          key={BUBBLE_LABELS[i]}
+          className="absolute flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card/80 backdrop-blur-md border border-primary/20 shadow-[0_4px_16px_hsl(var(--primary)/0.1)] text-xs font-semibold text-foreground"
+          style={{
+            transform: `translate(${pos.x}px, ${pos.y}px)`,
+            willChange: "transform",
+          }}
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-primary/70" />
+          {BUBBLE_LABELS[i]}
+        </div>
+      ))}
+    </div>
+  );
+};
 
 const HeroBackground = () => (
   <div className="absolute inset-0 z-0 overflow-hidden">
@@ -235,29 +359,7 @@ const HeroBackground = () => (
       className="absolute top-1/3 right-1/4 w-64 h-64 bg-primary/10 rounded-full blur-[80px]"
     />
 
-    {/* Floating service tags — hidden on mobile, visible on md+ */}
-    {floatingTags.map((tag) => (
-      <motion.div
-        key={tag.label}
-        initial={{ opacity: 0, scale: 0.85 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{
-          duration: 0.6,
-          ease: "easeOut",
-          delay: tag.delay * 0.3,
-        }}
-        className={`absolute items-center gap-1.5 px-3 py-1.5 rounded-full bg-card/80 backdrop-blur-md border border-primary/20 shadow-[0_4px_16px_hsl(var(--primary)/0.1)] text-xs font-semibold text-foreground ${tag.hideOnMd ? 'hidden lg:flex' : 'hidden md:flex'}`}
-        style={{
-          top: tag.top,
-          left: tag.left,
-          right: tag.right,
-          bottom: tag.bottom,
-        }}
-      >
-        <span className="w-1.5 h-1.5 rounded-full bg-primary/70" />
-        {tag.label}
-      </motion.div>
-    ))}
+    <FloatingBubbles />
   </div>
 );
 
