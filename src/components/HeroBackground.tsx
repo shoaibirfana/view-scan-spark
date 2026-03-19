@@ -198,14 +198,14 @@ const NetworkCanvas = () => {
 };
 
 const floatingTags = [
-  { label: "EIN Number", top: "3%", left: "42%", delay: 0 },
-  { label: "Shopify", top: "3%", right: "2%", delay: 0.5 },
-  { label: "Amazon FBA", bottom: "3%", left: "2%", delay: 1 },
-  { label: "LLC Formation", bottom: "3%", right: "2%", delay: 1.5 },
-  { label: "Brand Registry", top: "3%", left: "2%", delay: 2 },
-  { label: "Product Sourcing", bottom: "3%", left: "42%", delay: 2.5 },
-  { label: "TikTok Shop", bottom: "15%", right: "2%", delay: 3 },
-  { label: "ITIN Number", bottom: "3%", right: "30%", delay: 3.5 },
+  { label: "EIN Number", top: "12%", left: "38%", delay: 0 },
+  { label: "Shopify", top: "12%", right: "3%", delay: 0.5 },
+  { label: "Amazon FBA", bottom: "5%", left: "3%", delay: 1 },
+  { label: "LLC Formation", bottom: "5%", right: "3%", delay: 1.5 },
+  { label: "Brand Registry", top: "12%", right: "18%", delay: 2 },
+  { label: "Product Sourcing", bottom: "5%", left: "38%", delay: 2.5 },
+  { label: "TikTok Shop", bottom: "18%", right: "3%", delay: 3 },
+  { label: "ITIN Number", bottom: "5%", right: "28%", delay: 3.5 },
 ];
 
 const HeroBackground = () => (

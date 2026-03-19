@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useRef, useState, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import logo from "@/assets/logo.png";
+import team8new from "@/assets/team-8-new.jpg";
 
 import team1 from "@/assets/team-1.png";
 import team2 from "@/assets/team-2.png";
@@ -16,7 +17,7 @@ import team10 from "@/assets/team-10.jpg";
 
 const members = [
   { name: "Shayan Yousaf", role: "Senior Sales Manager", photo: team4 },
-  { name: "Anisa Ilyas", role: "TikTok Shop Expert", photo: team8 },
+  { name: "Anisa Ilyas", role: "TikTok Shop Expert", photo: team8new },
   { name: "Shoaib Irfan", role: "Amazon Private Label Expert", photo: team2 },
   { name: "Maryyum Manan", role: "Social Media Manager / Google Ads", photo: team3 },
   { name: "Muhammad Furqan Ahmad", role: "Senior Sourcing Manager", photo: team6 },
