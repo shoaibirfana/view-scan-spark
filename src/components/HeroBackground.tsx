@@ -197,15 +197,23 @@ const NetworkCanvas = () => {
   return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />;
 };
 
+// Bubble positions designed with golden ratio spacing:
+// - Hidden on mobile (no space) 
+// - On md+: placed in truly empty peripheral zones
+// - Never overlap navbar, hero text, video circle, stats row, or orbit icons
 const floatingTags = [
-  { label: "EIN Number", top: "12%", left: "38%", delay: 0 },
-  { label: "Shopify", top: "12%", right: "3%", delay: 0.5 },
-  { label: "Amazon FBA", bottom: "5%", left: "3%", delay: 1 },
-  { label: "LLC Formation", bottom: "5%", right: "3%", delay: 1.5 },
-  { label: "Brand Registry", top: "12%", right: "18%", delay: 2 },
-  { label: "Product Sourcing", bottom: "5%", left: "38%", delay: 2.5 },
-  { label: "TikTok Shop", bottom: "18%", right: "3%", delay: 3 },
-  { label: "ITIN Number", bottom: "5%", right: "28%", delay: 3.5 },
+  // Top-right area — empty space above & right of orbit
+  { label: "Shopify", top: "7%", right: "6%", delay: 0.5 },
+  { label: "Brand Registry", top: "7%", right: "24%", delay: 2 },
+  // Right edge — mid-height, outside orbit radius
+  { label: "TikTok Shop", top: "50%", right: "1.5%", delay: 3 },
+  // Bottom strip — below everything, evenly spaced (golden ratio ~38/62 split)
+  { label: "Amazon FBA", bottom: "1.5%", left: "4%", delay: 1 },
+  { label: "Product Sourcing", bottom: "1.5%", left: "38%", delay: 2.5 },
+  { label: "ITIN Number", bottom: "1.5%", right: "20%", delay: 3.5 },
+  { label: "LLC Formation", bottom: "1.5%", right: "1.5%", delay: 1.5 },
+  // Left edge — between hero text bottom and stats, vertically safe
+  { label: "EIN Number", bottom: "15%", left: "1.5%", delay: 0 },
 ];
 
 const HeroBackground = () => (
@@ -227,23 +235,23 @@ const HeroBackground = () => (
       className="absolute top-1/3 right-1/4 w-64 h-64 bg-primary/10 rounded-full blur-[80px]"
     />
 
-    {/* Floating service tags */}
+    {/* Floating service tags — hidden on mobile, visible on md+ */}
     {floatingTags.map((tag) => (
       <motion.div
         key={tag.label}
-        initial={{ opacity: 0, scale: 0.8 }}
+        initial={{ opacity: 0, scale: 0.85 }}
         animate={{
-          opacity: [0.6, 0.9, 0.6],
-          y: [0, -10, 0],
+          opacity: [0.5, 0.8, 0.5],
+          y: [0, -6, 0],
           scale: 1,
         }}
         transition={{
-          duration: 4,
+          duration: 5,
           repeat: Infinity,
           ease: "easeInOut",
           delay: tag.delay,
         }}
-        className="absolute flex items-center gap-1.5 px-2 py-1 sm:px-3 sm:py-1.5 rounded-full bg-card/70 backdrop-blur-md border border-primary/20 shadow-[0_0_12px_hsl(var(--primary)/0.1)] text-[10px] sm:text-xs font-medium text-muted-foreground"
+        className="absolute hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card/55 backdrop-blur-md border border-primary/12 shadow-[0_0_8px_hsl(var(--primary)/0.06)] text-xs font-medium text-muted-foreground/80"
         style={{
           top: tag.top,
           left: tag.left,
@@ -251,7 +259,7 @@ const HeroBackground = () => (
           bottom: tag.bottom,
         }}
       >
-        <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+        <span className="w-1.5 h-1.5 rounded-full bg-primary/60" />
         {tag.label}
       </motion.div>
     ))}
