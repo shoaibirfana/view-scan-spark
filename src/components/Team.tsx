@@ -17,7 +17,7 @@ import team10 from "@/assets/team-10.jpg";
 
 const members = [
   { name: "Shayan Yousaf", role: "Senior Sales Manager", photo: team4 },
-  { name: "Anisa Ilyas", role: "TikTok Shop Expert", photo: team8 },
+  { name: "Anisa Ilyas", role: "TikTok Shop Expert", photo: team8new },
   { name: "Shoaib Irfan", role: "Amazon Private Label Expert", photo: team2 },
   { name: "Maryyum Manan", role: "Social Media Manager / Google Ads", photo: team3 },
   { name: "Muhammad Furqan Ahmad", role: "Senior Sourcing Manager", photo: team6 },
