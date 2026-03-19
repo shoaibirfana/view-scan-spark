@@ -28,18 +28,18 @@ const Hero = () => {
       <div className="container mx-auto px-4 lg:px-8 py-16 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center relative">
           {/* Floating glass bubbles between text and video — desktop only */}
-          <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 -translate-x-1/2 w-48 z-20 pointer-events-none">
+          <div className="hidden xl:block absolute left-1/2 top-0 bottom-0 -translate-x-1/2 w-48 z-20 pointer-events-none">
             {[
-              { icon: Rocket, text: "Launch Fast", top: "18%", delay: 0 },
-              { icon: DollarSign, text: "Scale Revenue", top: "48%", delay: 0.3 },
-              { icon: ShieldCheck, text: "Brand Protection", top: "76%", delay: 0.6 },
+              { icon: Rocket, text: "Launch Fast", top: "15%", delay: 0 },
+              { icon: DollarSign, text: "Scale Revenue", top: "45%", delay: 0.3 },
+              { icon: ShieldCheck, text: "Brand Protection", top: "72%", delay: 0.6 },
             ].map((bubble) => (
               <motion.div
                 key={bubble.text}
                 initial={{ opacity: 0, scale: 0.7 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 1.2 + bubble.delay, duration: 0.6, ease: "easeOut" }}
-                className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-2.5 rounded-full bg-card/70 backdrop-blur-md border border-primary/25 shadow-[0_4px_20px_hsl(var(--primary)/0.12)]"
+                className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-2.5 rounded-full bg-card/80 backdrop-blur-md border border-primary/25 shadow-[0_4px_20px_hsl(var(--primary)/0.12)]"
                 style={{ top: bubble.top }}
               >
                 <bubble.icon className="text-primary w-4 h-4 shrink-0" />

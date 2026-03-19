@@ -240,18 +240,13 @@ const HeroBackground = () => (
       <motion.div
         key={tag.label}
         initial={{ opacity: 0, scale: 0.85 }}
-        animate={{
-          opacity: [0.5, 0.8, 0.5],
-          y: [0, -6, 0],
-          scale: 1,
-        }}
+        animate={{ opacity: 1, scale: 1 }}
         transition={{
-          duration: 5,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: tag.delay,
+          duration: 0.6,
+          ease: "easeOut",
+          delay: tag.delay * 0.3,
         }}
-        className="absolute hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card/55 backdrop-blur-md border border-primary/12 shadow-[0_0_8px_hsl(var(--primary)/0.06)] text-xs font-medium text-muted-foreground/80"
+        className={`absolute items-center gap-1.5 px-3 py-1.5 rounded-full bg-card/80 backdrop-blur-md border border-primary/20 shadow-[0_4px_16px_hsl(var(--primary)/0.1)] text-xs font-semibold text-foreground ${tag.hideOnMd ? 'hidden lg:flex' : 'hidden md:flex'}`}
         style={{
           top: tag.top,
           left: tag.left,
@@ -259,7 +254,7 @@ const HeroBackground = () => (
           bottom: tag.bottom,
         }}
       >
-        <span className="w-1.5 h-1.5 rounded-full bg-primary/60" />
+        <span className="w-1.5 h-1.5 rounded-full bg-primary/70" />
         {tag.label}
       </motion.div>
     ))}
