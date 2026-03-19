@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
-import { ArrowRight, ShoppingCart, TrendingUp, Globe, Headphones } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import logo from "@/assets/logo.png";
+import heroVideo from "@/assets/hero-video.mp4";
 import HeroBackground from "./HeroBackground";
 
 const stats = [
