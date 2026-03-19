@@ -116,21 +116,47 @@ const Hero = () => {
             </motion.div>
           </motion.div>
 
-          {/* Right side — video */}
+          {/* Right side — video with orbiting icons */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="relative hidden lg:flex justify-center items-center"
           >
-            <div className="relative w-full max-w-[500px] rounded-2xl overflow-hidden card-elevated border border-border/50">
+            {/* Orbiting items */}
+            {orbitItems.map((item, i) => {
+              const angle = (360 / orbitItems.length) * i;
+              return (
+                <motion.div
+                  key={item.label}
+                  className="absolute z-20"
+                  animate={{ rotate: [angle, angle + 360] }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear", delay: item.delay * 0.3 }}
+                  style={{ width: 340, height: 340, transformOrigin: "center center" }}
+                >
+                  <motion.div
+                    animate={{ rotate: [-(angle), -(angle + 360)] }}
+                    transition={{ duration: 20, repeat: Infinity, ease: "linear", delay: item.delay * 0.3 }}
+                    className="absolute -top-5 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1"
+                  >
+                    <div className="w-11 h-11 rounded-xl bg-card/90 backdrop-blur-md border border-primary/30 shadow-[0_0_15px_hsl(var(--primary)/0.2)] flex items-center justify-center">
+                      <item.icon size={20} className="text-primary" />
+                    </div>
+                    <span className="text-[10px] font-semibold text-muted-foreground whitespace-nowrap">{item.label}</span>
+                  </motion.div>
+                </motion.div>
+              );
+            })}
+
+            {/* Video in center */}
+            <div className="relative w-[280px] h-[280px] rounded-full overflow-hidden border-2 border-primary/30 shadow-[0_0_40px_hsl(var(--primary)/0.25)]">
               <video
-                src={heroVideo}
+                src={HERO_VIDEO_URL}
                 autoPlay
                 loop
                 muted
                 playsInline
-                className="w-full h-auto object-cover rounded-2xl"
+                className="w-full h-full object-cover"
               />
             </div>
           </motion.div>
