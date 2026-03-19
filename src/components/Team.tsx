@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useRef, useState, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import logo from "@/assets/logo.png";
+import team8new from "@/assets/team-8-new.jpg";
 
 import team1 from "@/assets/team-1.png";
 import team2 from "@/assets/team-2.png";
