@@ -205,6 +205,9 @@ const BUBBLE_LABELS = [
   "ITIN Number",
   "LLC Formation",
   "EIN Number",
+  "Launch Fast",
+  "Scale Revenue",
+  "Brand Protection",
 ];
 
 const NAV_HEIGHT = 72; // px reserved for the navbar
