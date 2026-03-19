@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowRight, ShoppingCart, Globe, TrendingUp, Package, Store, BarChart3, Rocket, DollarSign, ShieldCheck } from "lucide-react";
+import { ArrowRight, ShoppingCart, Globe, TrendingUp, Package, Store, BarChart3 } from "lucide-react";
 import logo from "@/assets/logo.png";
 import HeroBackground from "./HeroBackground";
 
