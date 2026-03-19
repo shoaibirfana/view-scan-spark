@@ -243,7 +243,7 @@ const HeroBackground = () => (
           ease: "easeInOut",
           delay: tag.delay,
         }}
-        className="absolute hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card/70 backdrop-blur-md border border-primary/20 shadow-[0_0_12px_hsl(var(--primary)/0.1)] text-xs font-medium text-muted-foreground"
+        className="absolute flex items-center gap-1.5 px-2 py-1 sm:px-3 sm:py-1.5 rounded-full bg-card/70 backdrop-blur-md border border-primary/20 shadow-[0_0_12px_hsl(var(--primary)/0.1)] text-[10px] sm:text-xs font-medium text-muted-foreground"
         style={{
           top: tag.top,
           left: tag.left,
