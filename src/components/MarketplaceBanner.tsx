@@ -1,21 +1,17 @@
 import amazonLogo from "@/assets/marketplaces/amazon.png";
-import shopifyLogo from "@/assets/marketplaces/shopify.png";
-import tiktokLogo from "@/assets/marketplaces/tiktok.png";
-import walmartLogo from "@/assets/marketplaces/walmart.png";
 import ebayLogo from "@/assets/marketplaces/ebay.png";
+import tiktokLogo from "@/assets/marketplaces/tiktok.png";
 import etsyLogo from "@/assets/marketplaces/etsy.png";
-import targetLogo from "@/assets/marketplaces/target.png";
-import alibabaLogo from "@/assets/marketplaces/alibaba.png";
+import onbuyLogo from "@/assets/marketplaces/onbuy.png";
+import temuLogo from "@/assets/marketplaces/temu.png";
 
 const marketplaces = [
   { name: "Amazon", logo: amazonLogo },
-  { name: "Shopify", logo: shopifyLogo },
-  { name: "TikTok Shop", logo: tiktokLogo },
-  { name: "Walmart", logo: walmartLogo },
   { name: "eBay", logo: ebayLogo },
+  { name: "TikTok", logo: tiktokLogo },
   { name: "Etsy", logo: etsyLogo },
-  { name: "Target Plus", logo: targetLogo },
-  { name: "Alibaba", logo: alibabaLogo },
+  { name: "OnBuy", logo: onbuyLogo },
+  { name: "Temu", logo: temuLogo },
 ];
 
 const MarketplaceBanner = () => {
@@ -39,7 +35,7 @@ const MarketplaceBanner = () => {
                   key={`${copy}-${i}`}
                   src={mp.logo}
                   alt={mp.name}
-                  className="h-24 sm:h-32 lg:h-36 w-auto object-contain opacity-75 hover:opacity-100 transition-opacity duration-300"
+                  className="h-28 sm:h-36 lg:h-44 w-auto object-contain opacity-85 hover:opacity-100 transition-opacity duration-300"
                   loading="lazy"
                 />
               ))}
