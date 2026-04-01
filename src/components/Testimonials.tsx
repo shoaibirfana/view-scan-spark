@@ -8,25 +8,25 @@ import davidImg from "@/assets/testimonial-david.png";
 
 const testimonials = [
   {
-    quote: "Ecom Surgent helped me set up my Amazon Wholesale account from scratch. Within two months, I was sourcing profitable products and making consistent sales. Their step-by-step guidance was a game changer!",
-    name: "Fatima Amir",
+    quote: "Team Ecomify helped me set up my Amazon Wholesale account from scratch. Within two months, I was sourcing profitable products and making consistent sales. Their step-by-step guidance was a game changer!",
+    name: "Sarah Mitchell",
     role: "Amazon Wholesale",
     img: fatimaImg,
   },
   {
-    quote: "Thanks to Ecom Surgent, I found top-performing creators for my TikTok Shop. My GMV skyrocketed within weeks — their influencer strategy and content planning really delivered results.",
-    name: "Aleena Tahir",
+    quote: "Thanks to Team Ecomify, I found top-performing creators for my TikTok Shop. My GMV skyrocketed within weeks — their influencer strategy and content planning really delivered results.",
+    name: "Emily Johnson",
     role: "TikTok Shop",
     img: aleenaImg,
   },
   {
-    quote: "Ecom Surgent handled my entire trademark filing and Amazon Brand Registry process. Now my brand is fully protected and I have access to A+ Content and Sponsored Brand Ads.",
-    name: "Hassan Raza",
+    quote: "Team Ecomify handled my entire trademark filing and Amazon Brand Registry process. Now my brand is fully protected and I have access to A+ Content and Sponsored Brand Ads.",
+    name: "Michael Carter",
     role: "Amazon Brand Registry",
     img: hassanImg,
   },
   {
-    quote: "I struggled with Amazon PPC and listing optimization until Ecom Surgent stepped in. They revamped my listings, optimized my campaigns, and my sales doubled in just 3 months.",
+    quote: "I struggled with Amazon PPC and listing optimization until Team Ecomify stepped in. They revamped my listings, optimized my campaigns, and my sales doubled in just 3 months.",
     name: "David Owens",
     role: "Amazon FBA",
     img: davidImg,
