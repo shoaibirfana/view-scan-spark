@@ -1,19 +1,8 @@
 import { motion } from "framer-motion";
-import { ArrowRight, ShoppingCart, Globe, TrendingUp, Package, Store, BarChart3 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import logo from "@/assets/logo.png";
 import heroCenter from "@/assets/hero-center.jpg";
 import HeroBackground from "./HeroBackground";
-
-
-
-const orbitItems = [
-  { icon: ShoppingCart, label: "Amazon FBA", delay: 0 },
-  { icon: Store, label: "Shopify", delay: 1 },
-  { icon: Globe, label: "Global Reach", delay: 2 },
-  { icon: TrendingUp, label: "Growth", delay: 3 },
-  { icon: Package, label: "Sourcing", delay: 4 },
-  { icon: BarChart3, label: "Analytics", delay: 5 },
-];
 
 const stats = [
   { value: "300+", label: "Satisfied Clients" },
