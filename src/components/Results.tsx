@@ -154,21 +154,13 @@ const MarqueeRow = ({
   duration?: number;
 }) => {
   const doubled = [...images, ...images];
+  const animationClass = direction === "left" ? "animate-marquee-left" : "animate-marquee-right";
 
   return (
     <div className="relative overflow-hidden py-3">
-      <motion.div
-        className="flex gap-6"
-        animate={{
-          x: direction === "left" ? ["0%", "-50%"] : ["-50%", "0%"],
-        }}
-        transition={{
-          x: {
-            duration,
-            repeat: Infinity,
-            ease: "linear",
-          },
-        }}
+      <div
+        className={`flex gap-6 ${animationClass}`}
+        style={{ animationDuration: `${duration}s` }}
       >
         {doubled.map((img, i) => (
           <div
@@ -185,7 +177,7 @@ const MarqueeRow = ({
             />
           </div>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 };
