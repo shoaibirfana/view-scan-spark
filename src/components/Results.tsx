@@ -7,6 +7,9 @@ type ResultCardConfig = {
   subtitle: string;
   accent: string;
   accentSoft: string;
+  metricLabel: string;
+  metricValue: string;
+  metricBarWidth?: number;
   bars: number[];
 };
 
@@ -16,8 +19,14 @@ const createResultCard = ({
   subtitle,
   accent,
   accentSoft,
+  metricLabel,
+  metricValue,
+  metricBarWidth: panelBarWidth,
   bars,
 }: ResultCardConfig) => {
+  const metricBarWidth = panelBarWidth ?? Math.max(96, Math.min(148, 78 + metricValue.length * 8));
+  const metricFontSize = metricValue.length > 8 ? 30 : metricValue.length > 6 ? 34 : 36;
+
   const chartBars = bars
     .map((height, index) => {
       const barWidth = 48;
@@ -57,9 +66,9 @@ const createResultCard = ({
       <text x="62" y="282" fill="#94A3B8" font-size="24" font-family="Arial, sans-serif">${subtitle}</text>
 
       <rect x="648" y="154" width="208" height="118" rx="24" fill="#0B1323" />
-      <text x="674" y="195" fill="#94A3B8" font-size="18" font-family="Arial, sans-serif">Growth</text>
-      <text x="674" y="236" fill="${accentSoft}" font-size="36" font-family="Arial, sans-serif" font-weight="700">+24%</text>
-      <rect x="674" y="250" width="116" height="10" rx="5" fill="${accent}" fill-opacity="0.28" />
+      <text x="674" y="195" fill="#94A3B8" font-size="18" font-family="Arial, sans-serif">${metricLabel}</text>
+      <text x="674" y="236" fill="${accentSoft}" font-size="${metricFontSize}" font-family="Arial, sans-serif" font-weight="700">${metricValue}</text>
+      <rect x="674" y="250" width="${metricBarWidth}" height="10" rx="5" fill="${accent}" fill-opacity="0.28" />
 
       <rect x="62" y="318" width="796" height="184" rx="28" fill="#0B1323" />
       <line x1="96" y1="460" x2="830" y2="460" stroke="#1E293B" stroke-width="2" />
@@ -81,6 +90,9 @@ const resultCards = [
     subtitle: "Last 30 days",
     accent: "#F59E0B",
     accentSoft: "#FCD34D",
+    metricLabel: "Net margin",
+    metricValue: "26.4%",
+    metricBarWidth: 134,
     bars: [92, 118, 108, 136, 150, 142, 176, 170, 206, 228],
   }),
   createResultCard({
@@ -89,6 +101,9 @@ const resultCards = [
     subtitle: "Store growth +18%",
     accent: "#22C55E",
     accentSoft: "#86EFAC",
+    metricLabel: "AOV",
+    metricValue: "$84.20",
+    metricBarWidth: 112,
     bars: [80, 96, 112, 104, 132, 146, 154, 174, 188, 202],
   }),
   createResultCard({
@@ -97,6 +112,9 @@ const resultCards = [
     subtitle: "Best seller momentum",
     accent: "#F43F5E",
     accentSoft: "#FDA4AF",
+    metricLabel: "ROAS",
+    metricValue: "4.8x",
+    metricBarWidth: 104,
     bars: [74, 92, 104, 124, 116, 140, 162, 184, 176, 198],
   }),
   createResultCard({
@@ -105,6 +123,9 @@ const resultCards = [
     subtitle: "Weekly payout view",
     accent: "#38BDF8",
     accentSoft: "#7DD3FC",
+    metricLabel: "Refund rate",
+    metricValue: "1.9%",
+    metricBarWidth: 96,
     bars: [88, 100, 94, 120, 138, 146, 154, 168, 180, 214],
   }),
   createResultCard({
@@ -113,6 +134,9 @@ const resultCards = [
     subtitle: "Funds cleared today",
     accent: "#A855F7",
     accentSoft: "#D8B4FE",
+    metricLabel: "Settlement",
+    metricValue: "09:30 AM",
+    metricBarWidth: 124,
     bars: [60, 72, 84, 96, 110, 124, 136, 148, 166, 178],
   }),
   createResultCard({
@@ -121,6 +145,9 @@ const resultCards = [
     subtitle: "High margin products",
     accent: "#F97316",
     accentSoft: "#FDBA74",
+    metricLabel: "Units sold",
+    metricValue: "1,146",
+    metricBarWidth: 108,
     bars: [82, 110, 98, 126, 116, 150, 144, 178, 196, 216],
   }),
   createResultCard({
@@ -129,6 +156,9 @@ const resultCards = [
     subtitle: "Traffic to checkout",
     accent: "#EAB308",
     accentSoft: "#FDE047",
+    metricLabel: "CPA",
+    metricValue: "$18.40",
+    metricBarWidth: 112,
     bars: [54, 68, 78, 90, 104, 118, 132, 146, 162, 178],
   }),
   createResultCard({
@@ -137,6 +167,9 @@ const resultCards = [
     subtitle: "Cross-channel growth",
     accent: "#14B8A6",
     accentSoft: "#5EEAD4",
+    metricLabel: "Repeat rate",
+    metricValue: "32.7%",
+    metricBarWidth: 126,
     bars: [96, 106, 118, 132, 148, 166, 182, 196, 208, 224],
   }),
 ];
@@ -153,28 +186,31 @@ const MarqueeRow = ({
   direction?: "left" | "right";
   duration?: number;
 }) => {
-  const doubled = [...images, ...images];
   const animationClass = direction === "left" ? "animate-marquee-left" : "animate-marquee-right";
 
   return (
     <div className="relative overflow-hidden py-3">
       <div
-        className={`flex gap-6 ${animationClass}`}
+        className={`flex w-max min-w-max ${animationClass} motion-reduce:animate-none`}
         style={{ animationDuration: `${duration}s` }}
       >
-        {doubled.map((img, i) => (
-          <div
-            key={i}
-            className="flex-shrink-0 w-[340px] sm:w-[400px] lg:w-[460px] rounded-xl overflow-hidden border border-border/50 shadow-[0_8px_30px_hsl(var(--primary)/0.08)] hover:border-primary/30 transition-colors duration-300"
-          >
-            <img
-              src={img}
-              alt={`Client result ${(i % images.length) + 1}`}
-              className="w-full h-auto object-cover"
-              loading="lazy"
-              width={920}
-              height={580}
-            />
+        {[0, 1].map((copyIndex) => (
+          <div key={copyIndex} className="flex shrink-0 gap-6 pr-6" aria-hidden={copyIndex === 1}>
+            {images.map((img, i) => (
+              <div
+                key={`${copyIndex}-${i}`}
+                className="flex-shrink-0 w-[340px] sm:w-[400px] lg:w-[460px] rounded-xl overflow-hidden border border-border/50 shadow-[0_8px_30px_hsl(var(--primary)/0.08)] hover:border-primary/30 transition-colors duration-300"
+              >
+                <img
+                  src={img}
+                  alt={`Client result ${i + 1}`}
+                  className="w-full h-auto object-cover"
+                  loading="lazy"
+                  width={920}
+                  height={580}
+                />
+              </div>
+            ))}
           </div>
         ))}
       </div>
