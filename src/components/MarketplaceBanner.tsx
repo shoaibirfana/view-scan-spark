@@ -37,19 +37,16 @@ const MarketplaceBanner = () => {
               {marketplaces.map((mp, i) => (
                 <div
                   key={`${copy}-${i}`}
-                  className="flex items-center gap-3 px-6 py-3 rounded-full border border-border/60 bg-card/80 backdrop-blur-sm shadow-sm hover:border-primary/40 hover:shadow-md transition-all duration-300"
+                  className="flex items-center justify-center px-6 py-3 rounded-full border border-border/60 bg-card/80 backdrop-blur-sm shadow-sm hover:border-primary/40 hover:shadow-md transition-all duration-300"
                 >
                   <img
                     src={mp.logo}
                     alt={mp.name}
-                    className="w-8 h-8 object-contain shrink-0"
+                    className="w-10 h-10 object-contain"
                     loading="lazy"
-                    width={32}
-                    height={32}
+                    width={40}
+                    height={40}
                   />
-                  <span className="text-lg font-heading font-semibold text-foreground whitespace-nowrap">
-                    {mp.name}
-                  </span>
                 </div>
               ))}
             </div>
