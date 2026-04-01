@@ -20,7 +20,7 @@ const marketplaces = [
 
 const MarketplaceBanner = () => {
   return (
-    <section className="py-10 bg-primary/5 overflow-hidden relative">
+    <section className="py-10 overflow-hidden relative">
       <div className="container mx-auto px-4 mb-8 text-center">
         <h3 className="text-2xl sm:text-3xl font-heading font-bold">
           Master Every Major <span className="text-gradient">Marketplace</span>
@@ -33,13 +33,13 @@ const MarketplaceBanner = () => {
           style={{ animationDuration: "30s" }}
         >
           {[0, 1].map((copy) => (
-            <div key={copy} className="flex shrink-0 items-center gap-12 sm:gap-16 pr-12 sm:pr-16" aria-hidden={copy === 1}>
+            <div key={copy} className="flex shrink-0 items-center gap-20 pr-20" aria-hidden={copy === 1}>
               {marketplaces.map((mp, i) => (
                 <img
                   key={`${copy}-${i}`}
                   src={mp.logo}
                   alt={mp.name}
-                  className="h-12 sm:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity duration-300"
+                  className="h-24 sm:h-32 lg:h-36 w-auto object-contain opacity-75 hover:opacity-100 transition-opacity duration-300"
                   loading="lazy"
                 />
               ))}
