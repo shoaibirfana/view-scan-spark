@@ -1,17 +1,17 @@
 import amazonLogo from "@/assets/marketplaces/amazon.png";
 import ebayLogo from "@/assets/marketplaces/ebay.png";
-import tiktokLogo from "@/assets/marketplaces/tiktok.png";
+import tiktokShopLogo from "@/assets/marketplaces/tiktokshop.png";
 import etsyLogo from "@/assets/marketplaces/etsy.png";
-import onbuyLogo from "@/assets/marketplaces/onbuy.png";
-import temuLogo from "@/assets/marketplaces/temu.png";
+import googleAdsLogo from "@/assets/marketplaces/googleads.png";
+import metaLogo from "@/assets/marketplaces/meta.png";
 
 const marketplaces = [
   { name: "Amazon", logo: amazonLogo },
   { name: "eBay", logo: ebayLogo },
-  { name: "TikTok", logo: tiktokLogo },
+  { name: "TikTok Shop", logo: tiktokShopLogo },
   { name: "Etsy", logo: etsyLogo },
-  { name: "OnBuy", logo: onbuyLogo },
-  { name: "Temu", logo: temuLogo },
+  { name: "Google Ads", logo: googleAdsLogo },
+  { name: "Meta", logo: metaLogo },
 ];
 
 const MarketplaceBanner = () => {
