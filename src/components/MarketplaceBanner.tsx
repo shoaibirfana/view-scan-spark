@@ -1,12 +1,21 @@
+import amazonLogo from "@/assets/marketplaces/amazon.png";
+import shopifyLogo from "@/assets/marketplaces/shopify.png";
+import tiktokLogo from "@/assets/marketplaces/tiktok.png";
+import walmartLogo from "@/assets/marketplaces/walmart.png";
+import ebayLogo from "@/assets/marketplaces/ebay.png";
+import etsyLogo from "@/assets/marketplaces/etsy.png";
+import targetLogo from "@/assets/marketplaces/target.png";
+import alibabaLogo from "@/assets/marketplaces/alibaba.png";
+
 const marketplaces = [
-  "Amazon",
-  "Shopify",
-  "TikTok Shop",
-  "Walmart",
-  "eBay",
-  "Etsy",
-  "Target Plus",
-  "Alibaba",
+  { name: "Amazon", logo: amazonLogo },
+  { name: "Shopify", logo: shopifyLogo },
+  { name: "TikTok Shop", logo: tiktokLogo },
+  { name: "Walmart", logo: walmartLogo },
+  { name: "eBay", logo: ebayLogo },
+  { name: "Etsy", logo: etsyLogo },
+  { name: "Target Plus", logo: targetLogo },
+  { name: "Alibaba", logo: alibabaLogo },
 ];
 
 const MarketplaceBanner = () => {
@@ -24,15 +33,22 @@ const MarketplaceBanner = () => {
           style={{ animationDuration: "25s" }}
         >
           {[0, 1].map((copy) => (
-            <div key={copy} className="flex shrink-0 gap-0 pr-0" aria-hidden={copy === 1}>
-              {marketplaces.map((name, i) => (
+            <div key={copy} className="flex shrink-0 gap-4 pr-4" aria-hidden={copy === 1}>
+              {marketplaces.map((mp, i) => (
                 <div
                   key={`${copy}-${i}`}
-                  className="flex items-center gap-3 px-8 py-4 mx-3 rounded-full border border-border/60 bg-card/80 backdrop-blur-sm shadow-sm hover:border-primary/40 hover:shadow-md transition-all duration-300"
+                  className="flex items-center gap-3 px-6 py-3 rounded-full border border-border/60 bg-card/80 backdrop-blur-sm shadow-sm hover:border-primary/40 hover:shadow-md transition-all duration-300"
                 >
-                  <span className="w-3 h-3 rounded-full bg-primary/80 shrink-0" />
+                  <img
+                    src={mp.logo}
+                    alt={mp.name}
+                    className="w-8 h-8 object-contain shrink-0"
+                    loading="lazy"
+                    width={32}
+                    height={32}
+                  />
                   <span className="text-lg font-heading font-semibold text-foreground whitespace-nowrap">
-                    {name}
+                    {mp.name}
                   </span>
                 </div>
               ))}
