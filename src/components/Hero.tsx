@@ -1,19 +1,8 @@
 import { motion } from "framer-motion";
-import { ArrowRight, ShoppingCart, Globe, TrendingUp, Package, Store, BarChart3 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import logo from "@/assets/logo.png";
 import heroCenter from "@/assets/hero-center.jpg";
 import HeroBackground from "./HeroBackground";
-
-
-
-const orbitItems = [
-  { icon: ShoppingCart, label: "Amazon FBA", delay: 0 },
-  { icon: Store, label: "Shopify", delay: 1 },
-  { icon: Globe, label: "Global Reach", delay: 2 },
-  { icon: TrendingUp, label: "Growth", delay: 3 },
-  { icon: Package, label: "Sourcing", delay: 4 },
-  { icon: BarChart3, label: "Analytics", delay: 5 },
-];
 
 const stats = [
   { value: "300+", label: "Satisfied Clients" },
@@ -117,39 +106,12 @@ const Hero = () => {
             </motion.div>
           </motion.div>
 
-          {/* Right side — video with orbiting icons */}
-          <motion.div
+           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="relative flex justify-center items-center mt-8 lg:mt-0"
           >
-            {/* Orbiting items */}
-            {orbitItems.map((item, i) => {
-              const angle = (360 / orbitItems.length) * i;
-              return (
-                <motion.div
-                  key={item.label}
-                  className="absolute z-20 w-[300px] h-[300px] sm:w-[380px] sm:h-[380px] lg:w-[480px] lg:h-[480px]"
-                  animate={{ rotate: [angle, angle + 360] }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear", delay: item.delay * 0.3 }}
-                  style={{ transformOrigin: "center center" }}
-                >
-                  <motion.div
-                    animate={{ rotate: [-(angle), -(angle + 360)] }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear", delay: item.delay * 0.3 }}
-                    className="absolute -top-5 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1"
-                  >
-                    <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-card/90 backdrop-blur-md border border-primary/30 shadow-[0_0_15px_hsl(var(--primary)/0.2)] flex items-center justify-center">
-                      <item.icon className="text-primary w-4 h-4 sm:w-5 sm:h-5" />
-                    </div>
-                    <span className="text-[8px] sm:text-[10px] font-semibold text-muted-foreground whitespace-nowrap">{item.label}</span>
-                  </motion.div>
-                </motion.div>
-              );
-            })}
-
-            {/* Video in center */}
             <div className="relative w-[260px] h-[260px] sm:w-[320px] sm:h-[320px] lg:w-[400px] lg:h-[400px] rounded-full overflow-hidden border-2 border-primary/30 shadow-[0_0_40px_hsl(var(--primary)/0.25)]">
               <img
                 src={heroCenter}
