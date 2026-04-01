@@ -4,7 +4,7 @@ import logo from "@/assets/logo.png";
 import heroCenter from "@/assets/hero-center.jpg";
 import HeroBackground from "./HeroBackground";
 
-const HERO_VIDEO_URL = "https://res.cloudinary.com/dxqmakjxj/video/upload/v1773947313/Untitled_design_hkkoxn.mp4";
+
 
 const orbitItems = [
   { icon: ShoppingCart, label: "Amazon FBA", delay: 0 },
