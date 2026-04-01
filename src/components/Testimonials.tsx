@@ -9,7 +9,7 @@ import davidImg from "@/assets/testimonial-david.png";
 const testimonials = [
   {
     quote: "Team Ecomify helped me set up my Amazon Wholesale account from scratch. Within two months, I was sourcing profitable products and making consistent sales. Their step-by-step guidance was a game changer!",
-    name: "Sarah Mitchell",
+    name: "Jessica Taylor",
     role: "Amazon Wholesale",
     img: fatimaImg,
   },
