@@ -20,8 +20,8 @@ const marketplaces = [
 
 const MarketplaceBanner = () => {
   return (
-    <section className="py-12 bg-primary/5 overflow-hidden relative">
-      <div className="container mx-auto px-4 mb-6 text-center">
+    <section className="py-10 bg-primary/5 overflow-hidden relative">
+      <div className="container mx-auto px-4 mb-8 text-center">
         <h3 className="text-2xl sm:text-3xl font-heading font-bold">
           Master Every Major <span className="text-gradient">Marketplace</span>
         </h3>
@@ -29,25 +29,19 @@ const MarketplaceBanner = () => {
 
       <div className="relative overflow-hidden">
         <div
-          className="flex w-max min-w-max animate-marquee-left motion-reduce:animate-none"
-          style={{ animationDuration: "25s" }}
+          className="flex w-max min-w-max animate-marquee-left motion-reduce:animate-none items-center"
+          style={{ animationDuration: "30s" }}
         >
           {[0, 1].map((copy) => (
-            <div key={copy} className="flex shrink-0 gap-4 pr-4" aria-hidden={copy === 1}>
+            <div key={copy} className="flex shrink-0 items-center gap-12 sm:gap-16 pr-12 sm:pr-16" aria-hidden={copy === 1}>
               {marketplaces.map((mp, i) => (
-                <div
+                <img
                   key={`${copy}-${i}`}
-                  className="flex items-center justify-center px-6 py-3 rounded-full border border-border/60 bg-card/80 backdrop-blur-sm shadow-sm hover:border-primary/40 hover:shadow-md transition-all duration-300"
-                >
-                  <img
-                    src={mp.logo}
-                    alt={mp.name}
-                    className="w-10 h-10 object-contain"
-                    loading="lazy"
-                    width={40}
-                    height={40}
-                  />
-                </div>
+                  src={mp.logo}
+                  alt={mp.name}
+                  className="h-12 sm:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity duration-300"
+                  loading="lazy"
+                />
               ))}
             </div>
           ))}
