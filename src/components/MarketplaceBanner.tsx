@@ -27,7 +27,7 @@ const MarketplaceBanner = () => {
         </h3>
       </div>
 
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-hidden py-6">
         <div
           className="flex w-max min-w-max animate-marquee-left motion-reduce:animate-none items-center"
           style={{ animationDuration: "35s" }}
