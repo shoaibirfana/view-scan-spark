@@ -29,7 +29,8 @@ const MarketplaceBanner = () => {
 
       <div className="relative overflow-hidden py-8">
         <div
-          className="flex w-max min-w-max animate-marquee-left motion-reduce:animate-none items-center"
+          className="flex w-max min-w-max motion-reduce:animate-none items-center"
+          style={{ animationDuration: "40s", animationName: "marquee-left-3", animationTimingFunction: "linear", animationIterationCount: "infinite", willChange: "transform", backfaceVisibility: "hidden" }}
           style={{ animationDuration: "40s" }}
         >
           {[0, 1, 2].map((copy) => (
