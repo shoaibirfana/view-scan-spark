@@ -35,7 +35,7 @@ const MarketplaceBanner = () => {
                   key={`${copy}-${i}`}
                   src={mp.logo}
                   alt={mp.name}
-                  className="h-28 sm:h-36 lg:h-44 w-auto object-contain opacity-85 hover:opacity-100 transition-opacity duration-300"
+                  className="h-12 sm:h-14 lg:h-16 w-auto object-contain transition-transform duration-300 hover:scale-125"
                   loading="lazy"
                 />
               ))}
