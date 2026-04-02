@@ -6,12 +6,12 @@ import googleAdsLogo from "@/assets/marketplaces/googleads.png";
 import metaLogo from "@/assets/marketplaces/meta.png";
 
 const marketplaces = [
-  { name: "Amazon", logo: amazonLogo },
-  { name: "eBay", logo: ebayLogo },
-  { name: "TikTok Shop", logo: tiktokShopLogo },
-  { name: "Etsy", logo: etsyLogo },
-  { name: "Google Ads", logo: googleAdsLogo },
-  { name: "Meta", logo: metaLogo },
+  { name: "Amazon", logo: amazonLogo, className: "h-10 sm:h-12 lg:h-14" },
+  { name: "eBay", logo: ebayLogo, className: "h-10 sm:h-12 lg:h-14" },
+  { name: "TikTok Shop", logo: tiktokShopLogo, className: "h-8 sm:h-10 lg:h-12" },
+  { name: "Etsy", logo: etsyLogo, className: "h-10 sm:h-12 lg:h-14" },
+  { name: "Google Ads", logo: googleAdsLogo, className: "h-8 sm:h-10 lg:h-12" },
+  { name: "Meta", logo: metaLogo, className: "h-6 sm:h-8 lg:h-9" },
 ];
 
 const MarketplaceBanner = () => {
@@ -35,7 +35,7 @@ const MarketplaceBanner = () => {
                   key={`${copy}-${i}`}
                   src={mp.logo}
                   alt={mp.name}
-                  className="h-28 sm:h-36 lg:h-44 w-auto object-contain opacity-85 hover:opacity-100 transition-opacity duration-300"
+                  className={`${mp.className} w-auto object-contain transition-transform duration-300 hover:scale-125 cursor-pointer`}
                   loading="lazy"
                 />
               ))}
