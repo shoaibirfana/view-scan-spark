@@ -36,7 +36,7 @@ const CtaSection = () => {
             href="https://wa.me/19413050102"
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-[0_0_40px_hsl(165_57%_60%/0.4)] transition-all duration-300 hover:scale-105"
+            className="group inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-[0_0_40px_hsl(160_90%_27%/0.4)] transition-all duration-300 hover:scale-105"
           >
             <MessageCircle size={22} /> Chat on WhatsApp
             <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
