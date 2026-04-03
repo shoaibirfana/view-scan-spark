@@ -78,7 +78,7 @@ const Hero = () => {
                 href="https://wa.me/19413050102"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex items-center gap-2 bg-primary text-primary-foreground px-7 py-3.5 rounded-xl font-semibold hover:shadow-[0_0_30px_hsl(165_57%_60%/0.4)] transition-all duration-300 hover:scale-105"
+                className="group inline-flex items-center gap-2 bg-primary text-primary-foreground px-7 py-3.5 rounded-xl font-semibold hover:shadow-[0_0_30px_hsl(160_90%_27%/0.4)] transition-all duration-300 hover:scale-105"
               >
                 Get Started <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </a>
