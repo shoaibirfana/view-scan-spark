@@ -112,11 +112,11 @@ const Hero = () => {
             transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="relative flex justify-center items-center mt-8 lg:mt-0"
           >
-            <div className="relative w-[55vw] h-[55vw] sm:w-[40vw] sm:h-[40vw] md:w-[35vw] md:h-[35vw] lg:w-[30vw] lg:h-[30vw] xl:w-[28vw] xl:h-[28vw] 2xl:w-[25vw] 2xl:h-[25vw] min-w-[220px] min-h-[220px] max-w-[500px] max-h-[500px] rounded-full overflow-hidden border-2 border-primary/30 shadow-[0_0_40px_hsl(var(--primary)/0.25)]">
+            <div className="relative w-full max-w-[600px] rounded-2xl overflow-hidden border-2 border-primary/30 shadow-[0_0_40px_hsl(var(--primary)/0.25)]">
               <img
                 src={heroCenter}
                 alt="E-Commerce"
-                className="w-full h-full object-cover"
+                className="w-full h-auto object-cover"
               />
             </div>
           </motion.div>
