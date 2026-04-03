@@ -84,7 +84,7 @@ const Hero = () => {
               </a>
               <a
                 href="#services"
-                className="group inline-flex items-center gap-2 bg-card/80 backdrop-blur-sm text-foreground border border-border px-7 py-3.5 rounded-xl font-semibold hover:border-primary/50 hover:shadow-[0_0_20px_hsl(165_57%_60%/0.15)] transition-all duration-300 hover:scale-105"
+                className="group inline-flex items-center gap-2 bg-card/80 backdrop-blur-sm text-foreground border border-border px-7 py-3.5 rounded-xl font-semibold hover:border-primary/50 hover:shadow-[0_0_20px_hsl(160_90%_27%/0.15)] transition-all duration-300 hover:scale-105"
               >
                 Explore Services <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </a>
