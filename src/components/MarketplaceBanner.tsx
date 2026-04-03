@@ -30,10 +30,10 @@ const MarketplaceBanner = () => {
       <div className="relative overflow-hidden py-8">
         <div
           className="flex w-max min-w-max motion-reduce:animate-none items-center"
-          style={{ animationDuration: "40s", animationName: "marquee-left-3", animationTimingFunction: "linear", animationIterationCount: "infinite", willChange: "transform", backfaceVisibility: "hidden" }}
+          style={{ animationDuration: "50s", animationName: "marquee-left-5", animationTimingFunction: "linear", animationIterationCount: "infinite", willChange: "transform", backfaceVisibility: "hidden" }}
         >
-          {[0, 1, 2].map((copy) => (
-            <div key={copy} className="flex shrink-0 items-center gap-10 sm:gap-16 lg:gap-24 pr-10 sm:pr-16 lg:pr-24" aria-hidden={copy > 0}>
+          {[0, 1, 2, 3, 4].map((copy) => (
+            <div key={copy} className="flex shrink-0 items-center gap-10 sm:gap-16 lg:gap-24 xl:gap-32 2xl:gap-40 pr-10 sm:pr-16 lg:pr-24 xl:pr-32 2xl:pr-40" aria-hidden={copy > 0}>
               {marketplaces.map((mp, i) => (
                 <img
                   key={`${copy}-${i}`}
