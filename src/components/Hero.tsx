@@ -12,10 +12,10 @@ const stats = [
 ];
 
 const heroMetrics = [
-  { end: 2500000, prefix: "$", suffix: "+", label: "Revenue Generated" },
-  { end: 80000, prefix: "", suffix: "+", label: "Orders Delivered" },
-  { end: 225000, prefix: "$", suffix: "+", label: "Ads Spend Managed" },
-  { end: 5, prefix: "", suffix: "+", label: "Brands Launched" },
+  { end: 5600000, prefix: "$", suffix: "+", label: "Revenue Generated" },
+  { end: 180000, prefix: "", suffix: "+", label: "Orders Delivered" },
+  { end: 800000, prefix: "$", suffix: "+", label: "Ads Spend Managed" },
+  { end: 8, prefix: "", suffix: "+", label: "Brands Launched" },
 ];
 
 function formatMetric(n: number): string {

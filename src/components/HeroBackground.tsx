@@ -83,8 +83,8 @@ const NetworkCanvas = () => {
     resize();
     window.addEventListener("resize", resize);
 
-    const DOT_COLOR = "rgba(13,148,136,";
-    const LINE_COLOR = "rgba(13,148,136,";
+    const DOT_COLOR = "rgba(7,132,99,";
+    const LINE_COLOR = "rgba(7,132,99,";
     let lastTime = performance.now();
 
     const draw = (now: number) => {
@@ -194,39 +194,53 @@ const NetworkCanvas = () => {
   return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />;
 };
 
-/* ── Floating bubble labels that drift across the hero ── */
+/* ── Cluster-based floating bubbles ── */
 
-const BUBBLE_LABELS = [
-  "Brand Registry",
-  "Shopify",
-  "TikTok Shop",
-  "Amazon FBA",
-  "Product Sourcing",
-  "ITIN Number",
-  "LLC Formation",
-  "EIN Number",
-  "Launch Fast",
-  "Scale Revenue",
-  "Brand Protection",
+interface Cluster {
+  label: string;
+  items: string[];
+  cx: number;
+  cy: number;
+}
+
+const CLUSTERS: Cluster[] = [
+  {
+    label: "Marketplace",
+    items: ["Amazon FBA", "Shopify", "TikTok Shop"],
+  },
+  {
+    label: "Legal & Compliance",
+    items: ["LLC Formation", "EIN Number", "ITIN Number"],
+  },
+  {
+    label: "Growth",
+    items: ["Brand Registry", "Brand Protection", "Scale Revenue"],
+  },
+  {
+    label: "Operations",
+    items: ["Product Sourcing", "Launch Fast"],
+  },
 ];
 
-const NAV_HEIGHT = 72; // px reserved for the navbar
-const BUBBLE_W = 130; // approx bubble width
-const BUBBLE_H = 32;  // approx bubble height
-const MIN_DIST = 150;  // min distance between bubble centres
-const SPEED = 0.35;    // px per frame-unit
+const NAV_HEIGHT = 72;
+const BUBBLE_W = 120;
+const BUBBLE_H = 32;
+const CLUSTER_RADIUS = 90;
+const CLUSTER_SPEED = 0.25;
+const ORBIT_SPEED = 0.003;
 
-interface BubbleState {
-  x: number;
-  y: number;
+interface ClusterState {
+  cx: number;
+  cy: number;
   vx: number;
   vy: number;
+  angle: number;
 }
 
 const FloatingBubbles = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const bubblesRef = useRef<BubbleState[]>([]);
-  const [positions, setPositions] = useState<{ x: number; y: number }[]>([]);
+  const clustersRef = useRef<ClusterState[]>([]);
+  const [, setTick] = useState(0);
   const animRef = useRef<number>(0);
 
   const init = useCallback(() => {
@@ -234,28 +248,27 @@ const FloatingBubbles = () => {
     if (!el) return;
     const w = el.offsetWidth;
     const h = el.offsetHeight;
-    const minY = NAV_HEIGHT + 10;
+    const minY = NAV_HEIGHT + CLUSTER_RADIUS + 20;
+    const maxY = h - CLUSTER_RADIUS - 20;
+    const minX = CLUSTER_RADIUS + 20;
+    const maxX = w - CLUSTER_RADIUS - 20;
 
-    const bubbles: BubbleState[] = [];
-    for (let i = 0; i < BUBBLE_LABELS.length; i++) {
-      let x: number, y: number, attempts = 0, ok = false;
-      do {
-        x = Math.random() * (w - BUBBLE_W);
-        y = minY + Math.random() * (h - minY - BUBBLE_H);
-        ok = true;
-        for (const b of bubbles) {
-          const dx = x - b.x;
-          const dy = y - b.y;
-          if (Math.sqrt(dx * dx + dy * dy) < MIN_DIST) { ok = false; break; }
-        }
-        attempts++;
-      } while (!ok && attempts < 60);
-
+    const states: ClusterState[] = CLUSTERS.map((_, i) => {
+      const cols = 2;
+      const row = Math.floor(i / cols);
+      const col = i % cols;
+      const cx = minX + (col + 0.5) * ((maxX - minX) / cols);
+      const cy = minY + (row + 0.5) * ((maxY - minY) / Math.ceil(CLUSTERS.length / cols));
       const angle = Math.random() * Math.PI * 2;
-      bubbles.push({ x, y, vx: Math.cos(angle) * SPEED, vy: Math.sin(angle) * SPEED });
-    }
-    bubblesRef.current = bubbles;
-    setPositions(bubbles.map(b => ({ x: b.x, y: b.y })));
+      return {
+        cx: cx + (Math.random() - 0.5) * 40,
+        cy: cy + (Math.random() - 0.5) * 40,
+        vx: Math.cos(angle) * CLUSTER_SPEED,
+        vy: Math.sin(angle) * CLUSTER_SPEED,
+        angle: Math.random() * Math.PI * 2,
+      };
+    });
+    clustersRef.current = states;
   }, []);
 
   useEffect(() => {
@@ -275,48 +288,52 @@ const FloatingBubbles = () => {
 
       const w = el.offsetWidth;
       const h = el.offsetHeight;
-      const minY = NAV_HEIGHT + 10;
-      const bs = bubblesRef.current;
+      const minY = NAV_HEIGHT + CLUSTER_RADIUS + 20;
+      const maxY = h - CLUSTER_RADIUS - 20;
+      const minX = CLUSTER_RADIUS + 20;
+      const maxX = w - CLUSTER_RADIUS - 20;
+      const cs = clustersRef.current;
 
-      // Move & bounce off walls
-      for (let i = 0; i < bs.length; i++) {
-        bs[i].x += bs[i].vx * dt;
-        bs[i].y += bs[i].vy * dt;
+      for (let i = 0; i < cs.length; i++) {
+        cs[i].cx += cs[i].vx * dt;
+        cs[i].cy += cs[i].vy * dt;
+        cs[i].angle += ORBIT_SPEED * dt;
 
-        if (bs[i].x < 0) { bs[i].x = 0; bs[i].vx = Math.abs(bs[i].vx); }
-        if (bs[i].x > w - BUBBLE_W) { bs[i].x = w - BUBBLE_W; bs[i].vx = -Math.abs(bs[i].vx); }
-        if (bs[i].y < minY) { bs[i].y = minY; bs[i].vy = Math.abs(bs[i].vy); }
-        if (bs[i].y > h - BUBBLE_H) { bs[i].y = h - BUBBLE_H; bs[i].vy = -Math.abs(bs[i].vy); }
+        if (cs[i].cx < minX) { cs[i].cx = minX; cs[i].vx = Math.abs(cs[i].vx); }
+        if (cs[i].cx > maxX) { cs[i].cx = maxX; cs[i].vx = -Math.abs(cs[i].vx); }
+        if (cs[i].cy < minY) { cs[i].cy = minY; cs[i].vy = Math.abs(cs[i].vy); }
+        if (cs[i].cy > maxY) { cs[i].cy = maxY; cs[i].vy = -Math.abs(cs[i].vy); }
       }
 
-      // Repel overlapping bubbles
-      for (let i = 0; i < bs.length; i++) {
-        for (let j = i + 1; j < bs.length; j++) {
-          const dx = bs[j].x - bs[i].x;
-          const dy = bs[j].y - bs[i].y;
+      // Repel clusters from each other
+      for (let i = 0; i < cs.length; i++) {
+        for (let j = i + 1; j < cs.length; j++) {
+          const dx = cs[j].cx - cs[i].cx;
+          const dy = cs[j].cy - cs[i].cy;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < MIN_DIST && dist > 0) {
-            const force = (MIN_DIST - dist) * 0.005;
+          const minDist = CLUSTER_RADIUS * 3;
+          if (dist < minDist && dist > 0) {
+            const force = (minDist - dist) * 0.003;
             const nx = dx / dist;
             const ny = dy / dist;
-            bs[i].vx -= nx * force;
-            bs[i].vy -= ny * force;
-            bs[j].vx += nx * force;
-            bs[j].vy += ny * force;
+            cs[i].vx -= nx * force;
+            cs[i].vy -= ny * force;
+            cs[j].vx += nx * force;
+            cs[j].vy += ny * force;
           }
         }
       }
 
       // Clamp speed
-      for (let i = 0; i < bs.length; i++) {
-        const spd = Math.sqrt(bs[i].vx * bs[i].vx + bs[i].vy * bs[i].vy);
-        if (spd > SPEED * 1.5) {
-          bs[i].vx = (bs[i].vx / spd) * SPEED;
-          bs[i].vy = (bs[i].vy / spd) * SPEED;
+      for (let i = 0; i < cs.length; i++) {
+        const spd = Math.sqrt(cs[i].vx ** 2 + cs[i].vy ** 2);
+        if (spd > CLUSTER_SPEED * 1.5) {
+          cs[i].vx = (cs[i].vx / spd) * CLUSTER_SPEED;
+          cs[i].vy = (cs[i].vy / spd) * CLUSTER_SPEED;
         }
       }
 
-      setPositions(bs.map(b => ({ x: b.x, y: b.y })));
+      setTick(t => t + 1);
       animRef.current = requestAnimationFrame(tick);
     };
 
@@ -324,21 +341,71 @@ const FloatingBubbles = () => {
     return () => cancelAnimationFrame(animRef.current);
   }, []);
 
+  const cs = clustersRef.current;
+
   return (
     <div ref={containerRef} className="absolute inset-0 pointer-events-none hidden md:block">
-      {positions.map((pos, i) => (
-        <div
-          key={BUBBLE_LABELS[i]}
-          className="absolute flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card/80 backdrop-blur-md border border-primary/20 shadow-[0_4px_16px_hsl(var(--primary)/0.1)] text-xs font-semibold text-foreground"
-          style={{
-            transform: `translate(${pos.x}px, ${pos.y}px)`,
-            willChange: "transform",
-          }}
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-primary/70" />
-          {BUBBLE_LABELS[i]}
-        </div>
-      ))}
+      {CLUSTERS.map((cluster, ci) => {
+        const state = cs[ci];
+        if (!state) return null;
+
+        return (
+          <div key={cluster.label} className="absolute" style={{ transform: `translate(${state.cx - CLUSTER_RADIUS}px, ${state.cy - CLUSTER_RADIUS}px)`, width: CLUSTER_RADIUS * 2, height: CLUSTER_RADIUS * 2, willChange: "transform" }}>
+            {/* Cluster glow background */}
+            <div className="absolute inset-0 rounded-full bg-primary/[0.06] border border-primary/[0.12] backdrop-blur-[2px]" />
+            
+            {/* Cluster label */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[10px] font-bold uppercase tracking-widest text-primary/30 whitespace-nowrap">
+              {cluster.label}
+            </div>
+
+            {/* Orbiting bubbles */}
+            {cluster.items.map((item, bi) => {
+              const angleOffset = (Math.PI * 2 / cluster.items.length) * bi;
+              const orbitR = CLUSTER_RADIUS * 0.6;
+              const bx = CLUSTER_RADIUS + Math.cos(state.angle + angleOffset) * orbitR - BUBBLE_W / 2;
+              const by = CLUSTER_RADIUS + Math.sin(state.angle + angleOffset) * orbitR - BUBBLE_H / 2;
+
+              return (
+                <div
+                  key={item}
+                  className="absolute flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card/90 backdrop-blur-md border border-primary/25 shadow-[0_4px_16px_hsl(var(--primary)/0.12)] text-xs font-semibold text-foreground whitespace-nowrap"
+                  style={{
+                    transform: `translate(${bx}px, ${by}px)`,
+                    willChange: "transform",
+                  }}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary/70" />
+                  {item}
+                </div>
+              );
+            })}
+
+            {/* Connection lines via SVG */}
+            <svg className="absolute inset-0 w-full h-full" style={{ overflow: "visible" }}>
+              {cluster.items.map((item, bi) => {
+                const angleOffset = (Math.PI * 2 / cluster.items.length) * bi;
+                const orbitR = CLUSTER_RADIUS * 0.6;
+                const bx = CLUSTER_RADIUS + Math.cos(state.angle + angleOffset) * orbitR;
+                const by = CLUSTER_RADIUS + Math.sin(state.angle + angleOffset) * orbitR;
+                return (
+                  <line
+                    key={item}
+                    x1={CLUSTER_RADIUS}
+                    y1={CLUSTER_RADIUS}
+                    x2={bx}
+                    y2={by}
+                    stroke="hsl(var(--primary))"
+                    strokeOpacity={0.15}
+                    strokeWidth={1}
+                    strokeDasharray="4 3"
+                  />
+                );
+              })}
+            </svg>
+          </div>
+        );
+      })}
     </div>
   );
 };

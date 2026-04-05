@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Store, ShoppingCart, Video, Tag, Building2, Shield,
   FileText, RefreshCw, Package, BarChart3, Users, Warehouse,
-  ChevronDown, ChevronUp,
+  ChevronDown, ChevronUp, Send,
 } from "lucide-react";
 import logo from "@/assets/logo.png";
 
@@ -26,6 +26,9 @@ const Services = () => {
   const [showAll, setShowAll] = useState(false);
   const gridRef = useRef<HTMLDivElement>(null);
   const [cols, setCols] = useState(4);
+  const [customName, setCustomName] = useState("");
+  const [customService, setCustomService] = useState("");
+  const [customDetails, setCustomDetails] = useState("");
 
   useEffect(() => {
     const detectCols = () => {
@@ -39,7 +42,6 @@ const Services = () => {
       }
     };
 
-    // Detect after render
     const timeout = setTimeout(detectCols, 100);
     window.addEventListener("resize", detectCols);
     return () => {
@@ -50,6 +52,13 @@ const Services = () => {
 
   const initialCount = cols * 2;
   const visible = showAll ? services : services.slice(0, initialCount);
+
+  const handleCustomSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const message = `Hi! I'd like to request a custom e-commerce service.\n\nName: ${customName}\nService Needed: ${customService}\nDetails: ${customDetails}`;
+    const encoded = encodeURIComponent(message);
+    window.open(`https://wa.me/19413050102?text=${encoded}`, "_blank");
+  };
 
   return (
     <section id="services" className="py-24 bg-background relative overflow-hidden">
@@ -128,6 +137,76 @@ const Services = () => {
             </button>
           </motion.div>
         )}
+
+        {/* Custom Service Request - only visible when expanded */}
+        <AnimatePresence>
+          {showAll && (
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="mt-16"
+            >
+              <div className="max-w-2xl mx-auto rounded-2xl border border-primary/20 bg-card/60 backdrop-blur-xl p-8 sm:p-10 shadow-[0_8px_40px_hsl(var(--primary)/0.08)]">
+                <div className="text-center mb-8">
+                  <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                    <Send className="text-primary" size={26} />
+                  </div>
+                  <h3 className="text-2xl font-heading font-bold text-card-foreground">
+                    Get Your Own <span className="text-gradient">Custom Service</span>
+                  </h3>
+                  <p className="text-muted-foreground text-sm mt-2 max-w-md mx-auto">
+                    Don't see what you need? Tell us about your e-commerce requirement and we'll create a tailored solution just for you.
+                  </p>
+                </div>
+
+                <form onSubmit={handleCustomSubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-1.5">Your Name</label>
+                    <input
+                      type="text"
+                      required
+                      value={customName}
+                      onChange={(e) => setCustomName(e.target.value)}
+                      placeholder="John Doe"
+                      className="w-full px-4 py-3 rounded-xl border border-border bg-background/80 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-1.5">Service You Need</label>
+                    <input
+                      type="text"
+                      required
+                      value={customService}
+                      onChange={(e) => setCustomService(e.target.value)}
+                      placeholder="e.g. Etsy Store Setup, Inventory Management..."
+                      className="w-full px-4 py-3 rounded-xl border border-border bg-background/80 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-1.5">Additional Details</label>
+                    <textarea
+                      required
+                      value={customDetails}
+                      onChange={(e) => setCustomDetails(e.target.value)}
+                      rows={3}
+                      placeholder="Describe your requirements, budget, and timeline..."
+                      className="w-full px-4 py-3 rounded-xl border border-border bg-background/80 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all resize-none"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-6 py-3.5 rounded-xl font-semibold hover:shadow-[0_0_30px_hsl(var(--primary)/0.3)] transition-all duration-300 hover:scale-[1.02]"
+                  >
+                    <Send size={18} />
+                    Send Request via WhatsApp
+                  </button>
+                </form>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   );
