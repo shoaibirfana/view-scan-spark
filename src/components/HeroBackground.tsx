@@ -199,8 +199,6 @@ const NetworkCanvas = () => {
 interface Cluster {
   label: string;
   items: string[];
-  cx: number;
-  cy: number;
 }
 
 const CLUSTERS: Cluster[] = [
