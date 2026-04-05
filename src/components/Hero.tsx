@@ -160,16 +160,9 @@ const Hero = () => {
               {heroMetrics.map((m, i) => (
                 <div
                   key={m.label}
-                  className={`flex flex-col items-center justify-center py-4 px-2 ${
-                    i < heroMetrics.length - 1 ? "border-r border-primary-foreground/20" : ""
-                  }`}
+                  className={i < heroMetrics.length - 1 ? "border-r border-primary-foreground/20" : ""}
                 >
-                  <span className="text-lg sm:text-xl lg:text-2xl font-heading font-bold text-primary-foreground">
-                    {m.value}
-                  </span>
-                  <span className="text-[10px] sm:text-xs text-primary-foreground/80 text-center leading-tight mt-1">
-                    {m.label}
-                  </span>
+                  <MetricCounter {...m} />
                 </div>
               ))}
             </motion.div>
