@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import logo from "@/assets/logo.png";
 import heroCenter from "@/assets/hero-center.png";
 import HeroBackground from "./HeroBackground";
+import { useCountUp } from "@/hooks/use-count-up";
 
 const stats = [
   { value: "300+", label: "Satisfied Clients" },
@@ -11,11 +12,31 @@ const stats = [
 ];
 
 const heroMetrics = [
-  { value: "$2.5M+", label: "Revenue Generated" },
-  { value: "80K+", label: "Orders Delivered" },
-  { value: "$225K+", label: "Ads Spend Managed" },
-  { value: "5+", label: "Brands Launched" },
+  { end: 2500000, prefix: "$", suffix: "+", label: "Revenue Generated" },
+  { end: 80000, prefix: "", suffix: "+", label: "Orders Delivered" },
+  { end: 225000, prefix: "$", suffix: "+", label: "Ads Spend Managed" },
+  { end: 5, prefix: "", suffix: "+", label: "Brands Launched" },
 ];
+
+function formatMetric(n: number): string {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(n >= 10_000 ? 0 : 1).replace(/\.0$/, "")}K`;
+  return n.toString();
+}
+
+const MetricCounter = ({ end, prefix, suffix, label }: typeof heroMetrics[number]) => {
+  const { count, ref } = useCountUp(end, 4000);
+  return (
+    <div ref={ref} className="flex flex-col items-center justify-center py-4 px-2">
+      <span className="text-lg sm:text-xl lg:text-2xl font-heading font-bold text-primary-foreground">
+        {prefix}{formatMetric(count)}{suffix}
+      </span>
+      <span className="text-[10px] sm:text-xs text-primary-foreground/80 text-center leading-tight mt-1">
+        {label}
+      </span>
+    </div>
+  );
+};
 
 const Hero = () => {
   return (
@@ -139,16 +160,9 @@ const Hero = () => {
               {heroMetrics.map((m, i) => (
                 <div
                   key={m.label}
-                  className={`flex flex-col items-center justify-center py-4 px-2 ${
-                    i < heroMetrics.length - 1 ? "border-r border-primary-foreground/20" : ""
-                  }`}
+                  className={i < heroMetrics.length - 1 ? "border-r border-primary-foreground/20" : ""}
                 >
-                  <span className="text-lg sm:text-xl lg:text-2xl font-heading font-bold text-primary-foreground">
-                    {m.value}
-                  </span>
-                  <span className="text-[10px] sm:text-xs text-primary-foreground/80 text-center leading-tight mt-1">
-                    {m.label}
-                  </span>
+                  <MetricCounter {...m} />
                 </div>
               ))}
             </motion.div>
