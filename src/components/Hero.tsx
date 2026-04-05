@@ -1,13 +1,20 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import logo from "@/assets/logo.png";
-import heroCenter from "@/assets/hero-center.jpg";
+import heroCenter from "@/assets/hero-center.png";
 import HeroBackground from "./HeroBackground";
 
 const stats = [
   { value: "300+", label: "Satisfied Clients" },
   { value: "85%", label: "Sales Growth" },
   { value: "12+", label: "Services" },
+];
+
+const heroMetrics = [
+  { value: "$2.5M+", label: "Revenue Generated" },
+  { value: "80K+", label: "Orders Delivered" },
+  { value: "$225K+", label: "Ads Spend Managed" },
+  { value: "5+", label: "Brands Launched" },
 ];
 
 const Hero = () => {
@@ -106,19 +113,45 @@ const Hero = () => {
             </motion.div>
           </motion.div>
 
-           <motion.div
+          {/* Right column: Image + Metrics */}
+          <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="relative flex justify-center items-center mt-8 lg:mt-0"
+            className="relative flex flex-col items-center mt-8 lg:mt-0"
           >
+            {/* Hero Image */}
             <div className="relative w-full max-w-[600px] rounded-2xl overflow-hidden border-2 border-primary/30 shadow-[0_0_40px_hsl(var(--primary)/0.25)]">
               <img
                 src={heroCenter}
-                alt="E-Commerce"
+                alt="E-Commerce Success Journey"
                 className="w-full h-auto object-cover"
               />
             </div>
+
+            {/* Metrics Bar */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.6 }}
+              className="w-full max-w-[600px] mt-4 grid grid-cols-4 bg-primary rounded-xl overflow-hidden"
+            >
+              {heroMetrics.map((m, i) => (
+                <div
+                  key={m.label}
+                  className={`flex flex-col items-center justify-center py-4 px-2 ${
+                    i < heroMetrics.length - 1 ? "border-r border-primary-foreground/20" : ""
+                  }`}
+                >
+                  <span className="text-lg sm:text-xl lg:text-2xl font-heading font-bold text-primary-foreground">
+                    {m.value}
+                  </span>
+                  <span className="text-[10px] sm:text-xs text-primary-foreground/80 text-center leading-tight mt-1">
+                    {m.label}
+                  </span>
+                </div>
+              ))}
+            </motion.div>
           </motion.div>
         </div>
       </div>
