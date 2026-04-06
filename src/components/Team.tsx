@@ -17,12 +17,12 @@ import team10 from "@/assets/team-10.jpg";
 import teamAhmadShah from "@/assets/team-ahmad-shah.png";
 
 const members = [
+  { name: "Muhammad Furqan Ahmad", role: "Senior Sourcing Manager", photo: team6 },
   { name: "Shayan Yousaf", role: "Senior Sales Manager", photo: team4 },
   { name: "Anisa Ilyas", role: "TikTok Shop Expert", photo: team8new },
   { name: "Shoaib Irfan", role: "Amazon Private Label Expert", photo: team2 },
   { name: "Maryyum Manan", role: "Social Media Manager / Google Ads", photo: team3 },
   { name: "Ahmad Shah", role: "Walmart & TikTok Shop Expert", photo: teamAhmadShah },
-  { name: "Muhammad Furqan Ahmad", role: "Senior Sourcing Manager", photo: team6 },
   { name: "Moaz Akram", role: "Shopify Expert", photo: team5 },
   { name: "Anosh Saleem", role: "Digital Marketing Expert", photo: team7 },
   { name: "Hamza", role: "Ecommerce Expert", photo: team1 },
