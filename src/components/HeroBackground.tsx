@@ -216,11 +216,6 @@ const NetworkCanvas = () => {
         const centerX = cluster.anchorX + cluster.offsetX;
         const centerY = cluster.anchorY + cluster.offsetY;
 
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, cluster.radius, 0, Math.PI * 2);
-        ctx.fillStyle = primary(0.04);
-        ctx.fill();
-
         return cluster.nodes.map((node) => {
           const angle = node.baseAngle + now * node.orbitSpeed;
           const radialWobble = 1 + Math.sin(now * 0.0011 + node.phase) * 0.08;
@@ -237,31 +232,33 @@ const NetworkCanvas = () => {
         });
       });
 
-      positionedClusters.forEach((clusterNodes) => {
-        for (let a = 0; a < clusterNodes.length; a++) {
-          for (let b = a + 1; b < clusterNodes.length; b++) {
-            const nodeA = clusterNodes[a];
-            const nodeB = clusterNodes[b];
-            const dx = nodeA.x - nodeB.x;
-            const dy = nodeA.y - nodeB.y;
-            const emphasized = nodeA.node.bubbleLabelIdx >= 0 || nodeB.node.bubbleLabelIdx >= 0;
-            const maxDistance = emphasized ? 118 : 92;
-            const distanceSq = dx * dx + dy * dy;
+      // Flatten all nodes for inter-cluster connections
+      const allNodes = positionedClusters.flat();
+      const maxDistance = 160;
+      const maxDistSq = maxDistance * maxDistance;
 
-            if (distanceSq > maxDistance * maxDistance) continue;
+      for (let a = 0; a < allNodes.length; a++) {
+        for (let b = a + 1; b < allNodes.length; b++) {
+          const nodeA = allNodes[a];
+          const nodeB = allNodes[b];
+          const dx = nodeA.x - nodeB.x;
+          const dy = nodeA.y - nodeB.y;
+          const distanceSq = dx * dx + dy * dy;
 
-            const proximity = 1 - distanceSq / (maxDistance * maxDistance);
-            const alpha = emphasized ? 0.16 + proximity * 0.36 : 0.08 + proximity * 0.24;
+          if (distanceSq > maxDistSq) continue;
 
-            ctx.beginPath();
-            ctx.moveTo(nodeA.x, nodeA.y);
-            ctx.lineTo(nodeB.x, nodeB.y);
-            ctx.lineWidth = emphasized ? 1.8 : 1.2;
-            ctx.strokeStyle = primary(alpha);
-            ctx.stroke();
-          }
+          const proximity = 1 - distanceSq / maxDistSq;
+          const emphasized = nodeA.node.bubbleLabelIdx >= 0 || nodeB.node.bubbleLabelIdx >= 0;
+          const alpha = emphasized ? 0.12 + proximity * 0.32 : 0.06 + proximity * 0.18;
+
+          ctx.beginPath();
+          ctx.moveTo(nodeA.x, nodeA.y);
+          ctx.lineTo(nodeB.x, nodeB.y);
+          ctx.lineWidth = emphasized ? 1.6 : 1;
+          ctx.strokeStyle = primary(alpha);
+          ctx.stroke();
         }
-      });
+      }
 
       positionedClusters.forEach((clusterNodes) => {
         clusterNodes.forEach(({ angle, node, x, y }) => {
