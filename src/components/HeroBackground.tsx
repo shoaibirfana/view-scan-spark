@@ -27,13 +27,13 @@ type ClusterNode = {
 type Cluster = {
   anchorX: number;
   anchorY: number;
-  offsetX: number;
-  offsetY: number;
-  vx: number;
-  vy: number;
-  limitX: number;
-  limitY: number;
-  radius: number;
+  // smooth drift via sine waves instead of velocity bounce
+  driftXAmp: number;
+  driftYAmp: number;
+  driftXFreq: number;
+  driftYFreq: number;
+  driftXPhase: number;
+  driftYPhase: number;
   nodes: ClusterNode[];
 };
 
@@ -66,22 +66,16 @@ const NetworkCanvas = () => {
 
     const rootStyles = getComputedStyle(document.documentElement);
     const primaryToken = rootStyles.getPropertyValue("--primary").trim() || "160 90% 27%";
-
     const primary = (alpha: number) => toHsl(primaryToken, alpha);
 
     let animationFrameId = 0;
     let canvasWidth = 0;
     let canvasHeight = 0;
     let clusters: Cluster[] = [];
-    let lastTime = performance.now();
 
     const bubbleLayer = document.createElement("div");
-    bubbleLayer.style.cssText = [
-      "position:absolute",
-      "inset:0",
-      "pointer-events:none",
-      "z-index:2",
-    ].join(";");
+    bubbleLayer.style.cssText =
+      "position:absolute;inset:0;pointer-events:none;z-index:2";
     canvas.parentElement?.appendChild(bubbleLayer);
 
     const bubbleEls = BUBBLE_LABELS.map((label) => {
@@ -95,6 +89,7 @@ const NetworkCanvas = () => {
         "border-radius:9999px",
         `background:${primary(0.12)}`,
         "backdrop-filter:blur(12px)",
+        `-webkit-backdrop-filter:blur(12px)`,
         `border:1px solid ${primary(0.34)}`,
         "font-size:12px",
         "font-weight:600",
@@ -102,7 +97,6 @@ const NetworkCanvas = () => {
         "white-space:nowrap",
         "pointer-events:none",
         "will-change:transform",
-        "transition:none",
         `box-shadow:0 0 18px ${primary(0.16)}`,
         "opacity:0",
       ].join(";");
@@ -154,25 +148,26 @@ const NetworkCanvas = () => {
               baseAngle: localIndex * 0.48 + nodeIndex * GOLDEN_ANGLE,
               orbitRadius: baseOrbit + nodeIndex * (compact ? 8 : 10) + (isBubbleNode ? 4 : 0),
               orbitSpeed:
-                (isBubbleNode ? 0.00024 : 0.00018) *
+                (isBubbleNode ? 0.00018 : 0.00012) *
                 (nodeIndex % 2 === 0 ? 1 : -1) *
-                (1 + (localIndex % 3) * 0.08),
+                (1 + (localIndex % 3) * 0.06),
               phase: localIndex * PHI + nodeIndex * 0.9,
               size: isBubbleNode ? 3.9 : 2.2 + (nodeIndex % 3) * 0.35,
               bubbleLabelIdx: isBubbleNode ? bubbleLabelIdx : -1,
             } satisfies ClusterNode;
           });
 
+          // Smooth sinusoidal drift — no sudden jumps
+          const driftRange = compact ? 12 : 20;
           return {
             anchorX,
             anchorY,
-            offsetX: (Math.random() - 0.5) * 10,
-            offsetY: (Math.random() - 0.5) * 10,
-            vx: (Math.cos(jitterAngle) >= 0 ? 1 : -1) * (compact ? 0.07 : 0.09 + (localIndex % 3) * 0.01),
-            vy: (Math.sin(jitterAngle) >= 0 ? 1 : -1) * (compact ? 0.05 : 0.07 + (localIndex % 2) * 0.01),
-            limitX: Math.min(cellWidth * 0.18, compact ? 18 : 30),
-            limitY: Math.min(rowHeight * 0.16, compact ? 14 : 24),
-            radius: Math.max(...nodes.map((node) => node.orbitRadius)) + 18,
+            driftXAmp: driftRange + (localIndex % 3) * 4,
+            driftYAmp: driftRange * 0.7 + (localIndex % 2) * 3,
+            driftXFreq: 0.00006 + (localIndex % 5) * 0.000008,
+            driftYFreq: 0.00005 + (localIndex % 4) * 0.000007,
+            driftXPhase: localIndex * 1.7,
+            driftYPhase: localIndex * 2.3,
             nodes,
           } satisfies Cluster;
         });
@@ -191,48 +186,37 @@ const NetworkCanvas = () => {
     };
 
     const draw = (now: number) => {
-      const dt = Math.min((now - lastTime) / 16.667, 2.5);
-      lastTime = now;
-
       ctx.clearRect(0, 0, canvasWidth, canvasHeight);
       bubbleEls.forEach((el) => {
         el.style.opacity = "0";
       });
 
       const positionedClusters: PositionedNode[][] = clusters.map((cluster) => {
-        cluster.offsetX += cluster.vx * dt;
-        cluster.offsetY += cluster.vy * dt;
-
-        if (Math.abs(cluster.offsetX) > cluster.limitX) {
-          cluster.offsetX = clamp(cluster.offsetX, -cluster.limitX, cluster.limitX);
-          cluster.vx *= -1;
-        }
-
-        if (Math.abs(cluster.offsetY) > cluster.limitY) {
-          cluster.offsetY = clamp(cluster.offsetY, -cluster.limitY, cluster.limitY);
-          cluster.vy *= -1;
-        }
-
-        const centerX = cluster.anchorX + cluster.offsetX;
-        const centerY = cluster.anchorY + cluster.offsetY;
+        // Smooth sinusoidal drift — always continuous, never jerky
+        const centerX =
+          cluster.anchorX +
+          Math.sin(now * cluster.driftXFreq + cluster.driftXPhase) * cluster.driftXAmp;
+        const centerY =
+          cluster.anchorY +
+          Math.sin(now * cluster.driftYFreq + cluster.driftYPhase) * cluster.driftYAmp;
 
         return cluster.nodes.map((node) => {
           const angle = node.baseAngle + now * node.orbitSpeed;
-          const radialWobble = 1 + Math.sin(now * 0.0011 + node.phase) * 0.08;
+          const radialWobble = 1 + Math.sin(now * 0.0006 + node.phase) * 0.06;
           const x =
             centerX +
             Math.cos(angle) * node.orbitRadius * radialWobble +
-            Math.sin(now * 0.00065 + node.phase) * 2.5;
+            Math.sin(now * 0.0004 + node.phase) * 1.5;
           const y =
             centerY +
-            Math.sin(angle) * node.orbitRadius * (0.8 + Math.cos(now * 0.0008 + node.phase) * 0.05) +
-            Math.cos(now * 0.00072 + node.phase) * 3;
+            Math.sin(angle) * node.orbitRadius * (0.85 + Math.cos(now * 0.0005 + node.phase) * 0.04) +
+            Math.cos(now * 0.00045 + node.phase) * 1.8;
 
           return { angle, node, x, y } satisfies PositionedNode;
         });
       });
 
-      // Flatten all nodes for inter-cluster connections
+      // Inter-cluster connections
       const allNodes = positionedClusters.flat();
       const maxDistance = 160;
       const maxDistSq = maxDistance * maxDistance;
@@ -248,30 +232,35 @@ const NetworkCanvas = () => {
           if (distanceSq > maxDistSq) continue;
 
           const proximity = 1 - distanceSq / maxDistSq;
-          const emphasized = nodeA.node.bubbleLabelIdx >= 0 || nodeB.node.bubbleLabelIdx >= 0;
-          const alpha = emphasized ? 0.12 + proximity * 0.32 : 0.06 + proximity * 0.18;
+          const emphasized =
+            nodeA.node.bubbleLabelIdx >= 0 || nodeB.node.bubbleLabelIdx >= 0;
+          const alpha = emphasized
+            ? 0.1 + proximity * 0.25
+            : 0.04 + proximity * 0.14;
 
           ctx.beginPath();
           ctx.moveTo(nodeA.x, nodeA.y);
           ctx.lineTo(nodeB.x, nodeB.y);
-          ctx.lineWidth = emphasized ? 1.6 : 1;
+          ctx.lineWidth = emphasized ? 1.4 : 0.8;
           ctx.strokeStyle = primary(alpha);
           ctx.stroke();
         }
       }
 
+      // Draw nodes & bubbles
       positionedClusters.forEach((clusterNodes) => {
         clusterNodes.forEach(({ angle, node, x, y }) => {
           if (node.bubbleLabelIdx >= 0) {
             ctx.beginPath();
             ctx.arc(x, y, node.size + 4, 0, Math.PI * 2);
-            ctx.fillStyle = primary(0.12);
+            ctx.fillStyle = primary(0.1);
             ctx.fill();
           }
 
           ctx.beginPath();
           ctx.arc(x, y, node.size, 0, Math.PI * 2);
-          ctx.fillStyle = node.bubbleLabelIdx >= 0 ? primary(0.82) : primary(0.56);
+          ctx.fillStyle =
+            node.bubbleLabelIdx >= 0 ? primary(0.8) : primary(0.5);
           ctx.fill();
 
           if (node.bubbleLabelIdx >= 0) {
