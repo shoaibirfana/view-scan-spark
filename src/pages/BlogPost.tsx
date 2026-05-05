@@ -6,9 +6,27 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { getPostBySlug } from "@/data/blogPosts";
 import AmazonPpcBeginners2026 from "@/content/blog/AmazonPpcBeginners2026";
+import ShopifyDropshippingGuide2026 from "@/content/blog/ShopifyDropshippingGuide2026";
+import TikTokShopSellerGuide2026 from "@/content/blog/TikTokShopSellerGuide2026";
+import AmazonProductListingOptimization from "@/content/blog/AmazonProductListingOptimization";
+import ShopifySeoTips2026 from "@/content/blog/ShopifySeoTips2026";
+import AmazonFbaVsFbm2026 from "@/content/blog/AmazonFbaVsFbm2026";
+import EcommerceEmailMarketingGuide from "@/content/blog/EcommerceEmailMarketingGuide";
+import ProductPhotographyTips from "@/content/blog/ProductPhotographyTips";
+import WalmartMarketplaceSellingGuide from "@/content/blog/WalmartMarketplaceSellingGuide";
+import SocialMediaStrategyEcommerce from "@/content/blog/SocialMediaStrategyEcommerce";
 
 const contentMap: Record<string, React.ComponentType> = {
   "amazon-ppc-for-beginners-2026": AmazonPpcBeginners2026,
+  "shopify-dropshipping-guide-2026": ShopifyDropshippingGuide2026,
+  "tiktok-shop-seller-guide-2026": TikTokShopSellerGuide2026,
+  "amazon-product-listing-optimization": AmazonProductListingOptimization,
+  "shopify-seo-tips-2026": ShopifySeoTips2026,
+  "amazon-fba-vs-fbm-2026": AmazonFbaVsFbm2026,
+  "ecommerce-email-marketing-guide": EcommerceEmailMarketingGuide,
+  "product-photography-tips-ecommerce": ProductPhotographyTips,
+  "walmart-marketplace-selling-guide": WalmartMarketplaceSellingGuide,
+  "social-media-strategy-ecommerce-brands": SocialMediaStrategyEcommerce,
 };
 
 const BlogPost = () => {
