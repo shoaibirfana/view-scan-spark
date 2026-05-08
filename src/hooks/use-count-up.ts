@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-export function useCountUp(end: number, duration = 4000, startOnView = true) {
+export function useCountUp(end: number, duration = 4000, startOnView = true, externalStart = true) {
   const [count, setCount] = useState(0);
   const [started, setStarted] = useState(!startOnView);
   const ref = useRef<HTMLDivElement>(null);
@@ -16,16 +16,16 @@ export function useCountUp(end: number, duration = 4000, startOnView = true) {
   }, [startOnView]);
 
   useEffect(() => {
-    if (!started) return;
+    if (!started || !externalStart) return;
     const startTime = performance.now();
     const tick = (now: number) => {
       const progress = Math.min((now - startTime) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
       setCount(Math.round(eased * end));
       if (progress < 1) requestAnimationFrame(tick);
     };
     requestAnimationFrame(tick);
-  }, [started, end, duration]);
+  }, [started, end, duration, externalStart]);
 
   return { count, ref };
 }
