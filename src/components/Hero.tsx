@@ -166,7 +166,7 @@ const Hero = ({ startCounters = true }: HeroProps) => {
                   key={m.label}
                   className={i < heroMetrics.length - 1 ? "border-r border-primary-foreground/20" : ""}
                 >
-                  <MetricCounter {...m} />
+                  <MetricCounter {...m} ready={startCounters} />
                 </div>
               ))}
             </motion.div>
