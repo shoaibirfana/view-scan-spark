@@ -5,6 +5,10 @@ import heroCenter from "@/assets/hero-center.png";
 import HeroBackground from "./HeroBackground";
 import { useCountUp } from "@/hooks/use-count-up";
 
+interface HeroProps {
+  startCounters?: boolean;
+}
+
 const stats = [
   { value: "300+", label: "Satisfied Clients" },
   { value: "85%", label: "Sales Growth" },
