@@ -42,7 +42,7 @@ const MetricCounter = ({ end, prefix, suffix, label }: typeof heroMetrics[number
   );
 };
 
-const Hero = () => {
+const Hero = ({ startCounters = true }: HeroProps) => {
   return (
     <section id="home" className="hero-bg min-h-screen flex items-center pt-20 relative overflow-hidden">
       <HeroBackground />
