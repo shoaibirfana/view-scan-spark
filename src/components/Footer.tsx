@@ -107,11 +107,25 @@ const Footer = () => (
               </a>
             </li>
             <li className="flex items-start gap-3">
-              <MapPin size={16} className="text-primary mt-0.5 flex-shrink-0" />
-              <span className="text-sm text-[hsl(210,15%,65%)]">Serving Clients Worldwide</span>
+             <MapPin size={16} className="text-primary mt-0.5 flex-shrink-0" />
+              <span className="text-sm text-[hsl(210,15%,65%)]">1411 Upland Dr, Houston, TX 77043</span>
             </li>
           </ul>
         </div>
+      </div>
+
+      {/* Google Maps */}
+      <div className="mb-12 rounded-xl overflow-hidden border border-[hsl(210,20%,22%)]">
+        <iframe
+          title="Team Ecomify Office Location"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3464.0!2d-95.555!3d29.78!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z1411+Upland+Dr+Houston+TX+77043!5e0!3m2!1sen!2sus!4v1700000000000"
+          width="100%"
+          height="280"
+          style={{ border: 0 }}
+          allowFullScreen
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        />
       </div>
 
       {/* Divider + Bottom */}

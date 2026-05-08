@@ -5,6 +5,10 @@ import heroCenter from "@/assets/hero-center.png";
 import HeroBackground from "./HeroBackground";
 import { useCountUp } from "@/hooks/use-count-up";
 
+interface HeroProps {
+  startCounters?: boolean;
+}
+
 const stats = [
   { value: "300+", label: "Satisfied Clients" },
   { value: "85%", label: "Sales Growth" },
@@ -24,8 +28,8 @@ function formatMetric(n: number): string {
   return n.toString();
 }
 
-const MetricCounter = ({ end, prefix, suffix, label }: typeof heroMetrics[number]) => {
-  const { count, ref } = useCountUp(end, 4000);
+const MetricCounter = ({ end, prefix, suffix, label, ready }: typeof heroMetrics[number] & { ready: boolean }) => {
+  const { count, ref } = useCountUp(end, 4000, true, ready);
   return (
     <div ref={ref} className="flex flex-col items-center justify-center py-4 px-2">
       <span className="text-lg sm:text-xl lg:text-2xl font-heading font-bold text-primary-foreground">
@@ -38,7 +42,7 @@ const MetricCounter = ({ end, prefix, suffix, label }: typeof heroMetrics[number
   );
 };
 
-const Hero = () => {
+const Hero = ({ startCounters = true }: HeroProps) => {
   return (
     <section id="home" className="hero-bg min-h-screen flex items-center pt-20 relative overflow-hidden">
       <HeroBackground />
@@ -162,7 +166,7 @@ const Hero = () => {
                   key={m.label}
                   className={i < heroMetrics.length - 1 ? "border-r border-primary-foreground/20" : ""}
                 >
-                  <MetricCounter {...m} />
+                  <MetricCounter {...m} ready={startCounters} />
                 </div>
               ))}
             </motion.div>

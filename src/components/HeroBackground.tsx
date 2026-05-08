@@ -21,13 +21,27 @@ type ClusterNode = {
   orbitSpeed: number;
   phase: number;
   size: number;
-  bubbleLabelIdx: number;
+};
+
+type BubbleInfo = {
+  clusterIdx: number;
+  // Independent sinusoidal drift for each bubble
+  anchorX: number;
+  anchorY: number;
+  driftXAmp: number;
+  driftYAmp: number;
+  driftXFreq: number;
+  driftYFreq: number;
+  driftXPhase: number;
+  driftYPhase: number;
+  // Previous position for smoothing
+  prevX: number;
+  prevY: number;
 };
 
 type Cluster = {
   anchorX: number;
   anchorY: number;
-  // smooth drift via sine waves instead of velocity bounce
   driftXAmp: number;
   driftYAmp: number;
   driftXFreq: number;
@@ -38,7 +52,6 @@ type Cluster = {
 };
 
 type PositionedNode = {
-  angle: number;
   node: ClusterNode;
   x: number;
   y: number;
@@ -72,6 +85,7 @@ const NetworkCanvas = () => {
     let canvasWidth = 0;
     let canvasHeight = 0;
     let clusters: Cluster[] = [];
+    let bubbles: BubbleInfo[] = [];
 
     const bubbleLayer = document.createElement("div");
     bubbleLayer.style.cssText =
@@ -99,6 +113,7 @@ const NetworkCanvas = () => {
         "will-change:transform",
         `box-shadow:0 0 18px ${primary(0.16)}`,
         "opacity:0",
+        "transition:opacity 0.3s ease",
       ].join(";");
       el.innerHTML = `<span style="width:6px;height:6px;border-radius:9999px;background:${primary(0.82)};box-shadow:0 0 10px ${primary(0.35)};"></span>${label}`;
       bubbleLayer.appendChild(el);
@@ -138,26 +153,19 @@ const NetworkCanvas = () => {
           );
 
           const nodeCount = compact ? 4 + (localIndex % 2) : 5 + (localIndex % 2);
-          const bubbleLabelIdx = localIndex < BUBBLE_LABELS.length ? localIndex : -1;
-          const bubbleNodeIndex = bubbleLabelIdx >= 0 ? (localIndex + 1) % nodeCount : -1;
           const baseOrbit = Math.min(cellWidth, rowHeight) * (compact ? 0.1 : 0.11);
 
-          const nodes = Array.from({ length: nodeCount }, (_, nodeIndex) => {
-            const isBubbleNode = nodeIndex === bubbleNodeIndex;
-            return {
-              baseAngle: localIndex * 0.48 + nodeIndex * GOLDEN_ANGLE,
-              orbitRadius: baseOrbit + nodeIndex * (compact ? 8 : 10) + (isBubbleNode ? 4 : 0),
-              orbitSpeed:
-                (isBubbleNode ? 0.00018 : 0.00012) *
-                (nodeIndex % 2 === 0 ? 1 : -1) *
-                (1 + (localIndex % 3) * 0.06),
-              phase: localIndex * PHI + nodeIndex * 0.9,
-              size: isBubbleNode ? 3.9 : 2.2 + (nodeIndex % 3) * 0.35,
-              bubbleLabelIdx: isBubbleNode ? bubbleLabelIdx : -1,
-            } satisfies ClusterNode;
-          });
+          const nodes = Array.from({ length: nodeCount }, (_, nodeIndex) => ({
+            baseAngle: localIndex * 0.48 + nodeIndex * GOLDEN_ANGLE,
+            orbitRadius: baseOrbit + nodeIndex * (compact ? 8 : 10),
+            orbitSpeed:
+              0.00012 *
+              (nodeIndex % 2 === 0 ? 1 : -1) *
+              (1 + (localIndex % 3) * 0.06),
+            phase: localIndex * PHI + nodeIndex * 0.9,
+            size: 2.2 + (nodeIndex % 3) * 0.35,
+          }));
 
-          // Smooth sinusoidal drift — no sudden jumps
           const driftRange = compact ? 12 : 20;
           return {
             anchorX,
@@ -172,6 +180,26 @@ const NetworkCanvas = () => {
           } satisfies Cluster;
         });
       });
+
+      // Initialize bubbles with independent movement, anchored near their cluster
+      bubbles = BUBBLE_LABELS.map((_, i) => {
+        const clusterIdx = i < clusters.length ? i : i % clusters.length;
+        const cluster = clusters[clusterIdx];
+        return {
+          clusterIdx,
+          anchorX: cluster.anchorX,
+          anchorY: cluster.anchorY,
+          // Very slow, smooth sinusoidal drift — unique per bubble
+          driftXAmp: 18 + (i % 4) * 5,
+          driftYAmp: 14 + (i % 3) * 4,
+          driftXFreq: 0.00003 + (i % 5) * 0.000006,
+          driftYFreq: 0.000025 + (i % 4) * 0.000005,
+          driftXPhase: i * 2.1 + 0.7,
+          driftYPhase: i * 1.8 + 1.3,
+          prevX: cluster.anchorX,
+          prevY: cluster.anchorY,
+        };
+      });
     };
 
     const resize = () => {
@@ -185,14 +213,12 @@ const NetworkCanvas = () => {
       initClusters();
     };
 
+    const LERP = 0.04; // smoothing factor for bubble position
+
     const draw = (now: number) => {
       ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-      bubbleEls.forEach((el) => {
-        el.style.opacity = "0";
-      });
 
       const positionedClusters: PositionedNode[][] = clusters.map((cluster) => {
-        // Smooth sinusoidal drift — always continuous, never jerky
         const centerX =
           cluster.anchorX +
           Math.sin(now * cluster.driftXFreq + cluster.driftXPhase) * cluster.driftXAmp;
@@ -212,7 +238,7 @@ const NetworkCanvas = () => {
             Math.sin(angle) * node.orbitRadius * (0.85 + Math.cos(now * 0.0005 + node.phase) * 0.04) +
             Math.cos(now * 0.00045 + node.phase) * 1.8;
 
-          return { angle, node, x, y } satisfies PositionedNode;
+          return { node, x, y } satisfies PositionedNode;
         });
       });
 
@@ -232,50 +258,92 @@ const NetworkCanvas = () => {
           if (distanceSq > maxDistSq) continue;
 
           const proximity = 1 - distanceSq / maxDistSq;
-          const emphasized =
-            nodeA.node.bubbleLabelIdx >= 0 || nodeB.node.bubbleLabelIdx >= 0;
-          const alpha = emphasized
-            ? 0.1 + proximity * 0.25
-            : 0.04 + proximity * 0.14;
+          const alpha = 0.04 + proximity * 0.14;
 
           ctx.beginPath();
           ctx.moveTo(nodeA.x, nodeA.y);
           ctx.lineTo(nodeB.x, nodeB.y);
-          ctx.lineWidth = emphasized ? 1.4 : 0.8;
+          ctx.lineWidth = 0.8;
           ctx.strokeStyle = primary(alpha);
           ctx.stroke();
         }
       }
 
-      // Draw nodes & bubbles
+      // Draw nodes
       positionedClusters.forEach((clusterNodes) => {
-        clusterNodes.forEach(({ angle, node, x, y }) => {
-          if (node.bubbleLabelIdx >= 0) {
-            ctx.beginPath();
-            ctx.arc(x, y, node.size + 4, 0, Math.PI * 2);
-            ctx.fillStyle = primary(0.1);
-            ctx.fill();
-          }
-
+        clusterNodes.forEach(({ node, x, y }) => {
           ctx.beginPath();
           ctx.arc(x, y, node.size, 0, Math.PI * 2);
-          ctx.fillStyle =
-            node.bubbleLabelIdx >= 0 ? primary(0.8) : primary(0.5);
+          ctx.fillStyle = primary(0.5);
           ctx.fill();
-
-          if (node.bubbleLabelIdx >= 0) {
-            const bubbleEl = bubbleEls[node.bubbleLabelIdx];
-            const bubbleWidth = bubbleEl?.offsetWidth || 120;
-            const bubbleHeight = bubbleEl?.offsetHeight || 28;
-            const offsetX = Math.cos(angle) >= 0 ? 14 : -bubbleWidth - 14;
-            const offsetY = Math.sin(angle) >= 0 ? 12 : -bubbleHeight - 12;
-            const targetX = clamp(x + offsetX, 8, canvasWidth - bubbleWidth - 8);
-            const targetY = clamp(y + offsetY, 8, canvasHeight - bubbleHeight - 8);
-
-            bubbleEl.style.opacity = "1";
-            bubbleEl.style.transform = `translate(${targetX}px, ${targetY}px)`;
-          }
         });
+      });
+
+      // Draw bubbles — independent smooth movement
+      bubbles.forEach((bubble, i) => {
+        const cluster = clusters[bubble.clusterIdx];
+        // Bubble follows its own sinusoidal path anchored near the cluster
+        const clusterCenterX =
+          cluster.anchorX +
+          Math.sin(now * cluster.driftXFreq + cluster.driftXPhase) * cluster.driftXAmp;
+        const clusterCenterY =
+          cluster.anchorY +
+          Math.sin(now * cluster.driftYFreq + cluster.driftYPhase) * cluster.driftYAmp;
+
+        // Target position: cluster center + bubble's own sinusoidal offset
+        const targetX =
+          clusterCenterX +
+          Math.sin(now * bubble.driftXFreq + bubble.driftXPhase) * bubble.driftXAmp;
+        const targetY =
+          clusterCenterY +
+          Math.sin(now * bubble.driftYFreq + bubble.driftYPhase) * bubble.driftYAmp;
+
+        // Lerp for ultra-smooth movement
+        bubble.prevX += (targetX - bubble.prevX) * LERP;
+        bubble.prevY += (targetY - bubble.prevY) * LERP;
+
+        const bx = clamp(bubble.prevX, 8, canvasWidth - 8);
+        const by = clamp(bubble.prevY, 8, canvasHeight - 8);
+
+        // Draw a small glowing dot at bubble position
+        ctx.beginPath();
+        ctx.arc(bx, by, 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = primary(0.7);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(bx, by, 7, 0, Math.PI * 2);
+        ctx.fillStyle = primary(0.08);
+        ctx.fill();
+
+        // Draw line from bubble dot to nearest cluster node
+        const clusterNodes = positionedClusters[bubble.clusterIdx];
+        if (clusterNodes && clusterNodes.length > 0) {
+          let nearestDist = Infinity;
+          let nearestNode = clusterNodes[0];
+          for (const cn of clusterNodes) {
+            const d = (cn.x - bx) ** 2 + (cn.y - by) ** 2;
+            if (d < nearestDist) {
+              nearestDist = d;
+              nearestNode = cn;
+            }
+          }
+          ctx.beginPath();
+          ctx.moveTo(bx, by);
+          ctx.lineTo(nearestNode.x, nearestNode.y);
+          ctx.lineWidth = 1.2;
+          ctx.strokeStyle = primary(0.18);
+          ctx.stroke();
+        }
+
+        // Position DOM bubble label
+        const bubbleEl = bubbleEls[i];
+        const bubbleWidth = bubbleEl?.offsetWidth || 120;
+        const bubbleHeight = bubbleEl?.offsetHeight || 28;
+        const labelX = clamp(bx - bubbleWidth / 2, 8, canvasWidth - bubbleWidth - 8);
+        const labelY = clamp(by - bubbleHeight - 14, 8, canvasHeight - bubbleHeight - 8);
+
+        bubbleEl.style.opacity = "1";
+        bubbleEl.style.transform = `translate(${labelX}px, ${labelY}px)`;
       });
 
       animationFrameId = requestAnimationFrame(draw);
