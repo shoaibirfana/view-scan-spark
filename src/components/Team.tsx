@@ -37,7 +37,6 @@ function getVisibleCount(width: number) {
   return 1;
 }
 
-import { motion as motionLib } from "framer-motion";
 const Team = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
