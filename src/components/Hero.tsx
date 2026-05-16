@@ -32,9 +32,7 @@ function formatMetric(n: number): string {
   return n.toString();
 }
 
-const MetricCounter = ({
-  end, prefix, suffix, label, ready,
-}: typeof heroMetrics[number] & { ready: boolean }) => {
+const MetricCounter = ({ end, prefix, suffix, label, ready }: typeof heroMetrics[number] & { ready: boolean }) => {
   const { count, ref } = useCountUp(end, 4000, true, ready);
   return (
     <div ref={ref} className="flex flex-col items-center justify-center py-4 px-2">
@@ -51,7 +49,6 @@ const MetricCounter = ({
 const Hero = ({ startCounters = true }: HeroProps) => {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [videoLoaded, setVideoLoaded] = useState(false);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -64,28 +61,35 @@ const Hero = ({ startCounters = true }: HeroProps) => {
     let trigger: ScrollTrigger | null = null;
 
     const setup = () => {
-      // Stop all automatic playback — GSAP drives everything
+      // Stop browser autoplay — GSAP is the only thing controlling video
       video.pause();
       video.autoplay = false;
+      video.loop = false;
 
       const duration = video.duration || 6;
+      // 100px of scroll per second of video = perfectly smooth
+      const scrollDistance = duration * 100;
 
       trigger = ScrollTrigger.create({
         trigger: section,
         start: "top top",
-        end: "+=100%",
+        end: `+=${scrollDistance}`,
         pin: true,
         pinSpacing: true,
-        scrub: 1.5,
+        scrub: true,
+        anticipatePin: 1,
         onUpdate: (self) => {
           const t = self.progress * duration;
           if (Number.isFinite(t)) {
-            video.currentTime = Math.min(duration - 0.01, Math.max(0, t));
+            try {
+              video.currentTime = Math.min(duration - 0.01, Math.max(0, t));
+            } catch {}
           }
         },
       });
 
       window.addEventListener("load", () => ScrollTrigger.refresh());
+      ScrollTrigger.refresh();
     };
 
     if (video.readyState >= 1 && video.duration) {
@@ -104,20 +108,15 @@ const Hero = ({ startCounters = true }: HeroProps) => {
     <section
       ref={sectionRef}
       id="home"
-      // FIXED: removed overflow-hidden — it breaks GSAP pin
       className="relative w-full h-screen flex items-center pt-20"
-      style={{ willChange: "transform" }}
     >
-      {/* Fallback gradient shown if video not loaded */}
+      {/* Dark navy fallback shown if video not loaded */}
       <div
         className="absolute inset-0 z-0"
-        style={{
-          background: "linear-gradient(135deg, #0a0f1e 0%, #0d2137 50%, #0a1628 100%)",
-        }}
+        style={{ background: "linear-gradient(135deg, #0a0f1e 0%, #0d2137 50%, #0a1628 100%)" }}
       />
 
-      {/* Fullscreen background video */}
-      {/* FIXED: removed autoPlay and loop — GSAP controls playback */}
+      {/* Background video — NO autoPlay NO loop — GSAP controls it */}
       <video
         ref={videoRef}
         className="absolute inset-0 w-full h-full object-cover z-[1]"
@@ -125,7 +124,6 @@ const Hero = ({ startCounters = true }: HeroProps) => {
         muted
         playsInline
         preload="auto"
-        onLoadedData={() => setVideoLoaded(true)}
       />
 
       {/* Dark overlay */}
@@ -133,7 +131,8 @@ const Hero = ({ startCounters = true }: HeroProps) => {
 
       <div className="container mx-auto px-4 lg:px-8 py-16 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center relative">
-          {/* Text */}
+
+          {/* Left — Text */}
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -224,7 +223,7 @@ const Hero = ({ startCounters = true }: HeroProps) => {
             </motion.div>
           </motion.div>
 
-          {/* Right column */}
+          {/* Right — Image + Metrics */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -256,6 +255,7 @@ const Hero = ({ startCounters = true }: HeroProps) => {
               ))}
             </motion.div>
           </motion.div>
+
         </div>
       </div>
     </section>
