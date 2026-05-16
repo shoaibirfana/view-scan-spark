@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import { Check, Award } from "lucide-react";
 import muazPhoto from "@/assets/muaz-photo.png";
 import logo from "@/assets/logo.png";
