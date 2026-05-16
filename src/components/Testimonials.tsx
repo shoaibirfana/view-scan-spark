@@ -1,6 +1,5 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
-import { Star, Quote, ChevronLeft, ChevronRight } from "lucide-react";
+import { Star, Quote } from "lucide-react";
 import logo from "@/assets/logo.png";
 import fatimaImg from "@/assets/testimonial-fatima.png";
 import aleenaImg from "@/assets/testimonial-aleena.png";
