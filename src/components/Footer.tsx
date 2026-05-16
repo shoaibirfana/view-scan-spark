@@ -58,10 +58,10 @@ const Footer = () => (
               <Mail size={16} className="text-primary" />
             </a>
           </div>
-        </div>
+        </motion.div>
 
         {/* Quick Links */}
-        <div>
+        <motion.div {...colFade(1)}>
           <h4 className="font-heading font-semibold text-white mb-4">Quick Links</h4>
           <ul className="space-y-2.5">
             {quickLinks.map((link) => (
@@ -72,10 +72,10 @@ const Footer = () => (
               </li>
             ))}
           </ul>
-        </div>
+        </motion.div>
 
         {/* Services */}
-        <div>
+        <motion.div {...colFade(2)}>
           <h4 className="font-heading font-semibold text-white mb-4">Our Services</h4>
           <ul className="space-y-2.5">
             {services.map((service) => (
@@ -84,10 +84,10 @@ const Footer = () => (
               </li>
             ))}
           </ul>
-        </div>
+        </motion.div>
 
         {/* Contact Info */}
-        <div>
+        <motion.div {...colFade(3)}>
           <h4 className="font-heading font-semibold text-white mb-4">Contact Us</h4>
           <ul className="space-y-3">
             <li className="flex items-start gap-3">
@@ -119,8 +119,7 @@ const Footer = () => (
               <span className="text-sm text-[hsl(210,15%,65%)]">1411 Upland Dr, Houston, TX 77043</span>
             </li>
           </ul>
-        </div>
-      </div>
+        </motion.div>
 
       {/* Google Maps */}
       <div className="mb-12 rounded-xl overflow-hidden border border-[hsl(210,20%,22%)]">
