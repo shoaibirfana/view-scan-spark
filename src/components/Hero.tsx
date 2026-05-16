@@ -32,7 +32,9 @@ function formatMetric(n: number): string {
   return n.toString();
 }
 
-const MetricCounter = ({ end, prefix, suffix, label, ready }: typeof heroMetrics[number] & { ready: boolean }) => {
+const MetricCounter = ({
+  end, prefix, suffix, label, ready,
+}: typeof heroMetrics[number] & { ready: boolean }) => {
   const { count, ref } = useCountUp(end, 4000, true, ready);
   return (
     <div ref={ref} className="flex flex-col items-center justify-center py-4 px-2">
@@ -49,6 +51,7 @@ const MetricCounter = ({ end, prefix, suffix, label, ready }: typeof heroMetrics
 const Hero = ({ startCounters = true }: HeroProps) => {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoLoaded, setVideoLoaded] = useState(false);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -61,9 +64,11 @@ const Hero = ({ startCounters = true }: HeroProps) => {
     let trigger: ScrollTrigger | null = null;
 
     const setup = () => {
-      // Pause looping playback, GSAP will drive currentTime
-      try { video.pause(); } catch {}
-      const duration = video.duration || 6;
+      // Stop all automatic playback — GSAP drives everything
+      video.pause();
+      video.autoplay = false;
+
+      const duration = video.duration || 8;
 
       trigger = ScrollTrigger.create({
         trigger: section,
@@ -71,16 +76,16 @@ const Hero = ({ startCounters = true }: HeroProps) => {
         end: "+=250%",
         pin: true,
         pinSpacing: true,
-        scrub: 1,
+        scrub: 1.5,
         onUpdate: (self) => {
           const t = self.progress * duration;
           if (Number.isFinite(t)) {
-            try { video.currentTime = Math.min(duration - 0.01, Math.max(0, t)); } catch {}
+            video.currentTime = Math.min(duration - 0.01, Math.max(0, t));
           }
         },
       });
 
-      ScrollTrigger.refresh();
+      window.addEventListener("load", () => ScrollTrigger.refresh());
     };
 
     if (video.readyState >= 1 && video.duration) {
@@ -99,21 +104,32 @@ const Hero = ({ startCounters = true }: HeroProps) => {
     <section
       ref={sectionRef}
       id="home"
-      className="relative w-full h-screen overflow-hidden flex items-center pt-20"
+      // FIXED: removed overflow-hidden — it breaks GSAP pin
+      className="relative w-full h-screen flex items-center pt-20"
+      style={{ willChange: "transform" }}
     >
+      {/* Fallback gradient shown if video not loaded */}
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          background: "linear-gradient(135deg, #0a0f1e 0%, #0d2137 50%, #0a1628 100%)",
+        }}
+      />
+
       {/* Fullscreen background video */}
+      {/* FIXED: removed autoPlay and loop — GSAP controls playback */}
       <video
         ref={videoRef}
-        className="absolute inset-0 w-full h-full object-cover z-0"
+        className="absolute inset-0 w-full h-full object-cover z-[1]"
         src="/hero-bg.mp4"
         muted
-        autoPlay
         playsInline
         preload="auto"
-        loop
+        onLoadedData={() => setVideoLoaded(true)}
       />
-      {/* Dark overlay for text readability */}
-      <div className="absolute inset-0 bg-black/45 z-[1]" />
+
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-black/45 z-[2]" />
 
       <div className="container mx-auto px-4 lg:px-8 py-16 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center relative">
@@ -131,6 +147,7 @@ const Hero = ({ startCounters = true }: HeroProps) => {
             >
               <img src={logo} alt="" className="w-4 h-4 object-contain" /> Welcome To Our Agency
             </motion.span>
+
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold leading-tight mb-6 text-white">
               <motion.span
                 initial={{ opacity: 0, y: 20 }}
@@ -157,6 +174,7 @@ const Hero = ({ startCounters = true }: HeroProps) => {
                 Success
               </motion.span>
             </h1>
+
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -168,13 +186,14 @@ const Hero = ({ startCounters = true }: HeroProps) => {
               registry, product sourcing, and everything in between to drive your
               growth and success.
             </motion.p>
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8, duration: 0.6 }}
               className="flex flex-wrap gap-4"
             >
-              <a
+              
                 href="https://wa.me/19413050102"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -182,7 +201,7 @@ const Hero = ({ startCounters = true }: HeroProps) => {
               >
                 Get Started <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </a>
-              <a
+              
                 href="#services"
                 className="group inline-flex items-center gap-2 bg-transparent backdrop-blur-sm text-white border border-white/60 px-7 py-3.5 rounded-xl font-semibold hover:border-white hover:bg-white/10 transition-all duration-300 hover:scale-105"
               >
@@ -190,7 +209,6 @@ const Hero = ({ startCounters = true }: HeroProps) => {
               </a>
             </motion.div>
 
-            {/* Stats row */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -206,7 +224,7 @@ const Hero = ({ startCounters = true }: HeroProps) => {
             </motion.div>
           </motion.div>
 
-          {/* Right column: Image + Metrics */}
+          {/* Right column */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -218,6 +236,7 @@ const Hero = ({ startCounters = true }: HeroProps) => {
                 src={heroCenter}
                 alt="E-Commerce Success Journey"
                 className="w-full h-auto object-cover"
+                loading="eager"
               />
             </div>
 
