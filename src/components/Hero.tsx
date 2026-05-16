@@ -68,12 +68,12 @@ const Hero = ({ startCounters = true }: HeroProps) => {
       video.pause();
       video.autoplay = false;
 
-      const duration = video.duration || 8;
+      const duration = video.duration || 6;
 
       trigger = ScrollTrigger.create({
         trigger: section,
         start: "top top",
-        end: "+=250%",
+        end: "+=100%",
         pin: true,
         pinSpacing: true,
         scrub: 1.5,
