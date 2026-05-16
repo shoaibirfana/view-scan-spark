@@ -1,4 +1,5 @@
 import { MessageCircle, Mail, Phone, MapPin } from "lucide-react";
+import { motion } from "framer-motion";
 import logo from "@/assets/logo.png";
 
 const quickLinks = [
@@ -18,12 +19,19 @@ const services = [
   "Trademark & Brand Registry",
 ];
 
+const colFade = (i: number) => ({
+  initial: { opacity: 0, y: 30 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, amount: 0.15 },
+  transition: { delay: i * 0.12, duration: 0.6, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
+});
+
 const Footer = () => (
   <footer className="bg-[hsl(210,35%,15%)] text-[hsl(210,20%,85%)] pt-16 pb-8">
     <div className="container mx-auto px-4 lg:px-8">
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
         {/* Brand */}
-        <div>
+        <motion.div {...colFade(0)}>
           <a href="#home" className="flex items-center gap-2 text-2xl font-heading font-bold mb-4">
             <img src={logo} alt="Team Ecomify logo" className="w-8 h-8 object-contain" />
             <span>
