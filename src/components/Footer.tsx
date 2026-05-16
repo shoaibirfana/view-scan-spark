@@ -120,6 +120,7 @@ const Footer = () => (
             </li>
           </ul>
         </motion.div>
+      </div>
 
       {/* Google Maps */}
       <div className="mb-12 rounded-xl overflow-hidden border border-[hsl(210,20%,22%)]">
