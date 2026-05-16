@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import { Check, Award } from "lucide-react";
 import muazPhoto from "@/assets/muaz-photo.png";
 import logo from "@/assets/logo.png";
@@ -20,10 +21,17 @@ const stats = [
 ];
 
 const About = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  const imageY = useTransform(scrollYProgress, [0, 1], [60, -60]);
+
   return (
-    <section id="about" className="py-24 hero-bg relative overflow-hidden">
+    <section ref={sectionRef} id="about" className="py-24 hero-bg relative overflow-hidden">
       <div className="absolute top-20 right-0 w-96 h-96 bg-primary/5 rounded-full blur-[120px]" />
-      
+
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Image */}
@@ -33,8 +41,8 @@ const About = () => {
             viewport={{ once: true }}
             className="flex justify-center"
           >
-            <div className="relative group">
-              <div className="absolute -inset-4 bg-gradient-to-br from-primary/20 to-transparent rounded-3xl blur-2xl opacity-50 group-hover:opacity-70 transition-opacity duration-500" />
+            <motion.div style={{ y: imageY }} className="relative group">
+              <div className="absolute -inset-6 bg-[radial-gradient(circle_at_center,rgba(0,196,140,0.35),transparent_70%)] rounded-3xl blur-2xl opacity-70 group-hover:opacity-90 transition-opacity duration-500" />
               <img
                 src={muazPhoto}
                 alt="Muaz Tanzeel"
@@ -49,7 +57,7 @@ const About = () => {
               >
                 <Award size={28} />
               </motion.div>
-            </div>
+            </motion.div>
           </motion.div>
 
           {/* Content */}

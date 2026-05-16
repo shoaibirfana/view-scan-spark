@@ -1,6 +1,5 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
-import { Star, Quote, ChevronLeft, ChevronRight } from "lucide-react";
+import { Star, Quote } from "lucide-react";
 import logo from "@/assets/logo.png";
 import fatimaImg from "@/assets/testimonial-fatima.png";
 import aleenaImg from "@/assets/testimonial-aleena.png";
@@ -86,21 +85,6 @@ const CARDS_PER_PAGE_LG = 4;
 const CARDS_PER_PAGE_SM = 2;
 
 const Testimonials = () => {
-  const [page, setPage] = useState(0);
-
-  const getCardsPerPage = () => {
-    if (typeof window !== "undefined" && window.innerWidth >= 1024) return CARDS_PER_PAGE_LG;
-    return CARDS_PER_PAGE_SM;
-  };
-
-  const cardsPerPage = getCardsPerPage();
-  const totalPages = Math.ceil(testimonials.length / cardsPerPage);
-
-  const next = () => setPage((p) => (p + 1) % totalPages);
-  const prev = () => setPage((p) => (p - 1 + totalPages) % totalPages);
-
-  const visible = testimonials.slice(page * cardsPerPage, page * cardsPerPage + cardsPerPage);
-
   return (
     <section id="testimonials" className="py-24 bg-background relative overflow-hidden">
       <div className="absolute bottom-0 left-0 w-80 h-80 bg-primary/5 rounded-full blur-[120px]" />
@@ -123,75 +107,53 @@ const Testimonials = () => {
             revenue and transitioning into full-time entrepreneurship.
           </p>
         </motion.div>
+      </div>
 
-        <div className="relative">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {visible.map((t, i) => (
-              <motion.div
-                key={`${page}-${t.name}`}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.08, duration: 0.4 }}
-                className="group relative bg-card/80 backdrop-blur-sm rounded-xl p-6 card-elevated border border-border/50 hover:border-primary/30 flex flex-col transition-all duration-300"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="relative z-10 flex flex-col flex-1">
-                  <Quote size={20} className="text-primary/30 mb-3" />
-                  <div className="flex gap-1 mb-4">
-                    {[...Array(5)].map((_, j) => (
-                      <Star key={j} size={14} className="fill-primary text-primary" />
-                    ))}
-                  </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed flex-1 mb-6">
-                    "{t.quote}"
-                  </p>
-                  <div className="flex items-center gap-3">
-                    <img
-                      src={t.img}
-                      alt={t.name}
-                      className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/20"
-                    />
-                    <div>
-                      <p className="text-sm font-semibold text-card-foreground">{t.name}</p>
-                      <p className="text-xs text-muted-foreground">{t.role}</p>
+      {/* Auto-scrolling horizontal carousel — pauses on hover */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true, amount: 0.15 }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        className="relative overflow-hidden group"
+      >
+        <div className="flex w-max animate-testimonial-scroll">
+          {[0, 1].map((copy) => (
+            <div key={copy} className="flex gap-6 pr-6 shrink-0" aria-hidden={copy === 1}>
+              {testimonials.map((t, i) => (
+                <div
+                  key={`${copy}-${i}`}
+                  className="group/card relative w-[300px] sm:w-[340px] bg-card/80 backdrop-blur-sm rounded-xl p-6 card-elevated border border-border/50 hover:border-[#00C48C]/60 hover:shadow-[0_0_24px_rgba(0,196,140,0.25)] flex flex-col transition-all duration-300 shrink-0"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent rounded-xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-300" />
+                  <div className="relative z-10 flex flex-col flex-1">
+                    <Quote size={20} className="text-primary/30 mb-3" />
+                    <div className="flex gap-1 mb-4">
+                      {[...Array(5)].map((_, j) => (
+                        <Star key={j} size={14} className="fill-primary text-primary" />
+                      ))}
+                    </div>
+                    <p className="text-sm text-muted-foreground leading-relaxed flex-1 mb-6">
+                      "{t.quote}"
+                    </p>
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={t.img}
+                        alt={t.name}
+                        className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/20"
+                      />
+                      <div>
+                        <p className="text-sm font-semibold text-card-foreground">{t.name}</p>
+                        <p className="text-xs text-muted-foreground">{t.role}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Navigation */}
-          <div className="flex items-center justify-center gap-4 mt-10">
-            <button
-              onClick={prev}
-              className="p-2 rounded-full bg-card border border-border hover:border-primary/50 text-muted-foreground hover:text-primary transition-all duration-200"
-              aria-label="Previous testimonials"
-            >
-              <ChevronLeft size={20} />
-            </button>
-            <div className="flex gap-2">
-              {Array.from({ length: totalPages }).map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setPage(i)}
-                  className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                    i === page ? "bg-primary w-6" : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
-                  }`}
-                  aria-label={`Go to page ${i + 1}`}
-                />
               ))}
             </div>
-            <button
-              onClick={next}
-              className="p-2 rounded-full bg-card border border-border hover:border-primary/50 text-muted-foreground hover:text-primary transition-all duration-200"
-              aria-label="Next testimonials"
-            >
-              <ChevronRight size={20} />
-            </button>
-          </div>
+          ))}
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 };
