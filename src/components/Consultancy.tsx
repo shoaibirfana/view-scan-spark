@@ -82,7 +82,7 @@ const Consultancy = () => {
             transition={{ duration: 0.6 }}
             className="relative"
           >
-            <div className="bg-card border border-border rounded-2xl p-8 shadow-[0_8px_40px_hsl(var(--primary)/0.1)] relative overflow-hidden">
+            <div className="bg-card border border-border rounded-2xl p-8 shadow-[0_8px_40px_hsl(var(--primary)/0.1)] relative overflow-hidden animate-float-soft">
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-[60px]" />
 
               <div className="relative z-10">
