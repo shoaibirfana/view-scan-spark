@@ -148,7 +148,7 @@ const Hero = ({ startCounters = true }: HeroProps) => {
         <div className="absolute inset-0 bg-black/45 z-[2]" />
 
         <div className="container mx-auto px-4 lg:px-8 py-16 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center relative">
+          <div className="grid lg:grid-cols-2 gap-12 items-center relative">
 
           {/* Left — Text */}
           <motion.div
@@ -274,6 +274,7 @@ const Hero = ({ startCounters = true }: HeroProps) => {
             </motion.div>
           </motion.div>
 
+          </div>
         </div>
       </div>
     </section>
