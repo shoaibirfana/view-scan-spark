@@ -109,7 +109,25 @@ const Hero = ({ startCounters = true }: HeroProps) => {
       const progress = Math.min(1, Math.max(0, rawProgress));
       targetFrame = prefersReduced ? 0 : Math.round(progress * (HERO_FRAME_COUNT - 1));
 
-      if (targetFrame !== renderedFrame && loadedFrames.has(targetFrame)) drawFrame(targetFrame);
+      if (targetFrame !== renderedFrame) {
+        if (loadedFrames.has(targetFrame)) {
+          drawFrame(targetFrame);
+          return;
+        }
+
+        for (let offset = 1; offset < HERO_FRAME_COUNT; offset++) {
+          const previous = targetFrame - offset;
+          const next = targetFrame + offset;
+          if (previous >= 0 && loadedFrames.has(previous)) {
+            drawFrame(previous);
+            return;
+          }
+          if (next < HERO_FRAME_COUNT && loadedFrames.has(next)) {
+            drawFrame(next);
+            return;
+          }
+        }
+      }
     };
 
     const requestUpdate = () => {
