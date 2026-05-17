@@ -192,7 +192,7 @@ const Hero = ({ startCounters = true }: HeroProps) => {
               transition={{ delay: 0.8, duration: 0.6 }}
               className="flex flex-wrap gap-4"
             >
-              
+              <a
                 href="https://wa.me/19413050102"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -200,7 +200,7 @@ const Hero = ({ startCounters = true }: HeroProps) => {
               >
                 Get Started <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </a>
-              
+              <a
                 href="#services"
                 className="group inline-flex items-center gap-2 bg-transparent backdrop-blur-sm text-white border border-white/60 px-7 py-3.5 rounded-xl font-semibold hover:border-white hover:bg-white/10 transition-all duration-300 hover:scale-105"
               >
