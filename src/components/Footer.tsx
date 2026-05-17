@@ -1,5 +1,4 @@
 import { MessageCircle, Mail, Phone, MapPin } from "lucide-react";
-import { motion } from "framer-motion";
 import logo from "@/assets/logo.png";
 
 const quickLinks = [
@@ -19,19 +18,12 @@ const services = [
   "Trademark & Brand Registry",
 ];
 
-const colFade = (i: number) => ({
-  initial: { opacity: 0, y: 30 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, amount: 0.15 },
-  transition: { delay: i * 0.12, duration: 0.6, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
-});
-
 const Footer = () => (
   <footer className="bg-[hsl(210,35%,15%)] text-[hsl(210,20%,85%)] pt-16 pb-8">
     <div className="container mx-auto px-4 lg:px-8">
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
         {/* Brand */}
-        <motion.div {...colFade(0)}>
+        <div>
           <a href="#home" className="flex items-center gap-2 text-2xl font-heading font-bold mb-4">
             <img src={logo} alt="Team Ecomify logo" className="w-8 h-8 object-contain" />
             <span>
@@ -58,10 +50,10 @@ const Footer = () => (
               <Mail size={16} className="text-primary" />
             </a>
           </div>
-        </motion.div>
+        </div>
 
         {/* Quick Links */}
-        <motion.div {...colFade(1)}>
+        <div>
           <h4 className="font-heading font-semibold text-white mb-4">Quick Links</h4>
           <ul className="space-y-2.5">
             {quickLinks.map((link) => (
@@ -72,10 +64,10 @@ const Footer = () => (
               </li>
             ))}
           </ul>
-        </motion.div>
+        </div>
 
         {/* Services */}
-        <motion.div {...colFade(2)}>
+        <div>
           <h4 className="font-heading font-semibold text-white mb-4">Our Services</h4>
           <ul className="space-y-2.5">
             {services.map((service) => (
@@ -84,10 +76,10 @@ const Footer = () => (
               </li>
             ))}
           </ul>
-        </motion.div>
+        </div>
 
         {/* Contact Info */}
-        <motion.div {...colFade(3)}>
+        <div>
           <h4 className="font-heading font-semibold text-white mb-4">Contact Us</h4>
           <ul className="space-y-3">
             <li className="flex items-start gap-3">
@@ -119,7 +111,7 @@ const Footer = () => (
               <span className="text-sm text-[hsl(210,15%,65%)]">1411 Upland Dr, Houston, TX 77043</span>
             </li>
           </ul>
-        </motion.div>
+        </div>
       </div>
 
       {/* Google Maps */}

@@ -6,7 +6,7 @@ const CtaSection = () => {
   return (
     <section id="contact" className="py-24 relative overflow-hidden">
       {/* Animated gradient background */}
-      <div className="absolute inset-0 animate-gradient-shift" style={{ backgroundImage: "linear-gradient(120deg, rgba(0,196,140,0.12) 0%, hsl(var(--background)) 40%, rgba(0,196,140,0.10) 100%)" }} />
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-primary/5" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[150px]" />
       
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
@@ -36,7 +36,7 @@ const CtaSection = () => {
             href="https://wa.me/19413050102"
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex items-center gap-2 bg-[#00C48C] text-white px-8 py-4 rounded-xl font-semibold text-lg animate-pulse-glow hover:scale-105 transition-transform duration-300"
+            className="group inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-[0_0_40px_hsl(160_90%_27%/0.4)] transition-all duration-300 hover:scale-105"
           >
             <MessageCircle size={22} /> Chat on WhatsApp
             <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />

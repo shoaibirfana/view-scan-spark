@@ -115,13 +115,7 @@ const Team = () => {
                   className="flex-shrink-0 px-3"
                   style={{ width: `${slideWidth}px` }}
                 >
-                  <motion.div
-                    initial={{ opacity: 0, y: 40 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.2 }}
-                    transition={{ delay: (i % 4) * 0.12, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                    className="bg-card/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-border/50 group transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_18px_40px_-8px_rgba(0,196,140,0.45),0_0_24px_rgba(0,196,140,0.25)] hover:border-[#00C48C]/60"
-                  >
+                  <div className="bg-card/80 backdrop-blur-sm rounded-2xl overflow-hidden card-elevated border border-border/50 group">
                     <div className="aspect-[3/4] overflow-hidden">
                       <img
                         src={m.photo}
@@ -133,7 +127,7 @@ const Team = () => {
                       <h3 className="font-heading font-semibold text-foreground">{m.name}</h3>
                       <p className="text-sm text-muted-foreground mt-1">{m.role}</p>
                     </div>
-                  </motion.div>
+                  </div>
                 </div>
               ))}
             </div>

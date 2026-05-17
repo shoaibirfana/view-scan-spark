@@ -87,23 +87,11 @@ const Services = () => {
             {visible.map((service, i) => (
               <motion.div
                 key={service.title}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ delay: (i % 8) * 0.12, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                onMouseMove={(e) => {
-                  const el = e.currentTarget as HTMLDivElement;
-                  const r = el.getBoundingClientRect();
-                  const px = (e.clientX - r.left) / r.width - 0.5;
-                  const py = (e.clientY - r.top) / r.height - 0.5;
-                  el.style.transform = `perspective(1000px) rotateX(${-py * 8}deg) rotateY(${px * 10}deg)`;
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg)";
-                }}
-                style={{ transformStyle: "preserve-3d", transition: "transform 0.4s cubic-bezier(0.22,1,0.36,1), box-shadow 0.4s cubic-bezier(0.22,1,0.36,1), border-color 0.3s ease" }}
-                className="group relative rounded-2xl p-6 border border-primary/10 bg-card/40 backdrop-blur-xl shadow-[0_8px_32px_hsl(var(--primary)/0.06)] hover:border-[#00C48C]/60 hover:shadow-[0_0_24px_rgba(0,196,140,0.35)]"
+                transition={{ delay: i * 0.04, duration: 0.4 }}
+                className="group relative rounded-2xl p-6 border border-primary/10 bg-card/40 backdrop-blur-xl shadow-[0_8px_32px_hsl(var(--primary)/0.06)] hover:border-primary/30 hover:shadow-[0_8px_40px_hsl(var(--primary)/0.12)] transition-all duration-300"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.04] to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative z-10">
