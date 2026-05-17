@@ -26,7 +26,7 @@ const HERO_FRAME_COUNT = 141;
 const HERO_SCROLL_DISTANCE = 2400;
 
 const getHeroFrameSrc = (frame: number) =>
-  `/hero-frames/frame-${String(frame).padStart(3, "0")}.jpg`;
+  `/hero-frames-webp/frame-${String(frame).padStart(3, "0")}.webp`;
 
 function formatMetric(n: number): string {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`;
