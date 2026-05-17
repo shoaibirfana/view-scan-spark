@@ -1,13 +1,9 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import logo from "@/assets/logo.png";
 import heroCenter from "@/assets/hero-center.png";
 import { useCountUp } from "@/hooks/use-count-up";
-
-gsap.registerPlugin(ScrollTrigger);
 
 interface HeroProps {
   startCounters?: boolean;
@@ -48,48 +44,62 @@ const MetricCounter = ({ end, prefix, suffix, label, ready }: typeof heroMetrics
 
 const Hero = ({ startCounters = true }: HeroProps) => {
   const sectionRef = useRef<HTMLElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
+    const sticky = stickyRef.current;
     const video = videoRef.current;
-    if (!section || !video) return;
+    if (!section || !sticky || !video) return;
 
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReduced) return;
 
-    let trigger: ScrollTrigger | null = null;
+    let rafId = 0;
+    let metadataReady = false;
+    let measuredTop = 0;
+    let scrollDistance = 600;
+    let videoDuration = 6;
+
+    video.pause();
+    video.autoplay = false;
+    video.loop = false;
+
+    const measure = () => {
+      const rect = section.getBoundingClientRect();
+      measuredTop = rect.top + window.scrollY;
+      scrollDistance = Math.max(600, window.innerHeight * 0.85);
+      section.style.setProperty("--hero-scroll-distance", `${scrollDistance}px`);
+    };
+
+    const update = () => {
+      rafId = 0;
+      if (!metadataReady) return;
+
+      const rawProgress = (window.scrollY - measuredTop) / scrollDistance;
+      const progress = Math.min(1, Math.max(0, rawProgress));
+      const targetTime = Math.min(videoDuration - 0.02, Math.max(0, progress * videoDuration));
+
+      if (Math.abs(video.currentTime - targetTime) > 1 / 48) {
+        try {
+          video.currentTime = targetTime;
+        } catch {
+          // Some browsers briefly reject seeks while the video buffer catches up.
+        }
+      }
+    };
+
+    const requestUpdate = () => {
+      if (!rafId) rafId = window.requestAnimationFrame(update);
+    };
 
     const setup = () => {
-      // Stop browser autoplay — GSAP is the only thing controlling video
       video.pause();
-      video.autoplay = false;
-      video.loop = false;
-
-      const duration = video.duration || 6;
-      // 100px of scroll per second of video = perfectly smooth
-      const scrollDistance = duration * 100;
-
-      trigger = ScrollTrigger.create({
-        trigger: section,
-        start: "top top",
-        end: `+=${scrollDistance}`,
-        pin: true,
-        pinSpacing: true,
-        scrub: true,
-        anticipatePin: 1,
-        onUpdate: (self) => {
-          const t = self.progress * duration;
-          if (Number.isFinite(t)) {
-            try {
-              video.currentTime = Math.min(duration - 0.01, Math.max(0, t));
-            } catch {}
-          }
-        },
-      });
-
-      window.addEventListener("load", () => ScrollTrigger.refresh());
-      ScrollTrigger.refresh();
+      metadataReady = true;
+      videoDuration = Number.isFinite(video.duration) && video.duration > 0 ? video.duration : 6;
+      measure();
+      requestUpdate();
     };
 
     if (video.readyState >= 1 && video.duration) {
@@ -98,8 +108,17 @@ const Hero = ({ startCounters = true }: HeroProps) => {
       video.addEventListener("loadedmetadata", setup, { once: true });
     }
 
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", measure);
+    window.addEventListener("load", () => {
+      measure();
+      requestUpdate();
+    });
+
     return () => {
-      trigger?.kill();
+      if (rafId) window.cancelAnimationFrame(rafId);
+      window.removeEventListener("scroll", requestUpdate);
+      window.removeEventListener("resize", measure);
       video.removeEventListener("loadedmetadata", setup);
     };
   }, []);
@@ -108,28 +127,27 @@ const Hero = ({ startCounters = true }: HeroProps) => {
     <section
       ref={sectionRef}
       id="home"
-      className="relative w-full h-screen flex items-center pt-20"
+      className="relative w-full min-h-[calc(100vh+var(--hero-scroll-distance,600px))]"
     >
-      {/* Dark navy fallback shown if video not loaded */}
       <div
-        className="absolute inset-0 z-0"
+        ref={stickyRef}
+        className="sticky top-0 h-screen w-full overflow-hidden flex items-center pt-20"
         style={{ background: "linear-gradient(135deg, #0a0f1e 0%, #0d2137 50%, #0a1628 100%)" }}
-      />
+      >
+        {/* Background video — scroll-controlled only, no browser playback loop/autoplay */}
+        <video
+          ref={videoRef}
+          className="absolute inset-0 w-full h-full object-cover z-[1]"
+          src="/hero-bg-scrub.mp4"
+          muted
+          playsInline
+          preload="auto"
+        />
 
-      {/* Background video — NO autoPlay NO loop — GSAP controls it */}
-      <video
-        ref={videoRef}
-        className="absolute inset-0 w-full h-full object-cover z-[1]"
-        src="/hero-bg.mp4"
-        muted
-        playsInline
-        preload="auto"
-      />
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/45 z-[2]" />
 
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/45 z-[2]" />
-
-      <div className="container mx-auto px-4 lg:px-8 py-16 relative z-10">
+        <div className="container mx-auto px-4 lg:px-8 py-16 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center relative">
 
           {/* Left — Text */}
