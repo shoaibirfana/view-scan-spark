@@ -132,17 +132,22 @@ const Hero = ({ startCounters = true }: HeroProps) => {
       requestUpdate();
     };
 
+    const handleResize = () => {
+      measure();
+      requestUpdate();
+    };
+
     measure();
     requestUpdate();
 
     window.addEventListener("scroll", requestUpdate, { passive: true });
-    window.addEventListener("resize", measure);
+    window.addEventListener("resize", handleResize);
     window.addEventListener("load", handleLoad);
 
     return () => {
       if (rafId) window.cancelAnimationFrame(rafId);
       window.removeEventListener("scroll", requestUpdate);
-      window.removeEventListener("resize", measure);
+      window.removeEventListener("resize", handleResize);
       window.removeEventListener("load", handleLoad);
     };
   }, []);
