@@ -158,14 +158,11 @@ const Hero = ({ startCounters = true }: HeroProps) => {
         className="sticky top-0 h-screen w-full overflow-hidden flex items-center pt-20"
         style={{ background: "linear-gradient(135deg, #0a0f1e 0%, #0d2137 50%, #0a1628 100%)" }}
       >
-        {/* Background video — scroll-controlled only, no browser playback loop/autoplay */}
-        <video
-          ref={videoRef}
-          className="absolute inset-0 w-full h-full object-cover z-[1]"
-          src="/hero-bg-scrub.mp4"
-          muted
-          playsInline
-          preload="auto"
+        {/* Scroll-rendered video frames for precise, smooth frame-by-frame control */}
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 w-full h-full z-[1]"
+          aria-hidden="true"
         />
 
         {/* Dark overlay */}
