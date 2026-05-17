@@ -22,6 +22,12 @@ const heroMetrics = [
   { end: 8, prefix: "", suffix: "+", label: "Brands Launched" },
 ];
 
+const HERO_FRAME_COUNT = 141;
+const HERO_SCROLL_DISTANCE = 2400;
+
+const getHeroFrameSrc = (frame: number) =>
+  `/hero-frames/frame-${String(frame).padStart(3, "0")}.jpg`;
+
 function formatMetric(n: number): string {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`;
   if (n >= 1_000) return `${(n / 1_000).toFixed(n >= 10_000 ? 0 : 1).replace(/\.0$/, "")}K`;
@@ -45,81 +51,99 @@ const MetricCounter = ({ end, prefix, suffix, label, ready }: typeof heroMetrics
 const Hero = ({ startCounters = true }: HeroProps) => {
   const sectionRef = useRef<HTMLElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
     const sticky = stickyRef.current;
-    const video = videoRef.current;
-    if (!section || !sticky || !video) return;
+    const canvas = canvasRef.current;
+    if (!section || !sticky || !canvas) return;
 
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReduced) return;
+    const context = canvas.getContext("2d");
+    if (!context) return;
 
+    const frames: HTMLImageElement[] = new Array(HERO_FRAME_COUNT);
+    const loadedFrames = new Set<number>();
     let rafId = 0;
-    let metadataReady = false;
     let measuredTop = 0;
-    let scrollDistance = 600;
-    let videoDuration = 6;
-
-    video.pause();
-    video.autoplay = false;
-    video.loop = false;
+    let scrollDistance = HERO_SCROLL_DISTANCE;
+    let targetFrame = 0;
+    let renderedFrame = -1;
 
     const measure = () => {
       const rect = section.getBoundingClientRect();
       measuredTop = rect.top + window.scrollY;
-      scrollDistance = Math.max(600, window.innerHeight * 0.85);
+      scrollDistance = Math.max(HERO_SCROLL_DISTANCE, window.innerHeight * 3);
       section.style.setProperty("--hero-scroll-distance", `${scrollDistance}px`);
+
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const width = Math.ceil(sticky.clientWidth * dpr);
+      const height = Math.ceil(sticky.clientHeight * dpr);
+
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+        renderedFrame = -1;
+      }
+    };
+
+    const drawFrame = (frame: number) => {
+      const image = frames[frame] || frames[0];
+      if (!image || !image.complete) return;
+
+      const scale = Math.max(canvas.width / image.naturalWidth, canvas.height / image.naturalHeight);
+      const width = image.naturalWidth * scale;
+      const height = image.naturalHeight * scale;
+      const x = (canvas.width - width) / 2;
+      const y = (canvas.height - height) / 2;
+
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.drawImage(image, x, y, width, height);
+      renderedFrame = frame;
     };
 
     const update = () => {
       rafId = 0;
-      if (!metadataReady) return;
-
       const rawProgress = (window.scrollY - measuredTop) / scrollDistance;
       const progress = Math.min(1, Math.max(0, rawProgress));
-      const targetTime = Math.min(videoDuration - 0.02, Math.max(0, progress * videoDuration));
+      targetFrame = prefersReduced ? 0 : Math.round(progress * (HERO_FRAME_COUNT - 1));
 
-      if (Math.abs(video.currentTime - targetTime) > 1 / 48) {
-        try {
-          video.currentTime = targetTime;
-        } catch {
-          // Some browsers briefly reject seeks while the video buffer catches up.
-        }
-      }
+      if (targetFrame !== renderedFrame && loadedFrames.has(targetFrame)) drawFrame(targetFrame);
     };
 
     const requestUpdate = () => {
       if (!rafId) rafId = window.requestAnimationFrame(update);
     };
 
-    const setup = () => {
-      video.pause();
-      metadataReady = true;
-      videoDuration = Number.isFinite(video.duration) && video.duration > 0 ? video.duration : 6;
+    frames.forEach((_, index) => {
+      const frameNumber = index + 1;
+      const image = new Image();
+      image.src = getHeroFrameSrc(frameNumber);
+      image.onload = () => {
+        loadedFrames.add(index);
+        if (index === 0 || index === targetFrame) requestUpdate();
+      };
+      frames[index] = image;
+    });
+
+    const handleLoad = () => {
       measure();
       requestUpdate();
     };
 
-    if (video.readyState >= 1 && video.duration) {
-      setup();
-    } else {
-      video.addEventListener("loadedmetadata", setup, { once: true });
-    }
+    measure();
+    requestUpdate();
 
     window.addEventListener("scroll", requestUpdate, { passive: true });
     window.addEventListener("resize", measure);
-    window.addEventListener("load", () => {
-      measure();
-      requestUpdate();
-    });
+    window.addEventListener("load", handleLoad);
 
     return () => {
       if (rafId) window.cancelAnimationFrame(rafId);
       window.removeEventListener("scroll", requestUpdate);
       window.removeEventListener("resize", measure);
-      video.removeEventListener("loadedmetadata", setup);
+      window.removeEventListener("load", handleLoad);
     };
   }, []);
 
