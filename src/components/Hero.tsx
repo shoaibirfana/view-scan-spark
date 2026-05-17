@@ -1,13 +1,9 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import logo from "@/assets/logo.png";
 import heroCenter from "@/assets/hero-center.png";
 import { useCountUp } from "@/hooks/use-count-up";
-
-gsap.registerPlugin(ScrollTrigger);
 
 interface HeroProps {
   startCounters?: boolean;
@@ -25,6 +21,12 @@ const heroMetrics = [
   { end: 800000, prefix: "$", suffix: "+", label: "Ads Spend Managed" },
   { end: 8, prefix: "", suffix: "+", label: "Brands Launched" },
 ];
+
+const HERO_FRAME_COUNT = 141;
+const HERO_SCROLL_DISTANCE = 2400;
+
+const getHeroFrameSrc = (frame: number) =>
+  `/hero-frames-webp/frame-${String(frame).padStart(3, "0")}.webp`;
 
 function formatMetric(n: number): string {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`;
@@ -48,59 +50,123 @@ const MetricCounter = ({ end, prefix, suffix, label, ready }: typeof heroMetrics
 
 const Hero = ({ startCounters = true }: HeroProps) => {
   const sectionRef = useRef<HTMLElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
-    const video = videoRef.current;
-    if (!section || !video) return;
+    const sticky = stickyRef.current;
+    const canvas = canvasRef.current;
+    if (!section || !sticky || !canvas) return;
 
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReduced) return;
+    const context = canvas.getContext("2d");
+    if (!context) return;
 
-    let trigger: ScrollTrigger | null = null;
+    const frames: HTMLImageElement[] = new Array(HERO_FRAME_COUNT);
+    const loadedFrames = new Set<number>();
+    let rafId = 0;
+    let measuredTop = 0;
+    let scrollDistance = HERO_SCROLL_DISTANCE;
+    let targetFrame = 0;
+    let renderedFrame = -1;
 
-    const setup = () => {
-      // Stop browser autoplay — GSAP is the only thing controlling video
-      video.pause();
-      video.autoplay = false;
-      video.loop = false;
+    const measure = () => {
+      const rect = section.getBoundingClientRect();
+      measuredTop = rect.top + window.scrollY;
+      scrollDistance = Math.max(HERO_SCROLL_DISTANCE, window.innerHeight * 3);
+      section.style.setProperty("--hero-scroll-distance", `${scrollDistance}px`);
 
-      const duration = video.duration || 6;
-      // 100px of scroll per second of video = perfectly smooth
-      const scrollDistance = duration * 100;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const width = Math.ceil(sticky.clientWidth * dpr);
+      const height = Math.ceil(sticky.clientHeight * dpr);
 
-      trigger = ScrollTrigger.create({
-        trigger: section,
-        start: "top top",
-        end: `+=${scrollDistance}`,
-        pin: true,
-        pinSpacing: true,
-        scrub: true,
-        anticipatePin: 1,
-        onUpdate: (self) => {
-          const t = self.progress * duration;
-          if (Number.isFinite(t)) {
-            try {
-              video.currentTime = Math.min(duration - 0.01, Math.max(0, t));
-            } catch {}
-          }
-        },
-      });
-
-      window.addEventListener("load", () => ScrollTrigger.refresh());
-      ScrollTrigger.refresh();
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+        renderedFrame = -1;
+      }
     };
 
-    if (video.readyState >= 1 && video.duration) {
-      setup();
-    } else {
-      video.addEventListener("loadedmetadata", setup, { once: true });
-    }
+    const drawFrame = (frame: number) => {
+      const image = frames[frame] || frames[0];
+      if (!image || !image.complete) return;
+
+      const scale = Math.max(canvas.width / image.naturalWidth, canvas.height / image.naturalHeight);
+      const width = image.naturalWidth * scale;
+      const height = image.naturalHeight * scale;
+      const x = (canvas.width - width) / 2;
+      const y = (canvas.height - height) / 2;
+
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.drawImage(image, x, y, width, height);
+      renderedFrame = frame;
+    };
+
+    const update = () => {
+      rafId = 0;
+      const rawProgress = (window.scrollY - measuredTop) / scrollDistance;
+      const progress = Math.min(1, Math.max(0, rawProgress));
+      targetFrame = prefersReduced ? 0 : Math.round(progress * (HERO_FRAME_COUNT - 1));
+
+      if (targetFrame !== renderedFrame) {
+        if (loadedFrames.has(targetFrame)) {
+          drawFrame(targetFrame);
+          return;
+        }
+
+        for (let offset = 1; offset < HERO_FRAME_COUNT; offset++) {
+          const previous = targetFrame - offset;
+          const next = targetFrame + offset;
+          if (previous >= 0 && loadedFrames.has(previous)) {
+            drawFrame(previous);
+            return;
+          }
+          if (next < HERO_FRAME_COUNT && loadedFrames.has(next)) {
+            drawFrame(next);
+            return;
+          }
+        }
+      }
+    };
+
+    const requestUpdate = () => {
+      if (!rafId) rafId = window.requestAnimationFrame(update);
+    };
+
+    frames.forEach((_, index) => {
+      const frameNumber = index + 1;
+      const image = new Image();
+      image.src = getHeroFrameSrc(frameNumber);
+      image.onload = () => {
+        loadedFrames.add(index);
+        if (index === 0 || index === targetFrame) requestUpdate();
+      };
+      frames[index] = image;
+    });
+
+    const handleLoad = () => {
+      measure();
+      requestUpdate();
+    };
+
+    const handleResize = () => {
+      measure();
+      requestUpdate();
+    };
+
+    measure();
+    requestUpdate();
+
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", handleResize);
+    window.addEventListener("load", handleLoad);
 
     return () => {
-      trigger?.kill();
-      video.removeEventListener("loadedmetadata", setup);
+      if (rafId) window.cancelAnimationFrame(rafId);
+      window.removeEventListener("scroll", requestUpdate);
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("load", handleLoad);
     };
   }, []);
 
@@ -108,29 +174,25 @@ const Hero = ({ startCounters = true }: HeroProps) => {
     <section
       ref={sectionRef}
       id="home"
-      className="relative w-full h-screen flex items-center pt-20"
+      className="relative w-full min-h-[calc(100vh+var(--hero-scroll-distance,600px))]"
     >
-      {/* Dark navy fallback shown if video not loaded */}
       <div
-        className="absolute inset-0 z-0"
+        ref={stickyRef}
+        className="sticky top-0 h-screen w-full overflow-hidden flex items-center pt-20"
         style={{ background: "linear-gradient(135deg, #0a0f1e 0%, #0d2137 50%, #0a1628 100%)" }}
-      />
+      >
+        {/* Scroll-rendered video frames for precise, smooth frame-by-frame control */}
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 w-full h-full z-[1]"
+          aria-hidden="true"
+        />
 
-      {/* Background video — NO autoPlay NO loop — GSAP controls it */}
-      <video
-        ref={videoRef}
-        className="absolute inset-0 w-full h-full object-cover z-[1]"
-        src="/hero-bg.mp4"
-        muted
-        playsInline
-        preload="auto"
-      />
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/45 z-[2]" />
 
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/45 z-[2]" />
-
-      <div className="container mx-auto px-4 lg:px-8 py-16 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center relative">
+        <div className="container mx-auto px-4 lg:px-8 py-16 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-12 items-center relative">
 
           {/* Left — Text */}
           <motion.div
@@ -256,6 +318,7 @@ const Hero = ({ startCounters = true }: HeroProps) => {
             </motion.div>
           </motion.div>
 
+          </div>
         </div>
       </div>
     </section>
