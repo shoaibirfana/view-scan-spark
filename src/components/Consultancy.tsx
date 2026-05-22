@@ -13,8 +13,9 @@ const benefits = [
 
 const Consultancy = () => {
   return (
-    <section id="consultancy" className="py-24 bg-background relative overflow-hidden">
+    <section id="consultancy" className="py-24 relative overflow-hidden consultancy-animated-bg">
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-[120px]" />
+
 
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
         <motion.div
@@ -82,7 +83,8 @@ const Consultancy = () => {
             transition={{ duration: 0.6 }}
             className="relative"
           >
-            <div className="bg-card border border-border rounded-2xl p-8 shadow-[0_8px_40px_hsl(var(--primary)/0.1)] relative overflow-hidden">
+            <div className="animate-float motion-reduce:!animate-none bg-card border border-border rounded-2xl p-8 shadow-[0_8px_40px_hsl(var(--primary)/0.1)] relative overflow-hidden">
+
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-[60px]" />
 
               <div className="relative z-10">
