@@ -141,4 +141,30 @@
     animation: none;
     transform: translate3d(0, 0, 0);
   }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
+
+@keyframes cta-gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.cta-animated-gradient {
+  background: linear-gradient(
+    135deg,
+    hsl(var(--primary) / 0.12) 0%,
+    hsl(var(--background)) 35%,
+    hsl(var(--primary) / 0.08) 70%,
+    hsl(var(--background)) 100%
+  );
+  background-size: 300% 300%;
+  animation: cta-gradient-shift 14s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cta-animated-gradient { animation: none; }
+}
+

@@ -84,36 +84,52 @@ const Services = () => {
 
         <div ref={gridRef} className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           <AnimatePresence mode="popLayout">
-            {visible.map((service, i) => (
-              <motion.div
-                key={service.title}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ delay: i * 0.04, duration: 0.4 }}
-                className="group relative rounded-2xl p-6 border border-primary/10 bg-card/40 backdrop-blur-xl shadow-[0_8px_32px_hsl(var(--primary)/0.06)] hover:border-primary/30 hover:shadow-[0_8px_40px_hsl(var(--primary)/0.12)] transition-all duration-300"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.04] to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="relative z-10">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 backdrop-blur-sm flex items-center justify-center mb-4 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
-                    <service.icon className="text-primary" size={24} />
+            {visible.map((service, i) => {
+              const handleTilt = (e: React.MouseEvent<HTMLDivElement>) => {
+                const el = e.currentTarget;
+                const r = el.getBoundingClientRect();
+                const x = (e.clientX - r.left) / r.width - 0.5;
+                const y = (e.clientY - r.top) / r.height - 0.5;
+                el.style.transform = `perspective(1000px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg) translateY(-4px)`;
+              };
+              const resetTilt = (e: React.MouseEvent<HTMLDivElement>) => {
+                e.currentTarget.style.transform = "";
+              };
+              return (
+                <motion.div
+                  key={service.title}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ delay: i * 0.04, duration: 0.4 }}
+                  onMouseMove={handleTilt}
+                  onMouseLeave={resetTilt}
+                  style={{ transformStyle: "preserve-3d", transition: "transform 0.3s ease-out" }}
+                  className="motion-reduce:!transform-none group relative rounded-2xl p-6 border border-primary/10 bg-card/40 backdrop-blur-xl shadow-[0_8px_32px_hsl(var(--primary)/0.06)] hover:border-primary/30 hover:shadow-[0_12px_40px_hsl(var(--primary)/0.18)] will-change-transform"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.04] to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="relative z-10">
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 backdrop-blur-sm flex items-center justify-center mb-4 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
+                      <service.icon className="text-primary" size={24} />
+                    </div>
+                    <h3 className="font-heading font-semibold text-card-foreground mb-2">
+                      {service.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                      {service.desc}
+                    </p>
+                    <a
+                      href="#contact"
+                      className="text-primary text-sm font-semibold hover:underline inline-flex items-center gap-1 group-hover:gap-2 transition-all"
+                    >
+                      Get Started →
+                    </a>
                   </div>
-                  <h3 className="font-heading font-semibold text-card-foreground mb-2">
-                    {service.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                    {service.desc}
-                  </p>
-                  <a
-                    href="#contact"
-                    className="text-primary text-sm font-semibold hover:underline inline-flex items-center gap-1 group-hover:gap-2 transition-all"
-                  >
-                    Get Started →
-                  </a>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              );
+            })}
           </AnimatePresence>
+
         </div>
 
         {/* Show More / Show Less */}

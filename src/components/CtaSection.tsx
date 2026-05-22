@@ -6,8 +6,9 @@ const CtaSection = () => {
   return (
     <section id="contact" className="py-24 relative overflow-hidden">
       {/* Animated gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-primary/5" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[150px]" />
+      <div className="absolute inset-0 cta-animated-gradient" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[150px] animate-pulse" />
+
       
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
         <motion.div
