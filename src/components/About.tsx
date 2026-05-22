@@ -1,7 +1,9 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import { Check, Award } from "lucide-react";
 import muazPhoto from "@/assets/muaz-photo.png";
 import logo from "@/assets/logo.png";
+import { useCountUp } from "@/hooks/use-count-up";
 
 const highlights = [
   "Amazon, Shopify, TikTok & eBay Expert",
@@ -13,28 +15,53 @@ const highlights = [
 ];
 
 const stats = [
-  { value: "300+", label: "Clients Served" },
-  { value: "4+", label: "Years Experience" },
-  { value: "12+", label: "Services Offered" },
-  { value: "100%", label: "Client Satisfaction" },
+  { value: 300, suffix: "+", label: "Clients Served" },
+  { value: 4, suffix: "+", label: "Years Experience" },
+  { value: 12, suffix: "+", label: "Services Offered" },
+  { value: 100, suffix: "%", label: "Client Satisfaction" },
 ];
 
-const About = () => {
+const StatCounter = ({ value, suffix, label }: { value: number; suffix: string; label: string }) => {
+  const { count, ref } = useCountUp(value, 2000);
   return (
-    <section id="about" className="py-24 hero-bg relative overflow-hidden">
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      className="text-center bg-card/80 backdrop-blur-sm rounded-xl p-4 card-elevated border border-border/50"
+    >
+      <span className="text-2xl font-heading font-bold text-primary">{count}{suffix}</span>
+      <p className="text-xs text-muted-foreground mt-1">{label}</p>
+    </motion.div>
+  );
+};
+
+const About = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  const imageY = useTransform(scrollYProgress, [0, 1], [-40, 40]);
+
+  return (
+    <section ref={sectionRef} id="about" className="py-24 hero-bg relative overflow-hidden">
       <div className="absolute top-20 right-0 w-96 h-96 bg-primary/5 rounded-full blur-[120px]" />
-      
+
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Image */}
+          {/* Image with parallax */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="flex justify-center"
           >
-            <div className="relative group">
-              <div className="absolute -inset-4 bg-gradient-to-br from-primary/20 to-transparent rounded-3xl blur-2xl opacity-50 group-hover:opacity-70 transition-opacity duration-500" />
+            <motion.div style={{ y: imageY }} className="relative group motion-reduce:!transform-none">
+              <div className="absolute -inset-6 bg-gradient-radial from-primary/30 via-primary/10 to-transparent rounded-3xl blur-3xl opacity-60 group-hover:opacity-90 transition-opacity duration-700" />
               <img
                 src={muazPhoto}
                 alt="Muaz Tanzeel"
@@ -49,14 +76,15 @@ const About = () => {
               >
                 <Award size={28} />
               </motion.div>
-            </div>
+            </motion.div>
           </motion.div>
 
-          {/* Content */}
+          {/* Content slides in from right */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
             <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.2em] uppercase text-primary mb-3 bg-primary/10 px-4 py-2 rounded-full">
               <img src={logo} alt="" className="w-4 h-4 object-contain" /> About Us
@@ -94,20 +122,10 @@ const About = () => {
               ))}
             </div>
 
-            {/* Stats */}
+            {/* Animated count-up stats */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {stats.map((stat, i) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="text-center bg-card/80 backdrop-blur-sm rounded-xl p-4 card-elevated border border-border/50"
-                >
-                  <span className="text-2xl font-heading font-bold text-primary">{stat.value}</span>
-                  <p className="text-xs text-muted-foreground mt-1">{stat.label}</p>
-                </motion.div>
+              {stats.map((s) => (
+                <StatCounter key={s.label} value={s.value} suffix={s.suffix} label={s.label} />
               ))}
             </div>
           </motion.div>
