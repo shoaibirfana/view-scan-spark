@@ -115,7 +115,7 @@ const Team = () => {
                   className="flex-shrink-0 px-3"
                   style={{ width: `${slideWidth}px` }}
                 >
-                  <div className="bg-card/80 backdrop-blur-sm rounded-2xl overflow-hidden card-elevated border border-border/50 group">
+                  <div className="bg-card/80 backdrop-blur-sm rounded-2xl overflow-hidden card-elevated border border-border/50 group transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_-15px_hsl(var(--primary)/0.35)] hover:border-primary/30 motion-reduce:hover:translate-y-0">
                     <div className="aspect-[3/4] overflow-hidden">
                       <img
                         src={m.photo}
