@@ -21,9 +21,10 @@ const Navbar = () => {
 
   useEffect(() => {
     const onScroll = () => {
-      // Glass while over hero (full viewport height), solid after
-      const threshold = isHome ? window.innerHeight - 80 : 20;
-      setScrolled(window.scrollY > threshold);
+      const heroEl = document.getElementById("home");
+      const heroBottom = heroEl ? heroEl.getBoundingClientRect().bottom : window.innerHeight;
+      // Switch to solid white as soon as hero leaves the top under the navbar
+      setScrolled(isHome ? heroBottom <= 80 : window.scrollY > 20);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -49,7 +50,7 @@ const Navbar = () => {
     >
       <div className="container mx-auto flex items-center justify-between py-4 px-4 lg:px-8">
         <Link to="/" className="flex items-center gap-2 text-2xl font-heading font-bold">
-          <img src={logo} alt="Team Ecomify logo" className="w-9 h-9 object-contain animate-logo-spin motion-reduce:!animate-none" />
+          <img src={logo} alt="Team Ecomify logo" className="w-9 h-9 object-contain" />
           <span>
             <span className="text-primary">Team</span>{" "}
             <span className={overHero ? "text-white" : "text-foreground"}>Ecomify</span>
