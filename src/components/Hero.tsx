@@ -55,14 +55,6 @@ const Hero = ({ startCounters = true }: HeroProps) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            <motion.span
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
-              className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.2em] uppercase text-primary mb-4 bg-primary/10 px-4 py-2 rounded-full backdrop-blur-sm border border-primary/20"
-            >
-              <img src={logo} alt="" className="w-4 h-4 object-contain" /> Welcome To Our Agency
-            </motion.span>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold leading-tight mb-6">
               <motion.span
                 initial={{ opacity: 0, y: 20 }}
