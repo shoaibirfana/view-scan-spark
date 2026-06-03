@@ -21,9 +21,10 @@ const Navbar = () => {
 
   useEffect(() => {
     const onScroll = () => {
-      // Glass while over hero (full viewport height), solid after
-      const threshold = isHome ? window.innerHeight - 80 : 20;
-      setScrolled(window.scrollY > threshold);
+      const heroEl = document.getElementById("home");
+      const heroBottom = heroEl ? heroEl.getBoundingClientRect().bottom : window.innerHeight;
+      // Switch to solid white as soon as hero leaves the top under the navbar
+      setScrolled(isHome ? heroBottom <= 80 : window.scrollY > 20);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
