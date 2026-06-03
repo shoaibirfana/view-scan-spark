@@ -198,6 +198,17 @@
 @media (prefers-reduced-motion: reduce) {
   .animate-float,
   .consultancy-animated-bg,
-  .animate-pulse-glow { animation: none; }
+  .animate-pulse-glow,
+  .animate-logo-spin { animation: none; }
 }
+
+@keyframes logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.animate-logo-spin {
+  animation: logo-spin 8s linear infinite;
+  will-change: transform;
+}
+
 

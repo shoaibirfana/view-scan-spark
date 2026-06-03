@@ -5,13 +5,13 @@ import logo from "@/assets/logo.png";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
-  { label: "Home", href: "/#home" },
   { label: "Services", href: "/#services" },
   { label: "About", href: "/#about" },
   { label: "Blog", href: "/blog" },
   { label: "Testimonials", href: "/#testimonials" },
   { label: "Contact", href: "/#contact" },
 ];
+
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -49,7 +49,7 @@ const Navbar = () => {
     >
       <div className="container mx-auto flex items-center justify-between py-4 px-4 lg:px-8">
         <Link to="/" className="flex items-center gap-2 text-2xl font-heading font-bold">
-          <img src={logo} alt="Team Ecomify logo" className="w-8 h-8 object-contain" />
+          <img src={logo} alt="Team Ecomify logo" className="w-9 h-9 object-contain animate-logo-spin motion-reduce:!animate-none" />
           <span>
             <span className="text-primary">Team</span>{" "}
             <span className={overHero ? "text-white" : "text-foreground"}>Ecomify</span>
