@@ -36,16 +36,14 @@ const MarqueeRow = ({
             {images.map((img, i) => (
               <div
                 key={`${copyIndex}-${i}`}
-                className="group flex-shrink-0 w-[340px] sm:w-[400px] lg:w-[460px] rounded-xl overflow-hidden border border-border/50 bg-card shadow-[0_8px_30px_hsl(var(--primary)/0.08)] hover:border-primary/40 hover:shadow-[0_0_30px_hsl(var(--primary)/0.25)] transition-all duration-500"
+                className="flex-shrink-0 w-[340px] sm:w-[400px] lg:w-[460px] rounded-xl overflow-hidden border border-border/50 bg-card shadow-[0_8px_30px_hsl(var(--primary)/0.08)] hover:border-primary/40 hover:shadow-[0_0_30px_hsl(var(--primary)/0.25)] transition-all duration-500"
               >
-                <div className="overflow-hidden">
-                  <img
-                    src={img}
-                    alt={`Client result ${i + 1}`}
-                    className="w-full h-auto object-cover aspect-[16/10] group-hover:scale-[1.15] transition-transform duration-500 ease-out"
-                    loading="lazy"
-                  />
-                </div>
+                <img
+                  src={img}
+                  alt={`Client result ${i + 1}`}
+                  className="w-full h-auto object-cover aspect-[16/10]"
+                  loading="lazy"
+                />
               </div>
             ))}
           </div>
