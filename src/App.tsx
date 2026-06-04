@@ -15,6 +15,10 @@ import { HelmetProvider } from "react-helmet-async";
 import Index from "./pages/Index";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import AmazonPPC from "./pages/AmazonPPC";
+import AmazonListing from "./pages/AmazonListing";
+import AmazonAccount from "./pages/AmazonAccount";
+import WalmartMarketplace from "./pages/WalmartMarketplace";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +34,10 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/amazon-ppc-management" element={<AmazonPPC />} />
+            <Route path="/amazon-listing-optimization" element={<AmazonListing />} />
+            <Route path="/amazon-account-management" element={<AmazonAccount />} />
+            <Route path="/walmart-marketplace" element={<WalmartMarketplace />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

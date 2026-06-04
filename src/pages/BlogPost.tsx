@@ -36,7 +36,7 @@ const BlogPost = () => {
 
   if (!post || !Content) return <Navigate to="/blog" replace />;
 
-  const siteUrl = typeof window !== "undefined" ? window.location.origin : "";
+  const siteUrl = "https://teamecomify.com";
   const url = `${siteUrl}/blog/${post.slug}`;
 
   const jsonLd = {

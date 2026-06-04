@@ -8,7 +8,7 @@ import {
 import logo from "@/assets/logo.png";
 
 const services = [
-  { icon: Store, title: "Amazon Store Management", desc: "Complete Amazon seller account setup, product listing optimization, PPC campaigns, and full store management." },
+  { icon: Store, title: "Amazon Store Management", desc: "Complete Amazon seller account setup, product listing optimization, PPC campaigns, and full store management.", href: "/amazon-ppc-management" },
   { icon: ShoppingCart, title: "Shopify Store Development", desc: "Custom Shopify store design, development, theme customization, and ready-to-run store packages." },
   { icon: Video, title: "TikTok Shop Setup", desc: "Launch your TikTok Shop with product listings, content strategy, and influencer marketing guidance." },
   { icon: Tag, title: "eBay Seller Account Setup", desc: "Professional eBay account setup with listing optimization, store branding, and sales strategy." },
@@ -17,9 +17,9 @@ const services = [
   { icon: FileText, title: "EIN Number & Reports", desc: "Get your EIN number, tax compliance setup, financial reports, and business documentation." },
   { icon: RefreshCw, title: "Suspended Account Reactivation", desc: "Expert help to recover and reactivate suspended Amazon, eBay, or Shopify seller accounts." },
   { icon: Package, title: "Product Sourcing from China", desc: "Verified supplier sourcing, quality control, competitive pricing, and logistics management." },
-  { icon: BarChart3, title: "Marketing & PPC Management", desc: "Data-driven advertising campaigns across Amazon PPC, Facebook Ads, and Google Ads." },
+  { icon: BarChart3, title: "Marketing & PPC Management", desc: "Data-driven advertising campaigns across Amazon PPC, Facebook Ads, and Google Ads.", href: "/amazon-ppc-management" },
   { icon: Users, title: "Business Consulting", desc: "One-on-one e-commerce consulting to scale your business with proven strategies and insights." },
-  { icon: Warehouse, title: "Walmart Store Setup", desc: "Get approved and launch your Walmart Marketplace seller account with optimized listings." },
+  { icon: Warehouse, title: "Walmart Store Setup", desc: "Get approved and launch your Walmart Marketplace seller account with optimized listings.", href: "/walmart-marketplace" },
 ];
 
 const Services = () => {
@@ -72,7 +72,7 @@ const Services = () => {
           className="text-center mb-16"
         >
           <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.2em] uppercase text-primary mb-3 bg-primary/10 px-4 py-2 rounded-full">
-            <img src={logo} alt="" className="w-4 h-4 object-contain" /> What We Offer
+            <img src={logo} alt="Team Ecomify logo" className="w-4 h-4 object-contain" /> What We Offer
           </span>
           <h2 className="text-3xl sm:text-4xl font-heading font-bold mt-4">
             Everything You Need to{" "}
@@ -119,7 +119,7 @@ const Services = () => {
                       {service.desc}
                     </p>
                     <a
-                      href="#contact"
+                      href={service.href ?? "#contact"}
                       className="text-primary text-sm font-semibold hover:underline inline-flex items-center gap-1 group-hover:gap-2 transition-all"
                     >
                       Get Started →

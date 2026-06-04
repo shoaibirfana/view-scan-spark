@@ -56,7 +56,7 @@ const Testimonials = () => {
           className="text-center mb-16"
         >
           <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.2em] uppercase text-primary mb-3 bg-primary/10 px-4 py-2 rounded-full">
-            <img src={logo} alt="" className="w-4 h-4 object-contain" /> Real People, Real Results
+            <img src={logo} alt="Team Ecomify logo" className="w-4 h-4 object-contain" /> Real People, Real Results
           </span>
           <h2 className="text-3xl sm:text-4xl font-heading font-bold mb-4 mt-4">
             What Our Clients Have To Say
