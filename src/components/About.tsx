@@ -87,7 +87,7 @@ const About = () => {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
             <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.2em] uppercase text-primary mb-3 bg-primary/10 px-4 py-2 rounded-full">
-              <img src={logo} alt="" className="w-4 h-4 object-contain" /> About Us
+              <img src={logo} alt="Team Ecomify logo" className="w-4 h-4 object-contain" /> About Us
             </span>
             <h2 className="text-3xl sm:text-4xl font-heading font-bold mb-6 mt-4">
               Our CEO, <span className="text-gradient">Muaz Tanzeel</span>

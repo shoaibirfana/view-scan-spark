@@ -23,7 +23,7 @@ const CtaSection = () => {
             viewport={{ once: true }}
             className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-6"
           >
-            <img src={logo} alt="Team Ecomify" className="w-10 h-10 object-contain" />
+            <img src={logo} alt="Team Ecomify logo" className="w-10 h-10 object-contain" />
           </motion.div>
           <h2 className="text-3xl sm:text-4xl font-heading font-bold mb-6">
             Ready to Start Your{" "}

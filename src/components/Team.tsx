@@ -79,7 +79,7 @@ const Team = () => {
           className="text-center mb-14"
         >
           <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.2em] uppercase text-primary mb-3 bg-primary/10 px-4 py-2 rounded-full">
-            <img src={logo} alt="" className="w-4 h-4 object-contain" /> Our Team
+            <img src={logo} alt="Team Ecomify logo" className="w-4 h-4 object-contain" /> Our Team
           </span>
           <h2 className="text-3xl sm:text-4xl font-heading font-bold mt-4">
             Meet the <span className="text-gradient">Experts</span>
