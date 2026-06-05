@@ -5,6 +5,7 @@ import Hero from "@/components/Hero";
 import Services from "@/components/Services";
 import MarketplaceBanner from "@/components/MarketplaceBanner";
 import Results from "@/components/Results";
+import CaseStudies from "@/components/CaseStudies";
 import About from "@/components/About";
 import Team from "@/components/Team";
 import Testimonials from "@/components/Testimonials";
@@ -98,6 +99,7 @@ const Index = () => {
       <Hero startCounters={!isLoading} />
       <MarketplaceBanner />
       <Services />
+      <CaseStudies />
       <Results />
       <About />
       <Team />

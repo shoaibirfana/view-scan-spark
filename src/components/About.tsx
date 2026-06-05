@@ -3,6 +3,11 @@ import { useRef } from "react";
 import { Check, Award } from "lucide-react";
 import muazPhoto from "@/assets/muaz-photo.png";
 import logo from "@/assets/logo.png";
+import team1 from "@/assets/team-1.png";
+import team2 from "@/assets/team-2.png";
+import team3 from "@/assets/team-3.jpg";
+import team4 from "@/assets/team-4.jpg";
+import team5 from "@/assets/team-5.jpg";
 import { useCountUp } from "@/hooks/use-count-up";
 
 const highlights = [
@@ -15,14 +20,17 @@ const highlights = [
 ];
 
 const stats = [
-  { value: 300, suffix: "+", label: "Clients Served" },
-  { value: 4, suffix: "+", label: "Years Experience" },
-  { value: 12, suffix: "+", label: "Services Offered" },
-  { value: 100, suffix: "%", label: "Client Satisfaction" },
+  { value: 300, suffix: "+", label: "Clients Served", prefix: "" },
+  { value: 4, suffix: "+", label: "Years Experience", prefix: "" },
+  { value: 12, suffix: "+", label: "Services Offered", prefix: "" },
+  { value: 5.6, suffix: "M+", label: "Revenue Generated", prefix: "$", decimal: true },
 ];
 
-const StatCounter = ({ value, suffix, label }: { value: number; suffix: string; label: string }) => {
-  const { count, ref } = useCountUp(value, 2000);
+const teamPhotos = [team1, team2, team3, team4, team5];
+
+const StatCounter = ({ value, suffix, label, prefix, decimal }: { value: number; suffix: string; label: string; prefix?: string; decimal?: boolean }) => {
+  const { count, ref } = useCountUp(decimal ? Math.round(value * 10) : value, 2000);
+  const display = decimal ? (count / 10).toFixed(1) : count;
   return (
     <motion.div
       ref={ref}
@@ -32,7 +40,7 @@ const StatCounter = ({ value, suffix, label }: { value: number; suffix: string; 
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className="text-center bg-card/80 backdrop-blur-sm rounded-xl p-4 card-elevated border border-border/50"
     >
-      <span className="text-2xl font-heading font-bold text-primary">{count}{suffix}</span>
+      <span className="text-2xl font-heading font-bold text-primary">{prefix}{display}{suffix}</span>
       <p className="text-xs text-muted-foreground mt-1">{label}</p>
     </motion.div>
   );
@@ -40,10 +48,7 @@ const StatCounter = ({ value, suffix, label }: { value: number; suffix: string; 
 
 const About = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
   const imageY = useTransform(scrollYProgress, [0, 1], [-40, 40]);
 
   return (
@@ -52,7 +57,6 @@ const About = () => {
 
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Image with parallax */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -62,11 +66,7 @@ const About = () => {
           >
             <motion.div style={{ y: imageY }} className="relative group motion-reduce:!transform-none">
               <div className="absolute -inset-6 bg-gradient-radial from-primary/30 via-primary/10 to-transparent rounded-3xl blur-3xl opacity-60 group-hover:opacity-90 transition-opacity duration-700" />
-              <img
-                src={muazPhoto}
-                alt="Muaz Tanzeel"
-                className="relative w-72 h-80 sm:w-80 sm:h-96 object-cover object-[center_15%] rounded-2xl shadow-2xl ring-1 ring-primary/10"
-              />
+              <img src={muazPhoto} alt="Muaz Tanzeel" className="relative w-72 h-80 sm:w-80 sm:h-96 object-cover object-[center_15%] rounded-2xl shadow-2xl ring-1 ring-primary/10" />
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -79,7 +79,6 @@ const About = () => {
             </motion.div>
           </motion.div>
 
-          {/* Content slides in from right */}
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -122,11 +121,25 @@ const About = () => {
               ))}
             </div>
 
-            {/* Animated count-up stats */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {stats.map((s) => (
-                <StatCounter key={s.label} value={s.value} suffix={s.suffix} label={s.label} />
+                <StatCounter key={s.label} {...s} />
               ))}
+            </div>
+
+            {/* Mini team strip */}
+            <div className="flex items-center gap-4 mt-8">
+              <div className="flex -space-x-3">
+                {teamPhotos.map((src, i) => (
+                  <img
+                    key={i}
+                    src={src}
+                    alt="Team member"
+                    className="w-10 h-10 rounded-full ring-2 ring-background object-cover"
+                  />
+                ))}
+              </div>
+              <span className="text-sm text-muted-foreground">+6 more experts on our team</span>
             </div>
           </motion.div>
         </div>

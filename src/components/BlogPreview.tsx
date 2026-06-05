@@ -7,8 +7,16 @@ const BlogPreview = () => {
   const posts = blogPosts.slice(0, 3);
 
   return (
-    <section id="blog" className="py-20 bg-secondary/30">
-      <div className="container mx-auto px-4 lg:px-8">
+    <section
+      id="blog"
+      className="py-20 bg-background relative overflow-hidden"
+      style={{
+        backgroundImage:
+          "linear-gradient(rgba(7,132,99,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(7,132,99,0.04) 1px, transparent 1px)",
+        backgroundSize: "40px 40px",
+      }}
+    >
+      <div className="container mx-auto px-4 lg:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -27,10 +35,7 @@ const BlogPreview = () => {
               Practical e-commerce guides to help you launch and scale faster.
             </p>
           </div>
-          <Link
-            to="/blog"
-            className="inline-flex items-center gap-2 text-primary font-semibold group self-start md:self-auto"
-          >
+          <Link to="/blog" className="inline-flex items-center gap-2 text-primary font-semibold group self-start md:self-auto">
             View all posts
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
           </Link>
@@ -44,19 +49,15 @@ const BlogPreview = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="card-elevated bg-card rounded-2xl p-6 border border-border flex flex-col"
+              className="card-elevated bg-card rounded-2xl p-6 border border-border border-l-2 border-l-primary flex flex-col hover:bg-primary/5 transition-colors duration-300"
             >
-              <div className="flex items-center gap-3 text-xs text-muted-foreground mb-3">
-                <span className="bg-primary/10 text-primary font-semibold px-3 py-1 rounded-full">
+              <div className="flex items-center gap-3 text-xs text-muted-foreground mb-3 flex-wrap">
+                <span className="bg-primary text-primary-foreground font-semibold px-3 py-1 rounded-full">
                   {post.category}
                 </span>
                 <span className="inline-flex items-center gap-1">
                   <Calendar size={12} />
-                  {new Date(post.date).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })}
+                  {new Date(post.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                 </span>
                 <span className="inline-flex items-center gap-1">
                   <Clock size={12} />
@@ -64,15 +65,10 @@ const BlogPreview = () => {
                 </span>
               </div>
               <h3 className="text-xl font-heading font-bold mb-2 leading-snug">
-                <Link to={`/blog/${post.slug}`} className="hover:text-primary transition-colors">
-                  {post.title}
-                </Link>
+                <Link to={`/blog/${post.slug}`} className="hover:text-primary transition-colors">{post.title}</Link>
               </h3>
               <p className="text-muted-foreground text-sm mb-5 flex-1">{post.excerpt}</p>
-              <Link
-                to={`/blog/${post.slug}`}
-                className="inline-flex items-center gap-2 text-primary font-semibold text-sm group"
-              >
+              <Link to={`/blog/${post.slug}`} className="inline-flex items-center gap-2 text-primary font-semibold text-sm group">
                 Read more
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </Link>
