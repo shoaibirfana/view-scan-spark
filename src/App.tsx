@@ -1,10 +1,8 @@
 /*
   SEO setup notes (off-page):
-  - Submit https://view-scan-spark.lovable.app/sitemap.xml to Google Search Console & Bing Webmaster Tools.
+  - Submit https://teamecomify.com/sitemap.xml to Google Search Console & Bing Webmaster Tools.
   - Share each blog post on LinkedIn, X/Twitter, Facebook, and relevant Reddit/Quora threads.
   - Republish (with canonical link back) on Medium and LinkedIn Articles for backlinks.
-  - Create Pinterest pins for each post linking back to /blog/<slug>.
-  - Reach out for guest posts on e-commerce blogs to build authoritative backlinks.
 */
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -19,6 +17,8 @@ import AmazonPPC from "./pages/AmazonPPC";
 import AmazonListing from "./pages/AmazonListing";
 import AmazonAccount from "./pages/AmazonAccount";
 import WalmartMarketplace from "./pages/WalmartMarketplace";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,7 +38,8 @@ const App = () => (
             <Route path="/amazon-listing-optimization" element={<AmazonListing />} />
             <Route path="/amazon-account-management" element={<AmazonAccount />} />
             <Route path="/walmart-marketplace" element={<WalmartMarketplace />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<Terms />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

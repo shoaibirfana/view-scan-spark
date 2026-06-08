@@ -7,7 +7,7 @@ const BlogPreview = () => {
   const posts = blogPosts.slice(0, 3);
 
   return (
-    <section id="blog" className="py-20 bg-secondary/30">
+    <section id="blog" className="py-20 bg-background relative overflow-hidden">
       <div className="container mx-auto px-4 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -44,10 +44,10 @@ const BlogPreview = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="card-elevated bg-card rounded-2xl p-6 border border-border flex flex-col"
+              className="card-elevated bg-card rounded-2xl p-6 border border-border border-l-2 border-l-primary flex flex-col hover:bg-primary/5 transition-colors duration-300"
             >
               <div className="flex items-center gap-3 text-xs text-muted-foreground mb-3">
-                <span className="bg-primary/10 text-primary font-semibold px-3 py-1 rounded-full">
+                <span className="bg-primary text-primary-foreground font-semibold px-3 py-1 rounded-full">
                   {post.category}
                 </span>
                 <span className="inline-flex items-center gap-1">

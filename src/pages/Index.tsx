@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
+import ScrollHero from "@/components/ScrollHero";
 import Services from "@/components/Services";
 import MarketplaceBanner from "@/components/MarketplaceBanner";
 import Results from "@/components/Results";
@@ -14,6 +14,7 @@ import CtaSection from "@/components/CtaSection";
 import Footer from "@/components/Footer";
 import ChatBot from "@/components/ChatBot";
 import LoadingScreen from "@/components/LoadingScreen";
+import CaseStudies from "@/components/CaseStudies";
 
 const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -23,7 +24,6 @@ const Index = () => {
     const unloaded = images.filter((img) => !img.complete);
 
     if (unloaded.length === 0) {
-      // All already loaded (or no images)
       const timer = setTimeout(() => setIsLoading(false), 400);
       return () => clearTimeout(timer);
     }
@@ -41,7 +41,6 @@ const Index = () => {
       img.addEventListener("error", check, { once: true });
     });
 
-    // Safety timeout
     const fallback = setTimeout(() => setIsLoading(false), 5000);
 
     return () => {
@@ -82,22 +81,13 @@ const Index = () => {
             "https://www.facebook.com/teamecomify"
           ]
         })}</script>
-        <script type="application/ld+json">{JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          "mainEntity": [
-            { "@type": "Question", "name": "What does an Amazon PPC agency do?", "acceptedAnswer": { "@type": "Answer", "text": "An Amazon PPC agency manages your Sponsored Products, Sponsored Brands, and Sponsored Display campaigns to maximize sales while minimizing wasted ad spend." } },
-            { "@type": "Question", "name": "How much does Amazon PPC management cost?", "acceptedAnswer": { "@type": "Answer", "text": "Team Ecomify offers flexible Amazon PPC management packages. Contact us on WhatsApp for a custom quote based on your ad budget and goals." } },
-            { "@type": "Question", "name": "Can you manage Walmart Marketplace accounts?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Team Ecomify provides complete Walmart Marketplace seller account setup, listing optimization, and ongoing management." } },
-            { "@type": "Question", "name": "How long does Amazon listing optimization take?", "acceptedAnswer": { "@type": "Answer", "text": "Our team typically delivers optimized Amazon listings within 3–5 business days, including keyword research, title, bullet points, description, and backend search terms." } }
-          ]
-        })}</script>
       </Helmet>
       <LoadingScreen isLoading={isLoading} />
       <Navbar />
-      <Hero startCounters={!isLoading} />
+      <ScrollHero />
       <MarketplaceBanner />
       <Services />
+      <CaseStudies />
       <Results />
       <About />
       <Team />

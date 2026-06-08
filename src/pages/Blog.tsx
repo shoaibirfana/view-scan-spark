@@ -53,11 +53,11 @@ const Blog = () => {
             {blogPosts.map((post, i) => (
               <motion.article
                 key={post.slug}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="card-elevated bg-card rounded-2xl p-7 border border-border flex flex-col"
+                viewport={{ once: true, margin: "0px 0px -80px 0px" }}
+                transition={{ duration: 0.35, delay: (i % 2) * 0.08 }}
+                className="card-elevated bg-card rounded-2xl p-7 border border-border border-l-2 border-l-primary flex flex-col"
               >
                 <div className="flex items-center gap-3 text-xs text-muted-foreground mb-4">
                   <span className="bg-primary/10 text-primary font-semibold px-3 py-1 rounded-full">

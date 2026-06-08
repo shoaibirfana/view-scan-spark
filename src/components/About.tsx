@@ -3,6 +3,11 @@ import { useRef } from "react";
 import { Check, Award } from "lucide-react";
 import muazPhoto from "@/assets/muaz-photo.png";
 import logo from "@/assets/logo.png";
+import team1 from "@/assets/team-1.png";
+import team2 from "@/assets/team-2.png";
+import team3 from "@/assets/team-3.jpg";
+import team4 from "@/assets/team-4.jpg";
+import team5 from "@/assets/team-5.jpg";
 import { useCountUp } from "@/hooks/use-count-up";
 
 const highlights = [
@@ -15,14 +20,16 @@ const highlights = [
 ];
 
 const stats = [
-  { value: 300, suffix: "+", label: "Clients Served" },
-  { value: 4, suffix: "+", label: "Years Experience" },
-  { value: 12, suffix: "+", label: "Services Offered" },
-  { value: 100, suffix: "%", label: "Client Satisfaction" },
+  { value: 300, suffix: "+", label: "Clients Served", decimal: false },
+  { value: 4, suffix: "+", label: "Years Experience", decimal: false },
+  { value: 12, suffix: "+", label: "Services Offered", decimal: false },
+  { value: 5.6, suffix: "M+", label: "Revenue Generated", decimal: true },
 ];
 
-const StatCounter = ({ value, suffix, label }: { value: number; suffix: string; label: string }) => {
-  const { count, ref } = useCountUp(value, 2000);
+const StatCounter = ({ value, suffix, label, decimal }: { value: number; suffix: string; label: string; decimal: boolean }) => {
+  const intValue = decimal ? Math.round(value * 10) : value;
+  const { count, ref } = useCountUp(intValue, 2000);
+  const display = decimal ? (count / 10).toFixed(1) : count;
   return (
     <motion.div
       ref={ref}
@@ -32,11 +39,15 @@ const StatCounter = ({ value, suffix, label }: { value: number; suffix: string; 
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className="text-center bg-card/80 backdrop-blur-sm rounded-xl p-4 card-elevated border border-border/50"
     >
-      <span className="text-2xl font-heading font-bold text-primary">{count}{suffix}</span>
+      <span className="text-2xl font-heading font-bold text-primary">
+        {decimal ? "$" : ""}{display}{suffix}
+      </span>
       <p className="text-xs text-muted-foreground mt-1">{label}</p>
     </motion.div>
   );
 };
+
+const teamPhotos = [team1, team2, team3, team4, team5];
 
 const About = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -79,7 +90,7 @@ const About = () => {
             </motion.div>
           </motion.div>
 
-          {/* Content slides in from right */}
+          {/* Content */}
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -122,12 +133,33 @@ const About = () => {
               ))}
             </div>
 
-            {/* Animated count-up stats */}
+            {/* Stats */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {stats.map((s) => (
-                <StatCounter key={s.label} value={s.value} suffix={s.suffix} label={s.label} />
+                <StatCounter key={s.label} value={s.value} suffix={s.suffix} label={s.label} decimal={s.decimal} />
               ))}
             </div>
+
+            {/* Mini team strip */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="flex items-center gap-3 mt-8"
+            >
+              <div className="flex -space-x-3">
+                {teamPhotos.map((photo, i) => (
+                  <img
+                    key={i}
+                    src={photo}
+                    alt={`Team member ${i + 1}`}
+                    className="w-10 h-10 rounded-full ring-2 ring-background object-cover"
+                  />
+                ))}
+              </div>
+              <span className="text-sm text-muted-foreground">+6 more experts on our team</span>
+            </motion.div>
           </motion.div>
         </div>
       </div>
