@@ -57,17 +57,17 @@ const Index = () => {
       <Helmet>
         <title>Amazon PPC & eCommerce Growth Agency | Team Ecomify</title>
         <meta name="description" content="Team Ecomify helps Amazon and eCommerce brands grow with expert PPC management, listing optimization, account management, and marketplace strategy. 300+ satisfied clients." />
-        <link rel="canonical" href="https://teamecomify.com/" />
+        <link rel="canonical" href="https://www.teamecomify.com/" />
         <meta property="og:title" content="Amazon PPC & eCommerce Growth Agency | Team Ecomify" />
         <meta property="og:description" content="Team Ecomify helps Amazon and eCommerce brands grow with expert PPC management, listing optimization, and marketplace strategy. 300+ satisfied clients." />
-        <meta property="og:url" content="https://teamecomify.com/" />
+        <meta property="og:url" content="https://www.teamecomify.com/" />
         <meta property="og:type" content="website" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Organization",
           "name": "Team Ecomify",
-          "url": "https://teamecomify.com",
-          "logo": "https://teamecomify.com/logo.png",
+          "url": "https://www.teamecomify.com",
+          "logo": "https://www.teamecomify.com/logo.png",
           "description": "eCommerce growth agency specializing in Amazon PPC, listing optimization, account management, and marketplace management.",
           "telephone": "+1-941-305-0102",
           "contactPoint": {

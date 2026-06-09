@@ -4,7 +4,11 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const WHATSAPP_NUMBER = "19413050102";
 
+<<<<<<< HEAD
 const SYSTEM_PROMPT = `You are the friendly support assistant for Team Ecomify, a premium eCommerce growth agency. Answer questions helpfully and concisely (2-4 sentences max). Always stay on topic about Team Ecomify's services. At the end of every response, if relevant, suggest the user contact on WhatsApp: +1 (941) 305-0102.
+=======
+const SYSTEM_CONTEXT = `You are the friendly support assistant for Team Ecomify, a premium eCommerce growth agency.
+>>>>>>> 05217bc72bdcf6146af743a93749a67c87328a73
 
 Company info:
 - CEO: Muaz Tanzeel, 4+ years experience
@@ -19,26 +23,88 @@ type APIMessage = { role: "user" | "assistant"; content: string };
 
 const initialOptions = [
   { id: "expert", label: "🗣️ Talk to an Expert" },
+<<<<<<< HEAD
   { id: "learn", label: "📋 Learn About Us" },
 ];
 
+=======
+  { id: "about", label: "📋 Learn About Us" },
+];
+
+// Local smart-response fallback (browser-safe — no API key exposure).
+function localReply(input: string): string {
+  const q = input.toLowerCase();
+  if (/(price|cost|how much|fee|charge)/.test(q))
+    return "Pricing depends on the service and scope. Consultancy sessions start at $50. For project-based or monthly retainers, message us on WhatsApp at +1 (941) 305-0102 for a custom quote.";
+  if (/(ppc|ads|advertising|acos)/.test(q))
+    return "We handle full Amazon PPC management — Sponsored Products, Brands, and Display — with a focus on lowering ACoS and scaling profitable spend. WhatsApp +1 (941) 305-0102 to get a free audit.";
+  if (/(walmart)/.test(q))
+    return "Yes — we handle Walmart Marketplace seller approval, full account setup, and listing optimization. Reach out on WhatsApp +1 (941) 305-0102 to start.";
+  if (/(amazon|fba|listing|seller)/.test(q))
+    return "We cover the full Amazon stack: account setup, listing optimization (3–5 day turnaround), PPC, brand registry, and account recovery. WhatsApp +1 (941) 305-0102 for details.";
+  if (/(shopify|store|website)/.test(q))
+    return "We build conversion-focused Shopify stores with custom themes, Klaviyo email automation, and Meta Ads creative. WhatsApp +1 (941) 305-0102 to discuss your project.";
+  if (/(tiktok)/.test(q))
+    return "We set up TikTok Shop, source winning products, and connect you with proven creators. WhatsApp +1 (941) 305-0102 to learn more.";
+  if (/(llc|ein|trademark|brand registry|legal)/.test(q))
+    return "We handle US LLC formation, EIN, ITIN, trademark filing, and Amazon Brand Registry end-to-end. WhatsApp +1 (941) 305-0102 to start.";
+  if (/(suspend|reinstate|recover|appeal)/.test(q))
+    return "Account suspensions are time-sensitive — our team has reinstated listings in as little as 4 days. WhatsApp +1 (941) 305-0102 right away.";
+  if (/(consult|book|session|meeting)/.test(q))
+    return "Our 1-on-1 consultancy is $50 for a 45–60 min session covering strategy, niche analysis, ad audit, and a 30-day growth plan. WhatsApp +1 (941) 305-0102 to book.";
+  if (/(contact|email|phone|address)/.test(q))
+    return "📞 +1 (941) 305-0102\n📧 hello@teamecomify.com\n💬 WhatsApp: wa.me/19413050102\n📍 1411 Upland Dr, Houston, TX 77043";
+  if (/(about|who|team|muaz)/.test(q))
+    return "Team Ecomify is led by CEO Muaz Tanzeel (4+ yrs experience). We've served 300+ clients, generated $5.6M+ in client revenue, and managed $800K+ in ad spend. WhatsApp +1 (941) 305-0102 to chat.";
+  if (/(hello|hi|hey|good)/.test(q))
+    return "Hi there! 👋 I'm here to help with anything about Team Ecomify's services. What would you like to know?";
+  return "Great question! For a detailed answer tailored to your business, the fastest path is WhatsApp at +1 (941) 305-0102 — our team usually replies within an hour.";
+}
+
+>>>>>>> 05217bc72bdcf6146af743a93749a67c87328a73
 const ChatBot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     { role: "bot", text: "Hi! 👋 Welcome to Team Ecomify. How can I help you today?" },
   ]);
+<<<<<<< HEAD
   const [conversationHistory, setConversationHistory] = useState<APIMessage[]>([]);
   const [showInitialOptions, setShowInitialOptions] = useState(true);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+=======
+  const [showInitial, setShowInitial] = useState(true);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+>>>>>>> 05217bc72bdcf6146af743a93749a67c87328a73
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+<<<<<<< HEAD
   }, [messages, isLoading]);
+=======
+  }, [messages, loading]);
+>>>>>>> 05217bc72bdcf6146af743a93749a67c87328a73
 
-  const addMessage = (role: "bot" | "user", text: string) => {
+  const addMessage = (role: "bot" | "user", text: string) =>
     setMessages((prev) => [...prev, { role, text }]);
+
+  const respondTo = async (userText: string) => {
+    setLoading(true);
+    try {
+      // Simulate AI thinking delay for smooth UX
+      await new Promise((r) => setTimeout(r, 700));
+      const reply = localReply(userText);
+      addMessage("bot", reply);
+    } catch {
+      addMessage(
+        "bot",
+        "I'm having trouble connecting. Please WhatsApp us directly at +1 (941) 305-0102"
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleAIMessage = async (userText: string) => {
@@ -73,8 +139,10 @@ const ChatBot = () => {
   };
 
   const handleOption = (id: string) => {
+    setShowInitial(false);
     if (id === "expert") {
       addMessage("user", "I'd like to talk to an expert");
+<<<<<<< HEAD
       addMessage("bot", "Great! I'm connecting you with our team now. Click the button below to reach us on WhatsApp 🚀");
       setShowInitialOptions(false);
       window.open(
@@ -83,19 +151,38 @@ const ChatBot = () => {
       );
     } else if (id === "learn") {
       handleAIMessage("Tell me about Team Ecomify and your services.");
+=======
+      addMessage("bot", "Great! Opening WhatsApp now — an expert will reply within an hour. 🚀");
+      window.open(
+        `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+          "Hi! A visitor from teamecomify.com wants to talk to an expert."
+        )}`,
+        "_blank"
+      );
+    } else if (id === "about") {
+      addMessage("user", "Tell me about Team Ecomify");
+      respondTo("tell me about your team");
+>>>>>>> 05217bc72bdcf6146af743a93749a67c87328a73
     }
   };
 
   const handleSend = () => {
     const trimmed = input.trim();
+<<<<<<< HEAD
     if (!trimmed || isLoading) return;
     setInput("");
     handleAIMessage(trimmed);
+=======
+    if (!trimmed || loading) return;
+    addMessage("user", trimmed);
+    setInput("");
+    setShowInitial(false);
+    respondTo(trimmed);
+>>>>>>> 05217bc72bdcf6146af743a93749a67c87328a73
   };
 
   return (
     <>
-      {/* Floating button */}
       <AnimatePresence>
         {!isOpen && (
           <motion.button
@@ -104,13 +191,13 @@ const ChatBot = () => {
             exit={{ scale: 0 }}
             onClick={() => setIsOpen(true)}
             className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-[0_0_30px_hsl(160_90%_27%/0.4)] flex items-center justify-center transition-shadow"
+            aria-label="Open chat"
           >
             <MessageCircle size={24} />
           </motion.button>
         )}
       </AnimatePresence>
 
-      {/* Chat window */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -119,7 +206,6 @@ const ChatBot = () => {
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             className="fixed bottom-6 right-6 z-50 w-[360px] max-w-[calc(100vw-48px)] h-[500px] max-h-[calc(100vh-120px)] bg-card border border-border rounded-2xl shadow-2xl flex flex-col overflow-hidden"
           >
-            {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 bg-primary text-primary-foreground rounded-t-2xl">
               <div className="flex items-center gap-2">
                 <MessageCircle size={18} />
@@ -128,12 +214,11 @@ const ChatBot = () => {
                   <p className="text-xs opacity-80">AI-powered support</p>
                 </div>
               </div>
-              <button onClick={() => setIsOpen(false)} className="hover:opacity-70 transition-opacity">
+              <button onClick={() => setIsOpen(false)} className="hover:opacity-70 transition-opacity" aria-label="Close chat">
                 <X size={20} />
               </button>
             </div>
 
-            {/* Messages */}
             <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3 bg-background/50">
               {messages.map((msg, i) => (
                 <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
@@ -149,6 +234,7 @@ const ChatBot = () => {
                 </div>
               ))}
 
+<<<<<<< HEAD
               {/* Loading indicator */}
               {isLoading && (
                 <div className="flex justify-start">
@@ -159,14 +245,29 @@ const ChatBot = () => {
                         className="w-1.5 h-1.5 bg-primary rounded-full"
                         animate={{ y: [0, -5, 0] }}
                         transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.15 }}
+=======
+              {loading && (
+                <div className="flex justify-start">
+                  <div className="bg-muted px-3 py-2 rounded-xl rounded-bl-sm flex gap-1">
+                    {[0, 1, 2].map((d) => (
+                      <motion.span
+                        key={d}
+                        className="w-1.5 h-1.5 rounded-full bg-primary"
+                        animate={{ opacity: [0.3, 1, 0.3] }}
+                        transition={{ duration: 1, repeat: Infinity, delay: d * 0.2 }}
+>>>>>>> 05217bc72bdcf6146af743a93749a67c87328a73
                       />
                     ))}
                   </div>
                 </div>
               )}
 
+<<<<<<< HEAD
               {/* Initial quick options */}
               {showInitialOptions && (
+=======
+              {showInitial && (
+>>>>>>> 05217bc72bdcf6146af743a93749a67c87328a73
                 <div className="flex flex-wrap gap-2 pt-1">
                   {initialOptions.map((opt) => (
                     <button
@@ -183,7 +284,6 @@ const ChatBot = () => {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Input */}
             <div className="px-3 py-2 border-t border-border bg-card">
               <div className="flex items-center gap-2">
                 <input
@@ -192,6 +292,7 @@ const ChatBot = () => {
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSend()}
                   placeholder="Type a message..."
+<<<<<<< HEAD
                   disabled={isLoading}
                   className="flex-1 bg-muted/50 text-foreground text-sm px-3 py-2 rounded-lg outline-none border border-border focus:border-primary/50 transition-colors disabled:opacity-50"
                 />
@@ -199,6 +300,16 @@ const ChatBot = () => {
                   onClick={handleSend}
                   disabled={isLoading}
                   className="w-8 h-8 rounded-lg bg-primary text-primary-foreground flex items-center justify-center hover:opacity-90 transition-opacity disabled:opacity-50"
+=======
+                  className="flex-1 bg-muted/50 text-foreground text-sm px-3 py-2 rounded-lg outline-none border border-border focus:border-primary/50 transition-colors"
+                  disabled={loading}
+                />
+                <button
+                  onClick={handleSend}
+                  disabled={loading}
+                  className="w-8 h-8 rounded-lg bg-primary text-primary-foreground flex items-center justify-center hover:opacity-90 transition-opacity disabled:opacity-50"
+                  aria-label="Send"
+>>>>>>> 05217bc72bdcf6146af743a93749a67c87328a73
                 >
                   <Send size={14} />
                 </button>

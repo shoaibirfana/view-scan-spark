@@ -30,10 +30,10 @@ const AmazonListing = () => {
     "@context": "https://schema.org",
     "@type": "Service",
     serviceType: "Amazon Listing Optimization",
-    provider: { "@type": "Organization", name: "Team Ecomify", url: "https://teamecomify.com" },
+    provider: { "@type": "Organization", name: "Team Ecomify", url: "https://www.teamecomify.com" },
     areaServed: "Worldwide",
     description: "Keyword-rich Amazon listing optimization — titles, bullets, descriptions, A+ Content, and backend search terms.",
-    url: "https://teamecomify.com/amazon-listing-optimization",
+    url: "https://www.teamecomify.com/amazon-listing-optimization",
   };
 
   return (
@@ -41,10 +41,10 @@ const AmazonListing = () => {
       <Helmet>
         <title>Amazon Listing Optimization Services | Team Ecomify</title>
         <meta name="description" content="Rank higher on Amazon with expert listing optimization. Team Ecomify writes keyword-rich titles, bullet points, A+ Content, and backend search terms that convert." />
-        <link rel="canonical" href="https://teamecomify.com/amazon-listing-optimization" />
+        <link rel="canonical" href="https://www.teamecomify.com/amazon-listing-optimization" />
         <meta property="og:title" content="Amazon Listing Optimization Services | Team Ecomify" />
         <meta property="og:description" content="Keyword-rich Amazon listings that rank higher and convert more shoppers." />
-        <meta property="og:url" content="https://teamecomify.com/amazon-listing-optimization" />
+        <meta property="og:url" content="https://www.teamecomify.com/amazon-listing-optimization" />
         <meta property="og:type" content="website" />
         <script type="application/ld+json">{JSON.stringify(serviceLd)}</script>
         <script type="application/ld+json">{JSON.stringify(faqLd)}</script>

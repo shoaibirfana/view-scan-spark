@@ -20,6 +20,7 @@ const highlights = [
 ];
 
 const stats = [
+<<<<<<< HEAD
   { value: 300, suffix: "+", label: "Clients Served", decimal: false },
   { value: 4, suffix: "+", label: "Years Experience", decimal: false },
   { value: 12, suffix: "+", label: "Services Offered", decimal: false },
@@ -29,6 +30,18 @@ const stats = [
 const StatCounter = ({ value, suffix, label, decimal }: { value: number; suffix: string; label: string; decimal: boolean }) => {
   const intValue = decimal ? Math.round(value * 10) : value;
   const { count, ref } = useCountUp(intValue, 2000);
+=======
+  { value: 300, suffix: "+", label: "Clients Served", prefix: "" },
+  { value: 4, suffix: "+", label: "Years Experience", prefix: "" },
+  { value: 12, suffix: "+", label: "Services Offered", prefix: "" },
+  { value: 5.6, suffix: "M+", label: "Revenue Generated", prefix: "$", decimal: true },
+];
+
+const teamPhotos = [team1, team2, team3, team4, team5];
+
+const StatCounter = ({ value, suffix, label, prefix, decimal }: { value: number; suffix: string; label: string; prefix?: string; decimal?: boolean }) => {
+  const { count, ref } = useCountUp(decimal ? Math.round(value * 10) : value, 2000);
+>>>>>>> 05217bc72bdcf6146af743a93749a67c87328a73
   const display = decimal ? (count / 10).toFixed(1) : count;
   return (
     <motion.div
@@ -39,9 +52,13 @@ const StatCounter = ({ value, suffix, label, decimal }: { value: number; suffix:
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className="text-center bg-card/80 backdrop-blur-sm rounded-xl p-4 card-elevated border border-border/50"
     >
+<<<<<<< HEAD
       <span className="text-2xl font-heading font-bold text-primary">
         {decimal ? "$" : ""}{display}{suffix}
       </span>
+=======
+      <span className="text-2xl font-heading font-bold text-primary">{prefix}{display}{suffix}</span>
+>>>>>>> 05217bc72bdcf6146af743a93749a67c87328a73
       <p className="text-xs text-muted-foreground mt-1">{label}</p>
     </motion.div>
   );
@@ -51,10 +68,7 @@ const teamPhotos = [team1, team2, team3, team4, team5];
 
 const About = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
   const imageY = useTransform(scrollYProgress, [0, 1], [-40, 40]);
 
   return (
@@ -63,7 +77,6 @@ const About = () => {
 
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Image with parallax */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -73,11 +86,7 @@ const About = () => {
           >
             <motion.div style={{ y: imageY }} className="relative group motion-reduce:!transform-none">
               <div className="absolute -inset-6 bg-gradient-radial from-primary/30 via-primary/10 to-transparent rounded-3xl blur-3xl opacity-60 group-hover:opacity-90 transition-opacity duration-700" />
-              <img
-                src={muazPhoto}
-                alt="Muaz Tanzeel"
-                className="relative w-72 h-80 sm:w-80 sm:h-96 object-cover object-[center_15%] rounded-2xl shadow-2xl ring-1 ring-primary/10"
-              />
+              <img src={muazPhoto} alt="Muaz Tanzeel" className="relative w-72 h-80 sm:w-80 sm:h-96 object-cover object-[center_15%] rounded-2xl shadow-2xl ring-1 ring-primary/10" />
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -90,7 +99,10 @@ const About = () => {
             </motion.div>
           </motion.div>
 
+<<<<<<< HEAD
           {/* Content */}
+=======
+>>>>>>> 05217bc72bdcf6146af743a93749a67c87328a73
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -133,14 +145,21 @@ const About = () => {
               ))}
             </div>
 
+<<<<<<< HEAD
             {/* Stats */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {stats.map((s) => (
                 <StatCounter key={s.label} value={s.value} suffix={s.suffix} label={s.label} decimal={s.decimal} />
+=======
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {stats.map((s) => (
+                <StatCounter key={s.label} {...s} />
+>>>>>>> 05217bc72bdcf6146af743a93749a67c87328a73
               ))}
             </div>
 
             {/* Mini team strip */}
+<<<<<<< HEAD
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -154,12 +173,25 @@ const About = () => {
                     key={i}
                     src={photo}
                     alt={`Team member ${i + 1}`}
+=======
+            <div className="flex items-center gap-4 mt-8">
+              <div className="flex -space-x-3">
+                {teamPhotos.map((src, i) => (
+                  <img
+                    key={i}
+                    src={src}
+                    alt="Team member"
+>>>>>>> 05217bc72bdcf6146af743a93749a67c87328a73
                     className="w-10 h-10 rounded-full ring-2 ring-background object-cover"
                   />
                 ))}
               </div>
               <span className="text-sm text-muted-foreground">+6 more experts on our team</span>
+<<<<<<< HEAD
             </motion.div>
+=======
+            </div>
+>>>>>>> 05217bc72bdcf6146af743a93749a67c87328a73
           </motion.div>
         </div>
       </div>

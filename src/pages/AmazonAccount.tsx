@@ -30,10 +30,10 @@ const AmazonAccount = () => {
     "@context": "https://schema.org",
     "@type": "Service",
     serviceType: "Amazon Account Management",
-    provider: { "@type": "Organization", name: "Team Ecomify", url: "https://teamecomify.com" },
+    provider: { "@type": "Organization", name: "Team Ecomify", url: "https://www.teamecomify.com" },
     areaServed: "Worldwide",
     description: "Full-service Amazon seller account management — listings, PPC, inventory, customer service, compliance.",
-    url: "https://teamecomify.com/amazon-account-management",
+    url: "https://www.teamecomify.com/amazon-account-management",
   };
 
   return (
@@ -41,10 +41,10 @@ const AmazonAccount = () => {
       <Helmet>
         <title>Amazon Account Management Services | Team Ecomify</title>
         <meta name="description" content="Full Amazon seller account management by Team Ecomify. We handle listings, PPC, inventory, customer service, and compliance so you can focus on growth." />
-        <link rel="canonical" href="https://teamecomify.com/amazon-account-management" />
+        <link rel="canonical" href="https://www.teamecomify.com/amazon-account-management" />
         <meta property="og:title" content="Amazon Account Management Services | Team Ecomify" />
         <meta property="og:description" content="Full-service Amazon seller account management — we run it, you grow." />
-        <meta property="og:url" content="https://teamecomify.com/amazon-account-management" />
+        <meta property="og:url" content="https://www.teamecomify.com/amazon-account-management" />
         <meta property="og:type" content="website" />
         <script type="application/ld+json">{JSON.stringify(serviceLd)}</script>
         <script type="application/ld+json">{JSON.stringify(faqLd)}</script>

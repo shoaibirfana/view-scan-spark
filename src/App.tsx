@@ -1,6 +1,6 @@
 /*
   SEO setup notes (off-page):
-  - Submit https://teamecomify.com/sitemap.xml to Google Search Console & Bing Webmaster Tools.
+  - Submit https://www.teamecomify.com/sitemap.xml to Google Search Console & Bing Webmaster Tools.
   - Share each blog post on LinkedIn, X/Twitter, Facebook, and relevant Reddit/Quora threads.
   - Republish (with canonical link back) on Medium and LinkedIn Articles for backlinks.
 */

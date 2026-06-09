@@ -7,7 +7,7 @@ import Footer from "@/components/Footer";
 import { blogPosts } from "@/data/blogPosts";
 
 const Blog = () => {
-  const siteUrl = "https://teamecomify.com";
+  const siteUrl = "https://www.teamecomify.com";
 
   return (
     <div className="min-h-screen bg-background">

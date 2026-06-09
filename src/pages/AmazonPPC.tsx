@@ -29,10 +29,10 @@ const AmazonPPC = () => {
     "@context": "https://schema.org",
     "@type": "Service",
     serviceType: "Amazon PPC Management",
-    provider: { "@type": "Organization", name: "Team Ecomify", url: "https://teamecomify.com" },
+    provider: { "@type": "Organization", name: "Team Ecomify", url: "https://www.teamecomify.com" },
     areaServed: "Worldwide",
     description: "Expert Amazon PPC management — Sponsored Products, Brands, and Display ads to lower ACOS and grow revenue.",
-    url: "https://teamecomify.com/amazon-ppc-management",
+    url: "https://www.teamecomify.com/amazon-ppc-management",
   };
 
   return (
@@ -40,10 +40,10 @@ const AmazonPPC = () => {
       <Helmet>
         <title>Amazon PPC Management Services | Team Ecomify</title>
         <meta name="description" content="Team Ecomify's Amazon PPC experts manage Sponsored Products, Sponsored Brands & Display ads to lower your ACOS and grow revenue. Get a free audit today." />
-        <link rel="canonical" href="https://teamecomify.com/amazon-ppc-management" />
+        <link rel="canonical" href="https://www.teamecomify.com/amazon-ppc-management" />
         <meta property="og:title" content="Amazon PPC Management Services | Team Ecomify" />
         <meta property="og:description" content="Expert Amazon PPC management to lower ACOS and grow revenue." />
-        <meta property="og:url" content="https://teamecomify.com/amazon-ppc-management" />
+        <meta property="og:url" content="https://www.teamecomify.com/amazon-ppc-management" />
         <meta property="og:type" content="website" />
         <script type="application/ld+json">{JSON.stringify(serviceLd)}</script>
         <script type="application/ld+json">{JSON.stringify(faqLd)}</script>

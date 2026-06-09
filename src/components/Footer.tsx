@@ -3,12 +3,21 @@ import { Link } from "react-router-dom";
 import logo from "@/assets/logo.png";
 
 const quickLinks = [
+<<<<<<< HEAD
   { label: "Home", href: "#home" },
   { label: "Services", href: "#services" },
   { label: "About", href: "#about" },
   { label: "Testimonials", href: "#testimonials" },
   { label: "Contact", href: "#contact" },
   { label: "Blog", href: "/blog" },
+=======
+  { label: "Home", href: "/#home", type: "anchor" },
+  { label: "Services", href: "/#services", type: "anchor" },
+  { label: "About", href: "/#about", type: "anchor" },
+  { label: "Blog", href: "/blog", type: "route" },
+  { label: "Testimonials", href: "/#testimonials", type: "anchor" },
+  { label: "Contact", href: "/#contact", type: "anchor" },
+>>>>>>> 05217bc72bdcf6146af743a93749a67c87328a73
 ];
 
 const services = [
@@ -44,6 +53,7 @@ const Footer = () => (
             Your trusted partner in e-commerce success. We help entrepreneurs build, launch, and scale profitable online businesses.
           </p>
           <div className="flex gap-3 flex-wrap">
+<<<<<<< HEAD
             <a
               href="https://wa.me/19413050102"
               target="_blank"
@@ -72,6 +82,18 @@ const Footer = () => (
               rel="noopener noreferrer"
               className="w-9 h-9 rounded-full bg-primary/20 flex items-center justify-center hover:bg-primary/30 transition-colors"
             >
+=======
+            <a href="https://wa.me/19413050102" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="w-9 h-9 rounded-full bg-primary/20 flex items-center justify-center hover:bg-primary/30 transition-colors">
+              <MessageCircle size={16} className="text-primary" />
+            </a>
+            <a href="mailto:hello@teamecomify.com" aria-label="Email" className="w-9 h-9 rounded-full bg-primary/20 flex items-center justify-center hover:bg-primary/30 transition-colors">
+              <Mail size={16} className="text-primary" />
+            </a>
+            <a href="https://linkedin.com/company/teamecomify" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="w-9 h-9 rounded-full bg-primary/20 flex items-center justify-center hover:bg-primary/30 transition-colors">
+              <Linkedin size={16} className="text-primary" />
+            </a>
+            <a href="https://facebook.com/teamecomify" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-9 h-9 rounded-full bg-primary/20 flex items-center justify-center hover:bg-primary/30 transition-colors">
+>>>>>>> 05217bc72bdcf6146af743a93749a67c87328a73
               <Facebook size={16} className="text-primary" />
             </a>
           </div>
@@ -83,6 +105,7 @@ const Footer = () => (
           <ul className="space-y-2.5">
             {quickLinks.map((link) => (
               <li key={link.href}>
+<<<<<<< HEAD
                 {link.href.startsWith("/") && !link.href.startsWith("/#") ? (
                   <Link to={link.href} className="text-sm text-[hsl(210,15%,65%)] hover:text-primary transition-colors">
                     {link.label}
@@ -91,6 +114,12 @@ const Footer = () => (
                   <a href={link.href} className="text-sm text-[hsl(210,15%,65%)] hover:text-primary transition-colors">
                     {link.label}
                   </a>
+=======
+                {link.type === "route" ? (
+                  <Link to={link.href} className="text-sm text-[hsl(210,15%,65%)] hover:text-primary transition-colors">{link.label}</Link>
+                ) : (
+                  <a href={link.href} className="text-sm text-[hsl(210,15%,65%)] hover:text-primary transition-colors">{link.label}</a>
+>>>>>>> 05217bc72bdcf6146af743a93749a67c87328a73
                 )}
               </li>
             ))}
@@ -103,9 +132,13 @@ const Footer = () => (
           <ul className="space-y-2.5">
             {services.map((service) => (
               <li key={service.label}>
+<<<<<<< HEAD
                 <a href={service.href} className="text-sm text-[hsl(210,15%,65%)] hover:text-primary transition-colors">
                   {service.label}
                 </a>
+=======
+                <a href={service.href} className="text-sm text-[hsl(210,15%,65%)] hover:text-primary transition-colors">{service.label}</a>
+>>>>>>> 05217bc72bdcf6146af743a93749a67c87328a73
               </li>
             ))}
           </ul>
@@ -117,9 +150,13 @@ const Footer = () => (
           <ul className="space-y-2.5">
             {servicePages.map((page) => (
               <li key={page.href}>
+<<<<<<< HEAD
                 <Link to={page.href} className="text-sm text-[hsl(210,15%,65%)] hover:text-primary transition-colors">
                   {page.label}
                 </Link>
+=======
+                <Link to={page.href} className="text-sm text-[hsl(210,15%,65%)] hover:text-primary transition-colors">{page.label}</Link>
+>>>>>>> 05217bc72bdcf6146af743a93749a67c87328a73
               </li>
             ))}
           </ul>
@@ -135,23 +172,20 @@ const Footer = () => (
             </li>
             <li className="flex items-start gap-3">
               <MessageCircle size={16} className="text-primary mt-0.5 flex-shrink-0" />
-              <a
-                href="https://wa.me/19413050102"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-[hsl(210,15%,65%)] hover:text-primary transition-colors"
-              >
-                WhatsApp Us
-              </a>
+              <a href="https://wa.me/19413050102" target="_blank" rel="noopener noreferrer" className="text-sm text-[hsl(210,15%,65%)] hover:text-primary transition-colors">WhatsApp Us</a>
             </li>
             <li className="flex items-start gap-3">
               <Mail size={16} className="text-primary mt-0.5 flex-shrink-0" />
+<<<<<<< HEAD
               <a
                 href="mailto:hello@teamecomify.com"
                 className="text-sm text-[hsl(210,15%,65%)] hover:text-primary transition-colors"
               >
                 hello@teamecomify.com
               </a>
+=======
+              <a href="mailto:hello@teamecomify.com" className="text-sm text-[hsl(210,15%,65%)] hover:text-primary transition-colors">hello@teamecomify.com</a>
+>>>>>>> 05217bc72bdcf6146af743a93749a67c87328a73
             </li>
             <li className="flex items-start gap-3">
               <MapPin size={16} className="text-primary mt-0.5 flex-shrink-0" />
@@ -161,7 +195,6 @@ const Footer = () => (
         </div>
       </div>
 
-      {/* Google Maps */}
       <div className="mb-12 rounded-xl overflow-hidden border border-[hsl(210,20%,22%)]">
         <iframe
           title="Team Ecomify Office Location"
@@ -175,7 +208,10 @@ const Footer = () => (
         />
       </div>
 
+<<<<<<< HEAD
       {/* Bottom */}
+=======
+>>>>>>> 05217bc72bdcf6146af743a93749a67c87328a73
       <div className="border-t border-[hsl(210,20%,22%)] pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
         <p className="text-sm text-[hsl(210,15%,55%)]">
           © {new Date().getFullYear()} Team Ecomify. All rights reserved.

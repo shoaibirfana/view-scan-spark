@@ -28,10 +28,10 @@ const WalmartMarketplace = () => {
     "@context": "https://schema.org",
     "@type": "Service",
     serviceType: "Walmart Marketplace Management",
-    provider: { "@type": "Organization", name: "Team Ecomify", url: "https://teamecomify.com" },
+    provider: { "@type": "Organization", name: "Team Ecomify", url: "https://www.teamecomify.com" },
     areaServed: "United States",
     description: "Walmart Marketplace seller approval, listing setup, pricing strategy, and ongoing account management.",
-    url: "https://teamecomify.com/walmart-marketplace",
+    url: "https://www.teamecomify.com/walmart-marketplace",
   };
 
   return (
@@ -39,10 +39,10 @@ const WalmartMarketplace = () => {
       <Helmet>
         <title>Walmart Marketplace Management Services | Team Ecomify</title>
         <meta name="description" content="Launch and grow your Walmart Marketplace store with Team Ecomify. We handle seller approval, listing setup, pricing strategy, and ongoing account management." />
-        <link rel="canonical" href="https://teamecomify.com/walmart-marketplace" />
+        <link rel="canonical" href="https://www.teamecomify.com/walmart-marketplace" />
         <meta property="og:title" content="Walmart Marketplace Management Services | Team Ecomify" />
         <meta property="og:description" content="Launch and grow on Walmart Marketplace with expert seller approval and account management." />
-        <meta property="og:url" content="https://teamecomify.com/walmart-marketplace" />
+        <meta property="og:url" content="https://www.teamecomify.com/walmart-marketplace" />
         <meta property="og:type" content="website" />
         <script type="application/ld+json">{JSON.stringify(serviceLd)}</script>
         <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
