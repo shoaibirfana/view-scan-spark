@@ -12,10 +12,13 @@ import { useEffect, useRef, useState } from "react";
 const FRAME_BASE =
   "https://res.cloudinary.com/dxqmakjxj/image/upload";
 
-const FRAME_COUNT = 900;
-// i is 0-based; frames are named starting at 001.
+// Frames on Cloudinary are numbered frame_413.jpg ... frame_900.jpg
+const FRAME_START = 413;
+const FRAME_END = 900;
+const FRAME_COUNT = FRAME_END - FRAME_START + 1; // 488
+// i is 0-based within our sequence; actual file number = FRAME_START + i
 const framePath = (i: number) =>
-  `${FRAME_BASE}/frame_${String(i + 1).padStart(3, "0")}.jpg`;
+  `${FRAME_BASE}/frame_${String(FRAME_START + i).padStart(3, "0")}.jpg`;
 
 
 type Overlay = { range: [number, number]; pos: string; title: string; sub?: string; size: string; };
