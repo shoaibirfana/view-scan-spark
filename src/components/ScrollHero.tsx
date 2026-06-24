@@ -47,44 +47,64 @@ const ScrollHero = () => {
   // Preload frames
   useEffect(() => {
     let loaded = 0;
-    let initialLoaded = 0;
+    let cancelled = false;
     const imgs: HTMLImageElement[] = new Array(FRAME_COUNT);
     const flags: boolean[] = new Array(FRAME_COUNT).fill(false);
     loadedRef.current = flags;
-
-    const markReadyIfNeeded = () => {
-      if (initialLoaded >= INITIAL_BATCH && !ready) setReady(true);
-    };
-
-    const loadImage = (i: number) => {
-      const img = new Image();
-      img.src = framePath(i);
-      img.onload = () => {
-        flags[i] = true;
-        loaded++;
-        if (i < INITIAL_BATCH) { initialLoaded++; markReadyIfNeeded(); }
-        setLoadPct(Math.round((loaded / FRAME_COUNT) * 100));
-        if (i === 0) drawFrame(0);
-      };
-      img.onerror = () => {
-        loaded++;
-        if (i < INITIAL_BATCH) { initialLoaded++; markReadyIfNeeded(); }
-        setLoadPct(Math.round((loaded / FRAME_COUNT) * 100));
-      };
-      imgs[i] = img;
-    };
-
-    // Load the initial batch first (sequential priority), then the rest.
-    for (let i = 0; i < INITIAL_BATCH && i < FRAME_COUNT; i++) loadImage(i);
-    // Defer the rest slightly so the first batch gets bandwidth priority
-    const t = setTimeout(() => {
-      for (let i = INITIAL_BATCH; i < FRAME_COUNT; i++) loadImage(i);
-    }, 200);
-
     imagesRef.current = imgs;
-    // Safety fallback: never hang forever
-    const safety = setTimeout(() => setReady(true), 8000);
-    return () => { clearTimeout(t); clearTimeout(safety); };
+
+    const loadOne = (i: number) =>
+      new Promise<void>((resolve) => {
+        const img = new Image();
+        imgs[i] = img;
+        img.onload = () => {
+          flags[i] = true;
+          loaded++;
+          setLoadPct(Math.round((loaded / FRAME_COUNT) * 100));
+          if (i === 0) drawFrame(0);
+          resolve();
+        };
+        img.onerror = () => {
+          loaded++;
+          setLoadPct(Math.round((loaded / FRAME_COUNT) * 100));
+          resolve();
+        };
+        img.src = framePath(i);
+      });
+
+    // Phase 1: load the OPENING frames strictly IN ORDER (small parallel window),
+    // so the hero always starts from frame 0 — never a random later frame.
+    const loadInOrder = async () => {
+      const CONCURRENCY = 6;
+      // Initial batch in order
+      for (let i = 0; i < INITIAL_BATCH && i < FRAME_COUNT; i += CONCURRENCY) {
+        if (cancelled) return;
+        const chunk: Promise<void>[] = [];
+        for (let j = i; j < i + CONCURRENCY && j < INITIAL_BATCH && j < FRAME_COUNT; j++) {
+          chunk.push(loadOne(j));
+        }
+        await Promise.all(chunk);
+      }
+      // Only NOW reveal the hero — opening frames are guaranteed present and in order.
+      if (!cancelled) setReady(true);
+
+      // Phase 2: load the rest in order, in the background.
+      for (let i = INITIAL_BATCH; i < FRAME_COUNT; i += CONCURRENCY) {
+        if (cancelled) return;
+        const chunk: Promise<void>[] = [];
+        for (let j = i; j < i + CONCURRENCY && j < FRAME_COUNT; j++) {
+          chunk.push(loadOne(j));
+        }
+        await Promise.all(chunk);
+      }
+    };
+
+    loadInOrder();
+
+    // Safety: if the network is very slow, reveal after a longer grace period
+    // (long enough that the opening batch should be done).
+    const safety = setTimeout(() => { if (!cancelled) setReady(true); }, 20000);
+    return () => { cancelled = true; clearTimeout(safety); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -93,10 +113,20 @@ const ScrollHero = () => {
     if (!canvas) return;
     let useIdx = idx;
     if (!loadedRef.current[useIdx]) {
-      for (let d = 1; d < FRAME_COUNT; d++) {
-        if (loadedRef.current[idx - d]) { useIdx = idx - d; break; }
-        if (loadedRef.current[idx + d]) { useIdx = idx + d; break; }
+      // Prefer the nearest EARLIER loaded frame so we never jump far ahead
+      // (which previously made the hero appear to start at a late frame).
+      let found = -1;
+      for (let d = 1; d <= idx; d++) {
+        if (loadedRef.current[idx - d]) { found = idx - d; break; }
       }
+      // Only look forward as a last resort, and only a little.
+      if (found === -1) {
+        for (let d = 1; d <= 8 && idx + d < FRAME_COUNT; d++) {
+          if (loadedRef.current[idx + d]) { found = idx + d; break; }
+        }
+      }
+      if (found === -1) return; // nothing suitable yet — leave current frame
+      useIdx = found;
     }
     const img = imagesRef.current[useIdx];
     if (!img || !img.complete || !img.naturalWidth) return;
