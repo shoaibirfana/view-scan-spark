@@ -10,7 +10,7 @@ import { useEffect, useRef, useState } from "react";
  * f_auto,q_auto makes Cloudinary serve the best format/quality automatically.
  */
 const FRAME_BASE =
-  "https://res.cloudinary.com/dxqmakjxj/image/upload/f_auto,q_auto";
+  "https://res.cloudinary.com/dxqmakjxj/image/upload";
 
 const FRAME_COUNT = 900;
 // i is 0-based; frames are named starting at 001.
