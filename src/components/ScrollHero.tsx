@@ -1,12 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { FRAME_FILES } from "@/data/frameList";
 
 /**
  * Cinematic scroll-driven hero — IMAGE SEQUENCE method.
  *
- * FRAMES: 900 frames hosted on Cloudinary.
- * Cloudinary added a unique random suffix to each file, so the exact filenames
- * are listed in src/data/frameList.ts (FRAME_FILES, in order 001..900).
+ * FRAMES: 900 frames hosted on Cloudinary, cleanly named
+ * frame_001.jpg ... frame_900.jpg (no random suffix).
  *
  * FRAME_BASE = the Cloudinary "upload" URL up to (but not including) the filename.
  * f_auto,q_auto makes Cloudinary serve the best format/quality automatically.
@@ -14,8 +12,10 @@ import { FRAME_FILES } from "@/data/frameList";
 const FRAME_BASE =
   "https://res.cloudinary.com/dxqmakjxj/image/upload/f_auto,q_auto";
 
-const FRAME_COUNT = FRAME_FILES.length; // 900
-const framePath = (i: number) => `${FRAME_BASE}/${FRAME_FILES[i]}`;
+const FRAME_COUNT = 900;
+// i is 0-based; frames are named starting at 001.
+const framePath = (i: number) =>
+  `${FRAME_BASE}/frame_${String(i + 1).padStart(3, "0")}.jpg`;
 
 
 type Overlay = { range: [number, number]; pos: string; title: string; sub?: string; size: string; };
