@@ -53,7 +53,7 @@ const Hero = ({ startCounters = true }: HeroProps) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold leading-tight mb-6 text-white">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold leading-tight mb-6 text-foreground">
               <motion.span initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.6 }} className="block">
                 We Grow
               </motion.span>
@@ -68,7 +68,7 @@ const Hero = ({ startCounters = true }: HeroProps) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.7, duration: 0.6 }}
-              className="text-white/80 text-lg max-w-lg mb-8 leading-relaxed"
+              className="text-muted-foreground text-lg max-w-lg mb-8 leading-relaxed"
             >
               From Amazon PPC and listing optimization to full store management — Team Ecomify has generated $5.6M+ in client revenue across 300+ brands worldwide.
             </motion.p>
@@ -88,14 +88,14 @@ const Hero = ({ startCounters = true }: HeroProps) => {
                 </a>
                 <a
                   href="#services"
-                  className="group inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white border border-white/20 px-7 py-3.5 rounded-xl font-semibold hover:border-white/40 hover:bg-white/15 transition-all duration-300 hover:scale-105"
+                  className="group inline-flex items-center gap-2 bg-white text-foreground border border-border px-7 py-3.5 rounded-xl font-semibold hover:border-primary/40 hover:bg-primary/5 transition-all duration-300 hover:scale-105"
                 >
                   Our Services <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </a>
               </div>
 
               {/* Trust badges */}
-              <div className="flex flex-wrap gap-x-6 gap-y-3 mt-6 text-sm text-white/85">
+              <div className="flex flex-wrap gap-x-6 gap-y-3 mt-6 text-sm text-muted-foreground">
                 <span className="inline-flex items-center gap-1.5">
                   <Star size={14} className="fill-yellow-400 text-yellow-400" /> 300+ satisfied clients
                 </span>
@@ -117,7 +117,7 @@ const Hero = ({ startCounters = true }: HeroProps) => {
               {stats.map((s) => (
                 <div key={s.label}>
                   <span className="text-2xl font-heading font-bold text-primary">{s.value}</span>
-                  <p className="text-xs text-white/70 mt-1">{s.label}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{s.label}</p>
                 </div>
               ))}
             </motion.div>
