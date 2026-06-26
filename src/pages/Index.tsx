@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
-import ScrollHero from "@/components/ScrollHero";
+import Hero from "@/components/Hero";
 import Services from "@/components/Services";
 import MarketplaceBanner from "@/components/MarketplaceBanner";
 import Results from "@/components/Results";
@@ -84,7 +84,7 @@ const Index = () => {
       </Helmet>
       <LoadingScreen isLoading={isLoading} />
       <Navbar />
-      <ScrollHero />
+      <Hero startCounters={!isLoading} />
       <MarketplaceBanner />
       <Services />
       <CaseStudies />
