@@ -92,7 +92,7 @@ const Consultancy = () => {
                   One-Time Session
                 </p>
                 <div className="flex items-baseline gap-2 mb-1">
-                  <span className="text-5xl font-heading font-bold text-foreground">$50</span>
+                  <span className="text-5xl font-heading font-bold text-foreground">FREE</span>
                   <span className="text-muted-foreground text-sm">/ session</span>
                 </div>
                 <p className="text-muted-foreground text-sm mb-8">
